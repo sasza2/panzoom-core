@@ -42,6 +42,7 @@ export const Puzzles = () => {
               opacity: connected ? 1 : 0.5,
               transition: 'all 1s',
               width: 180,
+              pointerEvents: 'none',
             }}
             src={
               connected
