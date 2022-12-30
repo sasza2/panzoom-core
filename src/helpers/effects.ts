@@ -16,11 +16,14 @@ type RefHook = { type: 'ref', value: Ref<Value>, deps: never, onUnmount: never }
 
 type Hook = EffectHook | StateHook | RefHook
 
+type Props = Record<string, unknown>
+
 type Context = {
   it: number,
   hooks: Array<Hook>,
-  rerun: () => void,
-  rerunTimeout: ReturnType<typeof setTimeout>,
+  render?: () => void,
+  props: Props,
+  onRerender?: () => void,
 }
 
 const HOOKS = {
@@ -31,58 +34,69 @@ const HOOKS = {
 
 type RenderComponent = () => void
 
-export type Component = { render: RenderComponent, unmount: () => void }
+export type Component = {
+  context: Context,
+  render: RenderComponent,
+  unmount: () => void,
+  updateProps: (props: Props) => void,
+}
 
-type InitializeComponent = (cb: () => void) => Component
+type InitializeComponent = (
+  cb: (props: Props) => void,
+  mapNextProps?: (props: Props) => Props,
+) => Component
 
-let context: Context = null
-let mainContext: Context = null
+const contextQueue: Array<Context> = []
+
+const getCurrentContext = () => contextQueue[contextQueue.length - 1]
 
 export const createRef = <T> (value: T): Ref<T> => ({ current: value })
 
-export const createExternalContext = <T>() => createRef(null as T)
-
-export const rerenderWithContext = <T>(externalContext: Ref<T>, value: T, cb: () => void) => {
-  externalContext.current = value
-  cb()
-  externalContext.current = null
+export const render = (components: Array<Component>) => {
+  const internalRender = () => {
+    let isRenderingQueue = true
+    let rerender = false
+    components.forEach(component => {
+      component.context.onRerender = () => {
+        if (isRenderingQueue) rerender = true
+        else internalRender()
+      }
+      component.render()
+    })
+    isRenderingQueue = false
+    contextQueue.length = 0
+    if (rerender) internalRender()
+  }
+  return internalRender()
 }
 
-export const initializeComponent: InitializeComponent = (cb) => {
-  let render: RenderComponent = null
-
-  const currentContext: Context = {
+export const initializeComponent: InitializeComponent = (cb, mapNextProps) => {
+  const context: Context = {
     it: 0,
     hooks: [],
-    rerun: () => {
-      if (currentContext.rerunTimeout) {
-        clearTimeout(currentContext.rerunTimeout)
-      }
-      currentContext.rerunTimeout = setTimeout(() => {
-        currentContext.rerunTimeout = null
-        render()
-      }, 0)
+    render: () => {
+      contextQueue.push(context)
+      context.it = 0
+      cb(context.props)
+      contextQueue.pop()
     },
-    rerunTimeout: null,
-  }
-
-  render = () => {
-    if (!mainContext) mainContext = currentContext
-    const prevContext = context
-    context = currentContext
-    context.it = 0
-    cb()
-    if (mainContext === currentContext) mainContext = null
-    context = prevContext
+    props: {},
   }
 
   const unmount = () => {
-    currentContext.hooks.forEach(hook => {
+    context.hooks.forEach(hook => {
       if (hook.type === HOOKS.EFFECT && hook.onUnmount) hook.onUnmount()
     })
   }
 
-  return { render, unmount }
+  const updateProps = (nextProps: Props) => {
+    const mappedNextProps = mapNextProps ? mapNextProps(nextProps) : nextProps
+    Object.entries(mappedNextProps).forEach(([key, value]) => {
+      if (value !== undefined) context.props[key] = value
+    })
+  }
+
+  return { context, render: context.render, unmount, updateProps }
 }
 
 const areDepsEqual = (prev: Dependencies, next: Dependencies) => {
@@ -93,6 +107,7 @@ const areDepsEqual = (prev: Dependencies, next: Dependencies) => {
 }
 
 export const useEffect = (cb: EffectHookCallback, deps: Dependencies) => {
+  const context = getCurrentContext()
   const currentIteration = context.it
   context.it++
 
@@ -113,16 +128,14 @@ export const useEffect = (cb: EffectHookCallback, deps: Dependencies) => {
 }
 
 export const useState = <T extends Value>(initialValue: T): [T, (next: T) => void] => {
+  const context = getCurrentContext()
   const currentIteration = context.it
   context.it++
 
-  const hookMainContext: Context = mainContext
-  const hookContext: Context = context
-
   const updateValue = (next: T) => {
-    const hook = hookContext.hooks[currentIteration] as StateHook
+    const hook = context.hooks[currentIteration] as StateHook
     hook.value = next
-    hookMainContext.rerun()
+    context.onRerender()
   }
 
   let hook = context.hooks[currentIteration] as StateHook
@@ -135,6 +148,7 @@ export const useState = <T extends Value>(initialValue: T): [T, (next: T) => voi
 }
 
 export const useRef = <T extends Value>(initialValue?: T): Ref<T> => {
+  const context = getCurrentContext()
   const currentIteration = context.it
   context.it++
 

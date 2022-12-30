@@ -1,4 +1,4 @@
-import { usePanZoom } from '@/panZoomProvider'
+import { usePanZoom } from '@/provider'
 import { SELECT_STYLE, SELECT_BOX_STYLE } from '@/styles';
 import { useEffect } from '@/helpers/effects'
 import applyStyles from '@/helpers/applyStyles'
@@ -6,9 +6,9 @@ import valueToCSSAttribute from '@/helpers/valueToCSSAttribute';
 import useBoundary from './hooks/useBoundary';
 import useBoundaryMove from './hooks/useBoundaryMove';
 import useGrabElements from './hooks/useGrabElements';
-import { useSelect } from './createProvider';
+import { useSelect } from './SelectProvider';
 
-const initSelect = () => {
+const Select = () => {
   const { childNode, selecting } = usePanZoom()
   const { selectRef, expandingRef, movingRef } = useSelect();
 
@@ -66,4 +66,4 @@ const initSelect = () => {
   useBoundaryMove({ grabElementsRef });
 }
 
-export default initSelect
+export default Select

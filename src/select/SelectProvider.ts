@@ -1,5 +1,5 @@
 import { Position, Ref } from 'types'
-import { createExternalContext, useRef, useState } from '@/helpers/effects'
+import { createRef, useRef, useState } from '@/helpers/effects'
 
 export type MoveRef = Ref<(position: Position) => void>;
 
@@ -22,11 +22,11 @@ type SelectContext = {
   setMove: (position: Position | null) => void;
 }
 
-const selectContext = createExternalContext<SelectContext>()
+const selectContext = createRef<SelectContext>(null)
 
 export const useSelect = (): SelectContext => selectContext.current
 
-export const withSelectProvider = (cb: () => void) => {
+export const SelectProvider = () => {
   const expandingRef = useRef<HTMLDivElement>();
   const movingRef = useRef<HTMLDivElement>();
   const selectRef = useRef<HTMLDivElement>();
@@ -42,8 +42,6 @@ export const withSelectProvider = (cb: () => void) => {
     move,
     setMove,
   }
-
-  cb()
-
-  selectContext.current = null
 }
+
+export default SelectProvider

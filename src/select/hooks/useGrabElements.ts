@@ -1,9 +1,9 @@
 import { Position } from 'types';
 import { useEffect, useRef } from '@/helpers/effects'
-import { usePanZoom } from '@/panZoomProvider';
+import { usePanZoom } from '@/provider';
 import { useElements } from '@/elements';
 import produceElementPosition from '@/helpers/produceElementPosition';
-import { MoveRef, useSelect } from '../createProvider';
+import { MoveRef, useSelect } from '../SelectProvider';
 import collectElements from '../helpers/collectElements';
 import copyElementsPositions from '../helpers/copyElementsPositions';
 

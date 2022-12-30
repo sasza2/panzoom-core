@@ -3,7 +3,7 @@ import getBoundingClientRect from '@/helpers/getBoundingClientRect';
 import getScrollOffset from '@/helpers/getScrollOffset';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceElementPosition from '@/helpers/produceElementPosition';
-import { usePanZoom } from '@/panZoomProvider';
+import { usePanZoom } from '@/provider';
 
 type useElementMouseDownPositionThunk = (
   e: MouseEvent | TouchEvent,

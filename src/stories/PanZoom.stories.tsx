@@ -171,4 +171,33 @@ export const selectingBoxes = () => {
   );
 };
 
+export const TwoInstances = () => {
+  const [hasTwoInstances, setHasTwoInstances] = useState(true)
+  const toggle: React.ChangeEventHandler<HTMLInputElement> = e => setHasTwoInstances(e.target.checked)
+
+  return (
+    <>
+      <div style={{ border: '1px solid red', height: 300 }}>
+        <PanZoom>
+          <Element id='a'>element A</Element>
+        </PanZoom>
+      </div>
+      <label htmlFor="twoInstances">
+        Has two instances
+        <input id="twoInstances" type="checkbox" onChange={toggle} checked={hasTwoInstances} />
+      </label>
+      {
+        hasTwoInstances && (
+          <div style={{ border: '1px solid red', height: 300 }}>
+            <PanZoom>
+              <Element id='b'>element B</Element>
+              <Element id='c' x={100} y={100}>element C</Element>
+            </PanZoom>
+          </div>
+        )
+      }
+    </>
+  )
+}
+
 export default { title: 'PanZoom', component: Rectangles };
