@@ -1,11 +1,9 @@
 import { ClientPosition, Elements, ElementsInMove, ElementsContext } from 'types'
-import { createExternalContext, useRef, useState } from '@/helpers/effects'
+import { createRef, useRef, useState } from '@/helpers/effects'
 
-const elementsContext = createExternalContext<ElementsContext>()
+export const elementsContext = createRef<ElementsContext>(null)
 
-export const useElements = (): ElementsContext => elementsContext.current
-
-export const withElementsProvider = (cb: () => void) => {
+const ElementsProvider = () => {
   const [elementsInMove, setElementsInMove] = useState<ElementsInMove>(null);
   const elementsRef: Elements = useRef({});
   const lastElementMouseMoveEventRef = useRef<ClientPosition>();
@@ -16,8 +14,6 @@ export const withElementsProvider = (cb: () => void) => {
     lastElementMouseMoveEventRef,
     setElementsInMove,
   }
-
-  cb()
-
-  elementsContext.current = null
 }
+
+export default ElementsProvider

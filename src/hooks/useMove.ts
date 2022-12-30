@@ -8,7 +8,7 @@ import produceBounding from '@/helpers/produceBounding';
 import produceStyle from '@/helpers/produceStyle';
 import stopEventPropagation from '@/helpers/stopEventPropagation';
 import useContainerMouseDownPosition from './useContainerMouseDownPosition';
-import { usePanZoom } from '@/panZoomProvider'
+import { usePanZoom } from '@/provider'
 
 const useMove = () => {
   const [moving, setMoving] = useState<Position | null>(null);

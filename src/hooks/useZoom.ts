@@ -12,7 +12,7 @@ import produceBounding from '@/helpers/produceBounding';
 import produceNextZoom from '@/helpers/produceNextZoom';
 import touchEventToZoomInit from '@/helpers/touchEventToZoomInit';
 import throttle from '@/helpers/throttle';
-import { usePanZoom } from '@/panZoomProvider'
+import { usePanZoom } from '@/provider'
 
 const useZoom = (): Zoom => {
   const {
@@ -51,8 +51,8 @@ const useZoom = (): Zoom => {
     let blockTimer: ReturnType<typeof setTimeout> = null;
 
     const wheelFunc = (e: ZoomEvent) => {
-      const parentRect = getBoundingClientRect(containerNode);
       const childRect = getBoundingClientRect(childNode);
+      const parentRect = getBoundingClientRect(containerNode);
 
       if (isMobile) {
         clearTimeout(blockTimer);

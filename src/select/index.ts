@@ -1,2 +1,3 @@
-export { withSelectProvider } from './createProvider'
-export { default } from './initSelect';
+export { SelectProvider } from './SelectProvider'
+export { default } from './Select';
+

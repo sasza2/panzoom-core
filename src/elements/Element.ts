@@ -13,25 +13,22 @@ import {
 import applyStyles from '@/helpers/applyStyles';
 import removeStyles from '@/helpers/removeStyles';
 import { useElements } from '@/elements'
-import { usePanZoom } from '@/panZoomProvider'
+import { usePanZoom } from '@/provider'
 
 let lastZIndex = 2;
 
-const componentElement = (
-  elementNode: HTMLDivElement,
-  {
-    id,
-    className,
-    disabled,
-    draggableSelector,
-    followers = [],
-    x = 0,
-    y = 0,
-    family,
-    onClick,
-    onMouseUp,
-  }: ElementOptions,
-) => {
+const Element = (elementNode: HTMLDivElement) => ({
+  id,
+  className,
+  disabled,
+  draggableSelector,
+  followers = [],
+  x = 0,
+  y = 0,
+  family,
+  onClick,
+  onMouseUp,
+}: ElementOptions) => {
   if (!id) throw new Error("'id' prop for element can't be undefined");
 
   const [isMoved, setIsMoved] = useState<boolean>(false);
@@ -213,17 +210,4 @@ const componentElement = (
   }, [disabled])
 };
 
-const initElement = (elementNode: HTMLDivElement, props: ElementOptions): [() => void, (props: ElementOptions) => void] => {
-  const context = props
-
-  const setOptions = (nextProps: ElementOptions) => {
-    const contextMap = context as Record<string, unknown>
-    Object.entries(nextProps).forEach(([key, value]) => {
-      if (value !== undefined) contextMap[key] = value
-    })
-  }
-
-  return [() => componentElement(elementNode, context), setOptions]
-}
-
-export default initElement
+export default Element

@@ -1,5 +1,5 @@
 import { ELEMENT_AUTO_MOVE_SPEED, ELEMENT_AUTO_MOVE_STEP } from '@/consts';
-import { usePanZoom } from '@/panZoomProvider';
+import { usePanZoom } from '@/provider';
 import { useElements } from '@/elements';
 import appendToCurrentPosition from '@/helpers/appendToCurrentPosition';
 import { useEffect } from '@/helpers/effects'

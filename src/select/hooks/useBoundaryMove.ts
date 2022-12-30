@@ -4,7 +4,7 @@ import {
   useElementMouseDownPosition,
   useElementMouseMovePosition,
 } from '@/hooks/useElementEventPosition';
-import { MoveRef, useSelect } from '../createProvider';
+import { MoveRef, useSelect } from '../SelectProvider';
 
 type UseBoundaryMove = ({ grabElementsRef }: { grabElementsRef: MoveRef }) => void;
 
