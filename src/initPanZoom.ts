@@ -4,7 +4,6 @@ import ElementsProvider, { createElementsQueue } from './elements'
 import Select, { SelectProvider } from './select'
 import PanZoomProvider, { getDefaultContext, mapPanZoomProps } from './provider'
 import PanZoom from './PanZoom'
-import PanZoomFeatures from './PanZoomFeatures'
 
 const initPanZoom = (childNode: HTMLDivElement, options: PanZoomOptions = {}): PanZoomApi => {
   const panZoomProvider = initializeComponent(PanZoomProvider, mapPanZoomProps)
@@ -12,17 +11,15 @@ const initPanZoom = (childNode: HTMLDivElement, options: PanZoomOptions = {}): P
 
   const elements = createElementsQueue()
 
-  const panZoomComponent = initializeComponent(PanZoom)
-  const panZoomFeaturesComponent = initializeComponent(PanZoomFeatures)
   const elementsProvider = initializeComponent(ElementsProvider)
+  const panZoomComponent = initializeComponent(PanZoom)
   const selectProvider = initializeComponent(SelectProvider)
   const selectComponent = initializeComponent(Select)
 
   const renderPanZoom = () => render([
     panZoomProvider,
-    panZoomComponent,
     elementsProvider,
-    panZoomFeaturesComponent,
+    panZoomComponent,
     ...elements.queue,
     selectProvider,
     selectComponent,
