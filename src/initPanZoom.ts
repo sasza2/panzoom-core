@@ -10,7 +10,7 @@ const initPanZoom = (childNode: HTMLDivElement, options: PanZoomOptions = {}): P
   const elementComponents: Array<Component> = []
 
   const panZoomProvider = initializeComponent(PanZoomProvider, mapPanZoomProps)
-  panZoomProvider.updateProps(getDefaultContext(childNode, options))
+  panZoomProvider.context.props = getDefaultContext(childNode, options)
 
   const panZoomComponent = initializeComponent(PanZoom)
   const panZoomFeaturesComponent = initializeComponent(PanZoomFeatures)

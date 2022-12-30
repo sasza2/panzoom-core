@@ -1,7 +1,7 @@
 import React, { createContext, DependencyList, EffectCallback, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { ElementApi, ElementOptions, PanZoomApi, PanZoomOptions } from 'types'
-import initPanZoom from '../initPanZoom';
+import initPanZoom, { getAllowedPanZoomProps } from '../';
 
 const useDidUpdateEffect = (cb: EffectCallback, deps: DependencyList) => {
   const didMount = useRef(false)
@@ -53,60 +53,26 @@ export const Element: React.FC<ElementOptions> = ({
   )
 }
 
+const panZoomAllowedProps = getAllowedPanZoomProps()
+
 const PanZoom: React.FC<PanZoomOptions> = ({
   children,
-  boundary,
-  className,
-  disabled,
-  disabledElements,
-  disabledMove,
-  disabledUserSelect,
-  disabledZoom,
-  onElementsChange,
-  onContainerChange,
-  onContainerClick,
-  onContainerPositionChange,
-  onContainerZoomChange,
-  selecting,
-  zoomInitial,
-  zoomMax,
-  zoomMin,
-  zoomSpeed,
+  ...props
 }) => {
   const childRef = useRef()
   const panZoomRef = useRef<PanZoomApi>(null)
   const [initialized, setInitialized] = useState(false)
 
-  const options = {
-    boundary,
-    className,
-    disabled,
-    disabledElements,
-    disabledMove,
-    disabledUserSelect,
-    disabledZoom,
-    onElementsChange,
-    onContainerChange,
-    onContainerClick,
-    onContainerPositionChange,
-    onContainerZoomChange,
-    selecting,
-    zoomInitial,
-    zoomMax,
-    zoomMin,
-    zoomSpeed,
-  }
-
-  const deps = Object.values(options)
+  const deps = panZoomAllowedProps.map(propName => props[propName])
 
   useLayoutEffect(() => {
-    panZoomRef.current = initPanZoom(childRef.current, options);
+    panZoomRef.current = initPanZoom(childRef.current, props);
     setInitialized(true)
     return panZoomRef.current.destroy
   }, [])
 
   useDidUpdateEffect(() => {
-    panZoomRef.current.setOptions(options)
+    panZoomRef.current.setOptions(props)
   }, deps)
 
   return (
