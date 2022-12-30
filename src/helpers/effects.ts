@@ -32,7 +32,7 @@ const HOOKS = {
   STATE: 'state',
 }
 
-type RenderComponent = () => void
+export type RenderComponent = () => void
 
 export type Component = {
   context: Context,
