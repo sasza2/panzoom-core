@@ -1,0 +1,58 @@
+{
+  "name": "panzoom-core",
+  "version": "1.0.0",
+  "description": "-",
+  "main": "dist/main.umd.cjs",
+  "keywords": [
+    "pan",
+    "zoom",
+    "move",
+    "panzoom",
+    "moving",
+    "selecting"
+  ],
+  "types": "types/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "dev": "ladle serve",
+    "lint": "eslint src --fix",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sasza2/react-panzoom.git"
+  },
+  "author": "sasza",
+  "contributors": [
+    "HighLiuk"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sasza2/react-panzoom/issues"
+  },
+  "browser": {
+    "[module-name]": false
+  },
+  "devDependencies": {
+    "@ladle/react": "^2.4.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "12.1.4",
+    "@types/react": "^16.14.0",
+    "@typescript-eslint/eslint-plugin": "^5.47.0",
+    "@typescript-eslint/parser": "^5.47.0",
+    "@vitest/coverage-c8": "^0.26.2",
+    "eslint": "^8.30.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-jsx-a11y": "6.6.1",
+    "eslint-plugin-react": "^7.31.11",
+    "jsdom": "^20.0.3",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "typescript": "^4.9.4",
+    "vite": "^4.0.3",
+    "vitest": "^0.26.2"
+  }
+}
