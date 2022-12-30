@@ -38,6 +38,19 @@ export type ZoomEvent = {
   clientY: number;
 };
 
+export type API = {
+  move: (x: number, y: number) => void;
+  getElements: () => Elements['current'];
+  updateElementPosition: (id: string | number, position: Position) => void;
+  getPosition: () => Position;
+  setPosition: (x: number, y: number) => void;
+  getZoom: () => number;
+  setZoom: (zoom: number) => void;
+  zoomIn: (zoom: number) => void;
+  zoomOut: (zoom: number) => void;
+  reset: () => void;
+};
+
 export type PanZoomOptions = {
   boundary?: BoundaryProp;
   className?: string;
@@ -61,6 +74,7 @@ export type PanZoomOptions = {
 export type Ref <T> = { current: T | undefined }
 
 export type PanZoomContext = {
+  apiRef: Ref<API>,
   boundary?: BoundaryProp,
   className?: string;
   blockMovingRef: Ref<boolean>,
@@ -144,7 +158,7 @@ export type PanZoomApi = {
   addElement: (node: HTMLDivElement, elementOptions: ElementOptions) => ElementApi,
   destroy: () => void,
   setOptions: (options: PanZoomOptions) => void,
-}
+} & API
 
 export type ElementApi = {
   destroy: () => void,

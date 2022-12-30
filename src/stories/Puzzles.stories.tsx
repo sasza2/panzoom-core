@@ -31,7 +31,7 @@ export const Puzzles = () => {
   };
 
   return (
-    <div style={{ border: '1px dashed #000', width: 400, height: 400 }}>
+    <div style={{ border: '1px solid red', width: 360, height: 400 }}>
       <PanZoom
         disabledUserSelect
         onElementsChange={onElementsChange}
