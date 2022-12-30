@@ -1,16 +1,16 @@
-import { ElementApi, ElementOptions, PanZoomApi, PanZoomOptions } from 'types'
-import { initializeComponent, Component, render } from './helpers/effects';
-import ElementsProvider, { createElement } from './elements'
+import { PanZoomApi, PanZoomOptions } from 'types'
+import { initializeComponent, render } from './helpers/effects';
+import ElementsProvider, { createElementsQueue } from './elements'
 import Select, { SelectProvider } from './select'
 import PanZoomProvider, { getDefaultContext, mapPanZoomProps } from './provider'
 import PanZoom from './PanZoom'
 import PanZoomFeatures from './PanZoomFeatures'
 
 const initPanZoom = (childNode: HTMLDivElement, options: PanZoomOptions = {}): PanZoomApi => {
-  const elementComponents: Array<Component> = []
-
   const panZoomProvider = initializeComponent(PanZoomProvider, mapPanZoomProps)
   panZoomProvider.context.props = getDefaultContext(childNode, options)
+
+  const elements = createElementsQueue()
 
   const panZoomComponent = initializeComponent(PanZoom)
   const panZoomFeaturesComponent = initializeComponent(PanZoomFeatures)
@@ -23,55 +23,28 @@ const initPanZoom = (childNode: HTMLDivElement, options: PanZoomOptions = {}): P
     panZoomComponent,
     elementsProvider,
     panZoomFeaturesComponent,
-    ...elementComponents,
+    ...elements.queue,
     selectProvider,
     selectComponent,
   ])
 
-  const addElementWrapper= (node: HTMLDivElement, elementOptions: ElementOptions): ElementApi => {
-    const Element = createElement(node)
-    const elementComponent = initializeComponent(Element)
-    elementComponent.updateProps(elementOptions)
-
-    elementComponents.push(elementComponent)
-    renderPanZoom()
-
-    const destroyElement = () => {
-      elementComponent.unmount()
-      const indexToRemove = elementComponents.findIndex(current => current === elementComponent)
-      if (indexToRemove < 0) return
-      elementComponents.splice(indexToRemove, 1)
-      renderPanZoom()
-    }
-
-    const setOptionsElement = (elementOptions: ElementOptions) => {
-      elementComponent.updateProps(elementOptions)
-      renderPanZoom()
-    }
-
-    return {
-      destroy: destroyElement,
-      setOptions: setOptionsElement,
-    }
-  }
+  elements.setRender(renderPanZoom)
 
   const setOptions = (options: PanZoomOptions) => {
     panZoomProvider.updateProps(options)
     renderPanZoom()
   }
 
-  renderPanZoom()
-
   const destroy = () => {
     selectComponent.unmount()
-    elementComponents.forEach(elementComponent => {
-      elementComponent.unmount()
-    })
+    elements.unmount()
     panZoomComponent.unmount()
   }
 
+  renderPanZoom()
+
   return {
-    addElement: addElementWrapper,
+    addElement: elements.add,
     destroy,
     setOptions,
   }
