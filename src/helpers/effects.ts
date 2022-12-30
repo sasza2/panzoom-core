@@ -50,7 +50,7 @@ const contextQueue: Array<Context> = []
 
 const getCurrentContext = () => contextQueue[contextQueue.length - 1]
 
-export const createRef = <T> (value: T): Ref<T> => ({ current: value })
+export const createRef = <T> (value?: T): Ref<T> => ({ current: value })
 
 export const render = (components: Array<Component>) => {
   const internalRender = () => {

@@ -5,6 +5,7 @@ import removeStyles from '@/helpers/removeStyles'
 import produceStyle from '@/helpers/produceStyle'
 import { useEffect } from '@/helpers/effects'
 import valueToCSSAttribute from '@/helpers/valueToCSSAttribute'
+import useApi from './hooks/useApi'
 import useElementAutoMoveAtEdge from './hooks/useElementAutoMoveAtEdge'
 import useMove from './hooks/useMove'
 import useZoom from './hooks/useZoom'
@@ -27,6 +28,7 @@ const PanZoom = () => {
   useMove()
   useZoom()
   useElementAutoMoveAtEdge()
+  useApi()
 
   useEffect(() => {
     const childStyle = {

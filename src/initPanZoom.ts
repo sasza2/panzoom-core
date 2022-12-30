@@ -1,4 +1,4 @@
-import { PanZoomApi, PanZoomOptions } from 'types'
+import { API, PanZoomApi, PanZoomOptions, Ref } from 'types'
 import { initializeComponent, render } from './helpers/effects';
 import ElementsProvider, { createElementsQueue } from './elements'
 import Select, { SelectProvider } from './select'
@@ -39,11 +39,13 @@ const initPanZoom = (childNode: HTMLDivElement, options: PanZoomOptions = {}): P
   }
 
   renderPanZoom()
+  const apiRef = panZoomProvider.context.props.apiRef as Ref<API>
 
   return {
     addElement: elements.add,
     destroy,
     setOptions,
+    ...apiRef.current,
   }
 }
 
