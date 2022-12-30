@@ -58,6 +58,16 @@ export const imageSVG = () => (
 
 export const boxBounding = () => (
   <div style={{ border: '1px dashed #000', width: 400, height: 400 }}>
+    <style
+      dangerouslySetInnerHTML={{
+        __html: `
+          .react-panzoom__in {
+            background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 50%, #eee 50%, #eee 75%, transparent 75%, #fff);
+            background-size: 200px 200px;
+          }
+        `,
+      }}
+    />
     <PanZoom
       disabledUserSelect
       boundary

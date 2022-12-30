@@ -39,10 +39,10 @@ export const SELECT_STYLE = {
   height: '100%',
   left: '0px',
   top: '0px',
+  zIndex: '2147483647',
 };
 
 export const SELECT_BOX_STYLE = {
   backgroundColor: '#ccc',
   opacity: '0.5',
-  zIndex: '2147483647',
 };
