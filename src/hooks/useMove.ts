@@ -1,5 +1,4 @@
 import { Position } from 'types';
-import { GRABBING_CLASS_NAME } from '@/styles';
 import { useEffect, useState } from '@/helpers/effects';
 import { onMouseDown, onMouseUp, onMouseMove } from '@/helpers/eventListener';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
@@ -17,6 +16,7 @@ const useMove = () => {
     boundary,
     childNode,
     containerNode,
+    className,
     disabled,
     disabledMove,
     onContainerChangeRef,
@@ -30,6 +30,8 @@ const useMove = () => {
 
   // Handle mousedown + mouseup
   useEffect(() => {
+    const grabbingClassName = `${className}--grabbing`
+
     const mousedown = (e: MouseEvent) => {
       if (e.button) return;
 
@@ -37,7 +39,7 @@ const useMove = () => {
       const stop = stopEventPropagation();
 
       document.body.style.userSelect = 'none';
-      document.body.classList.add(GRABBING_CLASS_NAME);
+      document.body.classList.add(grabbingClassName);
 
       if (onContainerClickRef.current) {
         onContainerClickRef.current({
@@ -54,7 +56,7 @@ const useMove = () => {
 
     const mouseup = () => {
       document.body.style.userSelect = null;
-      document.body.classList.remove(GRABBING_CLASS_NAME);
+      document.body.classList.remove(grabbingClassName);
       setMoving(null);
     };
 

@@ -1,4 +1,5 @@
 import { ElementsInMove, ElementOptions } from 'types';
+import { ELEMENT_CLASS_NAME } from '@/consts'
 import { ELEMENT_STYLE } from '@/styles';
 import { useEffect, useState, useRef } from '@/helpers/effects'
 import { onMouseDown, onMouseUp as onMouseUpListener, onMouseMove } from '@/helpers/eventListener';
@@ -10,8 +11,8 @@ import {
   useElementMouseDownPosition,
   useElementMouseMovePosition,
 } from '@/hooks/useElementEventPosition';
+import applyClassName from '@/helpers/applyClassName'
 import applyStyles from '@/helpers/applyStyles';
-import removeStyles from '@/helpers/removeStyles';
 import { useElements } from '@/elements'
 import { usePanZoom } from '@/provider'
 
@@ -19,7 +20,7 @@ let lastZIndex = 2;
 
 const Element = (elementNode: HTMLDivElement) => ({
   id,
-  className,
+  className = ELEMENT_CLASS_NAME,
   disabled,
   draggableSelector,
   followers = [],
@@ -178,36 +179,20 @@ const Element = (elementNode: HTMLDivElement) => ({
     return mouseDownClear
   }, [disabled, family, JSON.stringify(followers), id]);
 
-  useEffect(() => {
-    elementNode.classList.add('react-panzoom-element')
-    elementNode.classList.add(`react-panzoom-element--id-${id}`)
-    applyStyles(elementNode, ELEMENT_STYLE)
-    return () => {
-      elementNode.classList.remove('react-panzoom-element')
-      elementNode.classList.remove(`react-panzoom-element--id-${id}`)
-      removeStyles(elementNode, ELEMENT_STYLE)
-    }
-  }, [])
+  useEffect(
+    () => applyStyles(elementNode, ELEMENT_STYLE),
+    [],
+  )
 
-  useEffect(() => {
-    if (!className) return
-
-    elementNode.classList.add(className);
-    return () => {
-      elementNode.classList.remove(className);
-    }
-  }, [className])
+  useEffect(
+    () => applyClassName(elementNode, `${className} ${className}--id-${id}`),
+    [className, id],
+  )
 
   useEffect(() => {
     if (!disabled) return
-
-    const classNameDisabled = 'react-panzoom-element--disabled'
-    elementNode.classList.add(classNameDisabled);
-
-    return () => {
-      elementNode.classList.remove(classNameDisabled);
-    }
-  }, [disabled])
+    return applyClassName(elementNode, `${className}--disabled`)
+  }, [className, disabled])
 };
 
 export default Element

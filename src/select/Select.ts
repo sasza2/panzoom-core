@@ -44,10 +44,11 @@ const Select = () => {
       height: valueToCSSAttribute(boundary.height),
     };
 
-    applyStyles(movingRef.current, boundaryStyle)
+    const removeStyles = applyStyles(movingRef.current, boundaryStyle)
     selectRef.current.appendChild(movingRef.current)
 
     return () => {
+      removeStyles()
       selectRef.current.removeChild(movingRef.current)
     }
   }, [boundary])

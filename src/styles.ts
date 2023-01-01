@@ -1,19 +1,15 @@
-export const CLASS_NAME = 'react-panzoom';
-
-export const GRABBING_CLASS_NAME = `${CLASS_NAME}--grabbing`;
-
 export const CONTAINER_STYLE = {
   width: '100%',
   height: '100%',
   overflow: 'hidden',
-  touchAction: 'none',
+  'touch-action': 'none',
   WebkitFontSmoothing: 'antialiased',
 };
 
 export const CHILD_STYLE = {
   position: 'relative',
-  transformOrigin: '0 0',
-  pointerEvents: 'none',
+  'transform-origin': '0 0',
+  'pointer-events': 'none',
 };
 
 export const CHILD_DISABLED_STYLE = {
@@ -30,7 +26,7 @@ export const ELEMENT_STYLE = {
   position: 'absolute',
   left: '0px',
   top: '0px',
-  pointerEvents: 'all',
+  'pointer-events': 'all',
 };
 
 export const SELECT_STYLE = {
