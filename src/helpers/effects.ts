@@ -1,5 +1,11 @@
 import { Ref } from 'types';
 
+const HOOKS = {
+  EFFECT: 'effect',
+  REF: 'ref',
+  STATE: 'state',
+} as const;
+
 type Value = object | string | number | boolean | undefined | null
 
 type Dependencies = Array<Value>
@@ -8,17 +14,23 @@ type EffectHookOnUnmount = void | (() => void)
 
 type EffectHookCallback = () => EffectHookOnUnmount
 
-type EffectHook = { type: 'effect', deps: Dependencies, onUnmount: EffectHookOnUnmount, value: never }
+type EffectHook = {
+  type: typeof HOOKS.EFFECT, deps: Dependencies, onUnmount: EffectHookOnUnmount, value: never
+}
 
-type StateHook = { type: 'state', value: Value, deps: never, onUnmount: never }
+type StateHook = {
+  type: typeof HOOKS.STATE, value: Value, deps?: never, onUnmount?: never
+}
 
-type RefHook = { type: 'ref', value: Ref<Value>, deps: never, onUnmount: never }
+type RefHook = {
+  type: typeof HOOKS.REF, value: Ref<Value>, deps?: never, onUnmount?: never
+}
 
 type Hook = EffectHook | StateHook | RefHook
 
 type Props = Record<string, unknown>
 
-type Context = {
+type ComponentContext = {
   it: number,
   hooks: Array<Hook>,
   render?: () => void,
@@ -26,16 +38,10 @@ type Context = {
   onRerender?: () => void,
 }
 
-const HOOKS = {
-  EFFECT: 'effect',
-  REF: 'ref',
-  STATE: 'state',
-};
-
 export type RenderComponent = () => void
 
 export type Component = {
-  context: Context,
+  context: ComponentContext,
   render: RenderComponent,
   unmount: () => void,
   updateProps: (props: Props) => void,
@@ -46,7 +52,7 @@ type InitializeComponent = (
   mapNextProps?: (props: Props) => Props,
 ) => Component
 
-const contextQueue: Array<Context> = [];
+const contextQueue: Array<ComponentContext> = [];
 
 const getCurrentContext = () => contextQueue[contextQueue.length - 1];
 
@@ -71,7 +77,7 @@ export const render = (components: Array<Component>) => {
 };
 
 export const initializeComponent: InitializeComponent = (cb, mapNextProps) => {
-  const context: Context = {
+  const context: ComponentContext = {
     it: 0,
     hooks: [],
     render: () => {
@@ -121,8 +127,7 @@ export const useEffect = (cb: EffectHookCallback, deps: Dependencies) => {
     return;
   }
 
-  const shouldRun = areDepsEqual(hook.deps, deps);
-  if (shouldRun) return;
+  if (areDepsEqual(hook.deps, deps)) return;
 
   if (hook.onUnmount) hook.onUnmount();
   const onUnmount = cb();
@@ -159,7 +164,7 @@ export const useRef = <T extends Value>(initialValue?: T): Ref<T> => {
   let hook = context.hooks[currentIteration] as RefHook;
   if (!hook) {
     const value = { current: initialValue || null } as Ref<T>;
-    hook = { type: HOOKS.REF, value } as unknown as RefHook; // TODO
+    hook = { type: HOOKS.REF, value } as RefHook;
     context.hooks[currentIteration] = hook;
     return value;
   }
