@@ -4,7 +4,7 @@ import getBoundingClientRect from './getBoundingClientRect';
 
 type ProduceElementPositionProps = {
   element: HTMLElement;
-  container: HTMLDivElement;
+  childNode: HTMLDivElement;
   x: number;
   y: number;
   zoom: number;
@@ -12,16 +12,16 @@ type ProduceElementPositionProps = {
 
 const produceElementPosition = ({
   element,
-  container,
+  childNode,
   x,
   y,
   zoom,
 }: ProduceElementPositionProps): Position => {
   const elementRect = getBoundingClientRect(element);
-  const containerRect = getBoundingClientRect(container);
+  const childRect = getBoundingClientRect(childNode);
 
-  const maxRight = (containerRect.width - elementRect.width) / zoom;
-  const maxBottom = (containerRect.height - elementRect.height) / zoom;
+  const maxRight = (childRect.width - elementRect.width) / zoom;
+  const maxBottom = (childRect.height - elementRect.height) / zoom;
 
   const position: Position = { x, y };
 
