@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 
+import { API } from 'types'
 import PanZoom, { Element } from './PanZoom';
 
 const Rectangles = () => (
@@ -55,6 +56,28 @@ export const imageSVG = () => (
     </PanZoom>
   </div>
 );
+
+export const imageSVGAnimation = () => {
+  const ref = React.createRef<API>();
+  useLayoutEffect(() => {
+    const timer = setInterval(() => {
+      ref.current.setPosition(120, Math.floor(Math.random() * 240 - 120));
+    }, 500);
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <div style={{ border: '1px solid red' }}>
+      <PanZoom ref={ref}>
+        <svg height="210" width="500">
+          <polygon
+            points="200,10 250,190 160,210"
+            style={{ fill: 'lime', stroke: 'purple', strokeWidth: 1 }}
+          />
+        </svg>
+      </PanZoom>
+    </div>
+  );
+};
 
 export const boxBounding = () => (
   <div style={{ border: '1px dashed #000', width: 400, height: 400 }}>
