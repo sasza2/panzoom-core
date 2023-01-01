@@ -3,7 +3,7 @@ export const CONTAINER_STYLE = {
   height: '100%',
   overflow: 'hidden',
   'touch-action': 'none',
-  WebkitFontSmoothing: 'antialiased',
+  '-webkit-font-smoothing': 'antialiased',
 };
 
 export const CHILD_STYLE = {
@@ -13,12 +13,7 @@ export const CHILD_STYLE = {
 };
 
 export const CHILD_DISABLED_STYLE = {
-  WebkitTouchCallout: 'none',
-  WebkitUserSelect: 'none',
-  KhtmlUserSelect: 'none',
-  MozUserSelect: 'none',
-  msUserSelect: 'none',
-  userSelect: 'none',
+  'user-select': 'none',
 };
 
 export const ELEMENT_STYLE = {
@@ -35,10 +30,10 @@ export const SELECT_STYLE = {
   height: '100%',
   left: '0px',
   top: '0px',
-  zIndex: '2147483647',
+  'z-index': '2147483647',
 };
 
 export const SELECT_BOX_STYLE = {
-  backgroundColor: '#ccc',
+  'background-color': '#ccc',
   opacity: '0.5',
 };

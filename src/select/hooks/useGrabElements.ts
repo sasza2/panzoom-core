@@ -29,7 +29,7 @@ const useGrabElements = (): MoveRef => {
 
         const position = produceElementPosition({
           element: element.node.current,
-          container: childNode,
+          childNode,
           x: positionOnStart.x + (nextPosition.x - fromPosition.x),
           y: positionOnStart.y + (nextPosition.y - fromPosition.y),
           zoom: zoomRef.current,
