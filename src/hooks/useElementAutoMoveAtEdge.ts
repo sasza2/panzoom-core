@@ -59,7 +59,7 @@ const useElementAutoMoveAtEdge: UseElementAutoMoveAtEdge = () => {
         elementsInMove,
         produceNextPosition: (from, currentElement) => produceElementPosition({
           element: currentElement.node.current,
-          container: childNode, // TODO
+          childNode,
           x: currentElement.position.x - addPosition.x / zoomRef.current,
           y: currentElement.position.y - addPosition.y / zoomRef.current,
           zoom: zoomRef.current,
