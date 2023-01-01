@@ -39,6 +39,7 @@ export type ZoomEvent = {
 };
 
 export type API = {
+  childNode: HTMLDivElement,
   move: (x: number, y: number) => void;
   getElements: () => Elements['current'];
   updateElementPosition: (id: string | number, position: Position) => void;

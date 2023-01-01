@@ -1,5 +1,6 @@
 export const CURSOR_ON_EDGE_MARGIN = 30; // px
-export const CLASS_NAME = 'react-panzoom';
+export const CLASS_NAME = 'panzoom-core';
+export const ELEMENT_CLASS_NAME = 'panzoom-core-element'
 export const ELEMENT_AUTO_MOVE_SPEED = 20; // ms
 export const ELEMENT_AUTO_MOVE_STEP = 15; // px
 export const ZOOM_DESKTOP_DEFAULT_STEP = 0.125; // transform scale

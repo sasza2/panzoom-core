@@ -20,6 +20,7 @@ const useApi = (): void => {
   const { withEventAll, withEventPosition, withEventZoom } = useEventsCallback();
 
   apiRef.current = {
+    childNode,
     move: withEventPosition(
       move({
         childNode,
