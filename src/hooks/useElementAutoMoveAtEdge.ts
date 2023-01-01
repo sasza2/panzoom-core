@@ -5,8 +5,8 @@ import isCursorOnEdge from '@/helpers/isCursorOnEdge';
 import isEdgeVisible from '@/helpers/isEdgeVisible';
 import produceElementPosition from '@/helpers/produceElementPosition';
 import updateFamilyOfElementsPosition from '@/helpers/updateFamilyOfElementsPosition';
-import { useElements } from '@/elements'
-import { usePanZoom } from '@/provider'
+import { useElements } from '@/elements';
+import { usePanZoom } from '@/provider';
 
 type UseElementAutoMoveAtEdge = () => void;
 

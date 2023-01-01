@@ -1,13 +1,14 @@
-import { API, PanZoomContext, PanZoomOptions } from 'types'
-import { createRef } from '@/helpers/effects'
+import { API, PanZoomContext, PanZoomOptions } from 'types';
+import { createRef } from '@/helpers/effects';
 import {
   ZOOM_INITIAL,
   ZOOM_MIN_DEFAULT,
   ZOOM_MAX_DEFAULT,
-  ZOOM_SPEED_DEFAULT, } from '@/consts';
+  ZOOM_SPEED_DEFAULT,
+} from '@/consts';
 
 const getDefaultContext = (childNode: HTMLDivElement, options: PanZoomOptions): PanZoomContext => {
-  const containerNode = childNode.parentNode as HTMLDivElement
+  const containerNode = childNode.parentNode as HTMLDivElement;
 
   return {
     apiRef: createRef<API>(null),
@@ -35,7 +36,7 @@ const getDefaultContext = (childNode: HTMLDivElement, options: PanZoomOptions): 
     zoomMin: options.zoomMin || ZOOM_MIN_DEFAULT,
     zoomMax: options.zoomMax || ZOOM_MAX_DEFAULT,
     zoomSpeed: options.zoomSpeed || ZOOM_SPEED_DEFAULT,
-  }
-}
+  };
+};
 
-export default getDefaultContext
+export default getDefaultContext;

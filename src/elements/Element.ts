@@ -1,7 +1,7 @@
 import { ElementsInMove, ElementOptions } from 'types';
-import { ELEMENT_CLASS_NAME } from '@/consts'
+import { ELEMENT_CLASS_NAME } from '@/consts';
 import { ELEMENT_STYLE } from '@/styles';
-import { useEffect, useState, useRef } from '@/helpers/effects'
+import { useEffect, useState, useRef } from '@/helpers/effects';
 import { onMouseDown, onMouseUp as onMouseUpListener, onMouseMove } from '@/helpers/eventListener';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceStyle from '@/helpers/produceStyle';
@@ -11,10 +11,10 @@ import {
   useElementMouseDownPosition,
   useElementMouseMovePosition,
 } from '@/hooks/useElementEventPosition';
-import applyClassName from '@/helpers/applyClassName'
+import applyClassName from '@/helpers/applyClassName';
 import applyStyles from '@/helpers/applyStyles';
-import { useElements } from '@/elements'
-import { usePanZoom } from '@/provider'
+import { useElements } from '@/elements';
+import { usePanZoom } from '@/provider';
 
 let lastZIndex = 2;
 
@@ -53,7 +53,6 @@ const Element = (elementNode: HTMLDivElement) => ({
 
   const onMouseUpRef = useRef<typeof onMouseUp>();
   onMouseUpRef.current = onMouseUp;
-
 
   const onElementsAction = (nextElementsInMove: ElementsInMove) => {
     setElementsInMove(nextElementsInMove);
@@ -176,23 +175,23 @@ const Element = (elementNode: HTMLDivElement) => ({
     };
 
     const mouseDownClear = onMouseDown(elementNode, mousedown);
-    return mouseDownClear
+    return mouseDownClear;
   }, [disabled, family, JSON.stringify(followers), id]);
 
   useEffect(
     () => applyStyles(elementNode, ELEMENT_STYLE),
     [],
-  )
+  );
 
   useEffect(
     () => applyClassName(elementNode, `${className} ${className}--id-${id}`),
     [className, id],
-  )
+  );
 
   useEffect(() => {
-    if (!disabled) return
-    return applyClassName(elementNode, `${className}--disabled`)
-  }, [className, disabled])
+    if (!disabled) return undefined;
+    return applyClassName(elementNode, `${className}--disabled`);
+  }, [className, disabled]);
 };
 
-export default Element
+export default Element;

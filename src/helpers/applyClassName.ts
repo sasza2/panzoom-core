@@ -1,13 +1,13 @@
 const applyClassName = (node: HTMLElement, classNames: string): () => void => {
-  const classList = classNames.trim().split(' ').filter(cls => cls)
-  classList.forEach(className => {
-    node.classList.add(className)
-  })
+  const classList = classNames.trim().split(' ').filter((cls) => cls);
+  classList.forEach((className) => {
+    node.classList.add(className);
+  });
   return () => {
-    classList.forEach(className => {
-      node.classList.remove(className)
-    })
-  }
-}
+    classList.forEach((className) => {
+      node.classList.remove(className);
+    });
+  };
+};
 
-export default applyClassName
+export default applyClassName;

@@ -1,7 +1,7 @@
 import { Position } from 'types';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
 import positionFromEvent from '@/helpers/positionFromEvent';
-import { usePanZoom } from '@/provider'
+import { usePanZoom } from '@/provider';
 
 const useContainerMouseDownPosition = (): ((
   e: MouseEvent | TouchEvent

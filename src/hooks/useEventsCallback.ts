@@ -27,7 +27,9 @@ const useEventsCallback: UseEventsCallback = () => {
     };
 
     if (position && onContainerChangeRef.current) onContainerChangeRef.current(eventValue);
-    if (position && onContainerPositionChangeRef.current) onContainerPositionChangeRef.current(eventValue);
+    if (position && onContainerPositionChangeRef.current) {
+      onContainerPositionChangeRef.current(eventValue);
+    }
     if (zoom && onContainerZoomChangeRef.current) onContainerZoomChangeRef.current(eventValue);
   };
 

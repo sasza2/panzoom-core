@@ -1,6 +1,6 @@
-import { PanZoomContext } from 'types'
-import { panZoomContext } from './PanZoomProvider'
+import { PanZoomContext } from 'types';
+import { panZoomContext } from './PanZoomProvider';
 
-const usePanZoom = (): PanZoomContext => panZoomContext.current
+const usePanZoom = (): PanZoomContext => panZoomContext.current;
 
-export default usePanZoom
+export default usePanZoom;

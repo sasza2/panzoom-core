@@ -1,6 +1,6 @@
 import { Position } from 'types';
 import { usePanZoom } from '@/provider';
-import { useEffect, useRef, useState } from '@/helpers/effects'
+import { useEffect, useRef, useState } from '@/helpers/effects';
 import { onMouseUp, onMouseMove } from '@/helpers/eventListener';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
 import useContainerMouseDownPosition from '@/hooks/useContainerMouseDownPosition';

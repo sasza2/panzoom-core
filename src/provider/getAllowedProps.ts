@@ -1,4 +1,4 @@
-import { PanZoomOptions } from 'types'
+import { PanZoomOptions } from 'types';
 
 const getAllowedProps = (): Array<keyof PanZoomOptions> => [
   'boundary',
@@ -20,6 +20,6 @@ const getAllowedProps = (): Array<keyof PanZoomOptions> => [
   'zoomMax',
   'zoomMin',
   'zoomSpeed',
-]
+];
 
-export default getAllowedProps
+export default getAllowedProps;

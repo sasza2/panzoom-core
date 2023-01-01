@@ -1,4 +1,4 @@
-import { useEffect } from '@/helpers/effects'
+import { useEffect } from '@/helpers/effects';
 import { onMouseDown, onMouseUp, onMouseMove } from '@/helpers/eventListener';
 import {
   useElementMouseDownPosition,

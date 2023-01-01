@@ -1,5 +1,5 @@
 import { Position } from 'types';
-import { useEffect, useRef } from '@/helpers/effects'
+import { useEffect, useRef } from '@/helpers/effects';
 import { usePanZoom } from '@/provider';
 import { useElements } from '@/elements';
 import produceElementPosition from '@/helpers/produceElementPosition';

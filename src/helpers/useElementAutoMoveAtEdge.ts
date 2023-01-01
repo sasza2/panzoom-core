@@ -2,7 +2,7 @@ import { ELEMENT_AUTO_MOVE_SPEED, ELEMENT_AUTO_MOVE_STEP } from '@/consts';
 import { usePanZoom } from '@/provider';
 import { useElements } from '@/elements';
 import appendToCurrentPosition from '@/helpers/appendToCurrentPosition';
-import { useEffect } from '@/helpers/effects'
+import { useEffect } from '@/helpers/effects';
 import isCursorOnEdge from '@/helpers/isCursorOnEdge';
 import isEdgeVisible from '@/helpers/isEdgeVisible';
 import produceElementPosition from '@/helpers/produceElementPosition';
