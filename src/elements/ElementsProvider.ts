@@ -1,7 +1,9 @@
-import { ClientPosition, Elements, ElementsInMove, ElementsContext } from 'types'
-import { createRef, useRef, useState } from '@/helpers/effects'
+import {
+  ClientPosition, Elements, ElementsInMove, ElementsContext,
+} from 'types';
+import { createRef, useRef, useState } from '@/helpers/effects';
 
-export const elementsContext = createRef<ElementsContext>(null)
+export const elementsContext = createRef<ElementsContext>(null);
 
 const ElementsProvider = () => {
   const [elementsInMove, setElementsInMove] = useState<ElementsInMove>(null);
@@ -13,7 +15,7 @@ const ElementsProvider = () => {
     elementsRef,
     lastElementMouseMoveEventRef,
     setElementsInMove,
-  }
-}
+  };
+};
 
-export default ElementsProvider
+export default ElementsProvider;

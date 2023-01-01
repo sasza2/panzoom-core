@@ -11,7 +11,7 @@ const getWindowSize = (): Size => {
     return {
       width: window.innerWidth,
       height: window.innerHeight,
-    }
+    };
   }
   return {
     width: Math.min(bodyRect.width, window.innerWidth),

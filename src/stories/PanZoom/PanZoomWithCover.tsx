@@ -1,25 +1,18 @@
-import React, {
-  forwardRef,
-  MutableRefObject,
-  useImperativeHandle,
-  useLayoutEffect,
-  useRef,
-  useState
-} from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import React, { forwardRef, MutableRefObject, useLayoutEffect } from 'react';
 
-import { API, PanZoomApi, PanZoomOptions } from 'types'
+import { PanZoomApi, PanZoomOptions } from 'types';
 import initPanZoom, { getAllowedPanZoomProps } from '@/index';
-import ElementsContext from './ElementsContext'
-import useDidUpdateEffect from './useDidUpdateEffect'
+import usePanZoom from './usePanZoom';
 
 type PanZoomWithCoverOmit = Omit<PanZoomOptions, 'boundary'>
 
-const omitFields = ['boundary']
+const omitFields = ['boundary'];
 const panZoomWithCoverAllowedProps = getAllowedPanZoomProps()
-  .filter(propName => !omitFields.includes(propName)) as Array<keyof PanZoomWithCoverOmit>
+  .filter((propName) => !omitFields.includes(propName)) as Array<keyof PanZoomWithCoverOmit>;
 
 type PanZoomWithCoverProps = {
-  apiRef?: MutableRefObject<API>,
+  apiRef?: MutableRefObject<PanZoomApi>,
   cover: string,
   onCoverLoad?: () => void,
 } & PanZoomWithCoverOmit
@@ -31,21 +24,23 @@ const PanZoomWithCover: React.FC<PanZoomWithCoverProps> = ({
   onCoverLoad,
   ...props
 }) => {
-  const childRef = useRef<HTMLDivElement>()
-  const parentRef = useRef<HTMLDivElement>()
-  const panZoomRef = useRef<PanZoomApi>(null)
-  const [initialized, setInitialized] = useState(false)
-
-  const deps = panZoomWithCoverAllowedProps.map(propName => props[propName])
+  const {
+    childRef, parentRef, panZoomRef, render, setInitialized,
+  } = usePanZoom({
+    apiRef,
+    allowedProps: panZoomWithCoverAllowedProps,
+    children,
+    props,
+  });
 
   useLayoutEffect(() => {
-    setInitialized(false)
+    setInitialized(false);
 
     const image = new Image();
     image.src = cover;
     image.onload = () => {
       const containerNode = parentRef.current.parentNode as HTMLElement;
-      const containerSize = containerNode.getBoundingClientRect()
+      const containerSize = containerNode.getBoundingClientRect();
 
       const imageSize = {
         width: image.naturalWidth,
@@ -71,41 +66,26 @@ const PanZoomWithCover: React.FC<PanZoomWithCoverProps> = ({
           zoomMin: scale,
           zoomMax: props.zoomMax * scale,
         },
-      )
+      );
 
-      setInitialized(true)
-      onCoverLoad()
+      setInitialized(true);
+      onCoverLoad();
     };
 
     return () => {
-      if (!panZoomRef.current) return
-      panZoomRef.current.destroy()
-      panZoomRef.current = null
-    }
-  }, [cover])
+      if (!panZoomRef.current) return;
+      panZoomRef.current.destroy();
+      panZoomRef.current = null;
+    };
+  }, [cover]);
 
-  useDidUpdateEffect(() => {
-    if (panZoomRef.current) panZoomRef.current.setOptions(props)
-  }, deps)
+  return render;
+};
 
-  useImperativeHandle(
-    apiRef,
-    () => panZoomRef.current,
-  )
+const PanZoomWithCoverRef = forwardRef(
+  (props: PanZoomWithCoverProps, ref: MutableRefObject<PanZoomApi>) => (
+    <PanZoomWithCover {...props} apiRef={ref} />
+  ),
+) as React.FC<PanZoomWithCoverProps & { ref?: MutableRefObject<PanZoomApi> }>;
 
-  return (
-    <ElementsContext.Provider value={{ initialized, panZoomRef }}>
-      <div ref={parentRef}>
-        <div ref={childRef}>
-          {children}
-        </div>
-      </div>
-    </ElementsContext.Provider>
-  )
-}
-
-const PanZoomWithCoverRef = forwardRef((props: PanZoomWithCoverProps, ref: MutableRefObject<API>) => (
-  <PanZoomWithCover {...props} apiRef={ref} />
-)) as React.FC<PanZoomWithCoverProps & { ref?: MutableRefObject<API> }>
-
-export default PanZoomWithCoverRef
+export default PanZoomWithCoverRef;

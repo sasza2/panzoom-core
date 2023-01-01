@@ -67,7 +67,7 @@ const useApi = (): void => {
         zoomRef,
       }),
     ),
-  } as API
+  } as API;
 };
 
 export default useApi;

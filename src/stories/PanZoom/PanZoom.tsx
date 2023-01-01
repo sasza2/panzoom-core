@@ -1,61 +1,40 @@
-import React, {
-  forwardRef,
-  MutableRefObject,
-  useImperativeHandle,
-  useLayoutEffect,
-  useRef,
-  useState
-} from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import React, { forwardRef, MutableRefObject, useLayoutEffect } from 'react';
 
-import { API, PanZoomApi, PanZoomOptions } from 'types'
+import { PanZoomApi, PanZoomOptions } from 'types';
 import initPanZoom, { getAllowedPanZoomProps } from '@/index';
-import ElementsContext from './ElementsContext'
-import useDidUpdateEffect from './useDidUpdateEffect'
+import usePanZoom from './usePanZoom';
 
-const panZoomAllowedProps = getAllowedPanZoomProps()
+const panZoomAllowedProps = getAllowedPanZoomProps();
 
-const PanZoom: React.FC<PanZoomOptions & { apiRef?: MutableRefObject<API> }> = ({
+const PanZoom: React.FC<PanZoomOptions & { apiRef?: MutableRefObject<PanZoomApi> }> = ({
   apiRef,
   children,
   ...props
 }) => {
-  const childRef = useRef<HTMLDivElement>()
-  const panZoomRef = useRef<PanZoomApi>(null)
-  const [initialized, setInitialized] = useState(false)
-
-  const deps = panZoomAllowedProps.map(propName => props[propName])
+  const {
+    childRef, panZoomRef, render, setInitialized,
+  } = usePanZoom({
+    allowedProps: panZoomAllowedProps,
+    apiRef,
+    children,
+    props,
+  });
 
   useLayoutEffect(() => {
     panZoomRef.current = initPanZoom(childRef.current, {
       ...props,
       className: props.className || 'react-panzoom',
     });
-    setInitialized(true)
-    return panZoomRef.current.destroy
-  }, [])
+    setInitialized(true);
+    return panZoomRef.current.destroy;
+  }, []);
 
-  useDidUpdateEffect(() => {
-    if (panZoomRef.current) panZoomRef.current.setOptions(props)
-  }, deps)
+  return render;
+};
 
-  useImperativeHandle(
-    apiRef,
-    () => panZoomRef.current,
-  )
-
-  return (
-    <ElementsContext.Provider value={{ initialized, panZoomRef }}>
-      <div>
-        <div ref={childRef}>
-          {children}
-        </div>
-      </div>
-    </ElementsContext.Provider>
-  )
-}
-
-const PanZoomRef = forwardRef((props: PanZoomOptions, ref: MutableRefObject<API>) => (
+const PanZoomRef = forwardRef((props: PanZoomOptions, ref: MutableRefObject<PanZoomApi>) => (
   <PanZoom {...props} apiRef={ref} />
-)) as React.FC<PanZoomOptions & { ref?: MutableRefObject<API> }>
+)) as React.FC<PanZoomOptions & { ref?: MutableRefObject<PanZoomApi> }>;
 
-export default PanZoomRef
+export default PanZoomRef;

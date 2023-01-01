@@ -4,7 +4,7 @@ import {
   ZOOM_NON_DESKTOP_MOVING_BLOCK_DELAY,
 } from '@/consts';
 import { Zoom, ZoomEvent } from 'types';
-import { useEffect } from '@/helpers/effects'
+import { useEffect } from '@/helpers/effects';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
 import isEventMobileZoom from '@/helpers/isEventMobileZoom';
 import produceStyle from '@/helpers/produceStyle';
@@ -12,7 +12,7 @@ import produceBounding from '@/helpers/produceBounding';
 import produceNextZoom from '@/helpers/produceNextZoom';
 import touchEventToZoomInit from '@/helpers/touchEventToZoomInit';
 import throttle from '@/helpers/throttle';
-import { usePanZoom } from '@/provider'
+import { usePanZoom } from '@/provider';
 
 const useZoom = (): Zoom => {
   const {

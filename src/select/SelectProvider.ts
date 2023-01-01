@@ -1,5 +1,5 @@
-import { Position, Ref } from 'types'
-import { createRef, useRef, useState } from '@/helpers/effects'
+import { Position, Ref } from 'types';
+import { createRef, useRef, useState } from '@/helpers/effects';
 
 export type MoveRef = Ref<(position: Position) => void>;
 
@@ -22,9 +22,9 @@ type SelectContext = {
   setMove: (position: Position | null) => void;
 }
 
-const selectContext = createRef<SelectContext>(null)
+const selectContext = createRef<SelectContext>(null);
 
-export const useSelect = (): SelectContext => selectContext.current
+export const useSelect = (): SelectContext => selectContext.current;
 
 export const SelectProvider = () => {
   const expandingRef = useRef<HTMLDivElement>();
@@ -41,7 +41,7 @@ export const SelectProvider = () => {
     selectRef,
     move,
     setMove,
-  }
-}
+  };
+};
 
-export default SelectProvider
+export default SelectProvider;

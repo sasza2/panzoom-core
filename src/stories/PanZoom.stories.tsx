@@ -1,6 +1,7 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useLayoutEffect, useState } from 'react';
 
-import { API } from 'types'
+import { PanZoomApi } from 'types';
 import PanZoom, { Element } from './PanZoom';
 
 const Rectangles = () => (
@@ -58,7 +59,7 @@ export const imageSVG = () => (
 );
 
 export const imageSVGAnimation = () => {
-  const ref = React.createRef<API>();
+  const ref = React.createRef<PanZoomApi>();
   useLayoutEffect(() => {
     const timer = setInterval(() => {
       ref.current.setPosition(120, Math.floor(Math.random() * 240 - 120));
@@ -82,6 +83,7 @@ export const imageSVGAnimation = () => {
 export const boxBounding = () => (
   <div style={{ border: '1px dashed #000', width: 400, height: 400 }}>
     <style
+      // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{
         __html: `
           .react-panzoom__in {
@@ -135,7 +137,7 @@ export const boxBounding = () => (
 export const selectingBoxes = () => {
   const [selecting, setSelecting] = useState(true);
 
-  const toggle: React.ChangeEventHandler<HTMLInputElement> = e => setSelecting(e.target.checked)
+  const toggle: React.ChangeEventHandler<HTMLInputElement> = (e) => setSelecting(e.target.checked);
 
   return (
     <>
@@ -205,14 +207,16 @@ export const selectingBoxes = () => {
 };
 
 export const TwoInstances = () => {
-  const [hasTwoInstances, setHasTwoInstances] = useState(true)
-  const toggle: React.ChangeEventHandler<HTMLInputElement> = e => setHasTwoInstances(e.target.checked)
+  const [hasTwoInstances, setHasTwoInstances] = useState(true);
+  const toggle: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setHasTwoInstances(e.target.checked);
+  };
 
   return (
     <>
       <div style={{ border: '1px solid red', height: 300 }}>
         <PanZoom>
-          <Element id='a'>element A</Element>
+          <Element id="a">element A</Element>
         </PanZoom>
       </div>
       <label htmlFor="twoInstances">
@@ -223,14 +227,14 @@ export const TwoInstances = () => {
         hasTwoInstances && (
           <div style={{ border: '1px solid red', height: 300 }}>
             <PanZoom>
-              <Element id='b'>element B</Element>
-              <Element id='c' x={100} y={100}>element C</Element>
+              <Element id="b">element B</Element>
+              <Element id="c" x={100} y={100}>element C</Element>
             </PanZoom>
           </div>
         )
       }
     </>
-  )
-}
+  );
+};
 
 export default { title: 'PanZoom', component: Rectangles };

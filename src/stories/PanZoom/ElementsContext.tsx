@@ -1,12 +1,13 @@
-import { createContext } from 'react'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { createContext } from 'react';
 
-import { PanZoomApi } from 'types'
+import { PanZoomApi } from 'types';
 
 type ElementsContextValue = {
   initialized: boolean,
   panZoomRef: React.MutableRefObject<PanZoomApi>
 }
 
-const ElementsContext = createContext({} as ElementsContextValue)
+const ElementsContext = createContext({} as ElementsContextValue);
 
-export default ElementsContext
+export default ElementsContext;

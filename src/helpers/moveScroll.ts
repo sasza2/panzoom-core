@@ -40,7 +40,7 @@ const moveScroll = (
   nextY: number,
 ): Position => {
   const parent = childNode.parentNode as HTMLDivElement;
-  const parentRect = getBoundingClientRect(parent );
+  const parentRect = getBoundingClientRect(parent);
 
   const windowSize = getWindowSize();
 

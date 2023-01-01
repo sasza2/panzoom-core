@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import {
   DependencyList,
   EffectCallback,
@@ -6,15 +7,15 @@ import {
 } from 'react';
 
 const useDidUpdateEffect = (cb: EffectCallback, deps: DependencyList) => {
-  const didMount = useRef(false)
+  const didMount = useRef(false);
 
   useEffect(() => {
     if (!didMount.current) {
-      didMount.current = true
-      return
+      didMount.current = true;
+      return undefined;
     }
-    return cb()
-  }, deps)
-}
+    return cb();
+  }, deps);
+};
 
-export default useDidUpdateEffect
+export default useDidUpdateEffect;

@@ -6,8 +6,8 @@ import positionFromEvent from '@/helpers/positionFromEvent';
 import produceBounding from '@/helpers/produceBounding';
 import produceStyle from '@/helpers/produceStyle';
 import stopEventPropagation from '@/helpers/stopEventPropagation';
+import { usePanZoom } from '@/provider';
 import useContainerMouseDownPosition from './useContainerMouseDownPosition';
-import { usePanZoom } from '@/provider'
 
 const useMove = () => {
   const [moving, setMoving] = useState<Position | null>(null);
@@ -24,13 +24,13 @@ const useMove = () => {
     onContainerPositionChangeRef,
     positionRef,
     zoomRef,
-  } = usePanZoom()
+  } = usePanZoom();
 
   const containerMouseDownPosition = useContainerMouseDownPosition();
 
   // Handle mousedown + mouseup
   useEffect(() => {
-    const grabbingClassName = `${className}--grabbing`
+    const grabbingClassName = `${className}--grabbing`;
 
     const mousedown = (e: MouseEvent) => {
       if (e.button) return;
