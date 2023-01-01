@@ -1,5 +1,3 @@
-type Edge = string | number;
-
 export type Boundary = {
   top?: Edge;
   right?: Edge;
@@ -8,6 +6,13 @@ export type Boundary = {
 };
 
 export type BoundaryProp = Boundary | boolean;
+
+export type ClientPosition = {
+  clientX: number;
+  clientY: number;
+};
+
+type Edge = string | number;
 
 export type Position = {
   x: number;
@@ -18,6 +23,8 @@ export type Size = {
   height?: string | number;
   width?: string | number;
 };
+
+export type Ref <T> = { current: T | undefined }
 
 export type OnElementsChange = (elements: Record<string, Position>) => unknown;
 
@@ -72,8 +79,6 @@ export type PanZoomOptions = {
   zoomSpeed?: number;
 } & Size
 
-export type Ref <T> = { current: T | undefined }
-
 export type PanZoomContext = {
   apiRef: Ref<API>,
   boundary?: BoundaryProp,
@@ -100,10 +105,7 @@ export type PanZoomContext = {
   zoomSpeed?: number;
 } & Size
 
-export type ClientPosition = {
-  clientX: number;
-  clientY: number;
-};
+export type ElementId = string | number;
 
 export type Elements = Ref<Record<ElementId, Element>>;
 
@@ -115,8 +117,6 @@ export type ElementsContext = {
   lastElementMouseMoveEventRef: Ref<ClientPosition>;
   setElementsInMove: (elementsInMove: ElementsInMove) => void;
 };
-
-export type ElementId = string | number;
 
 export type Element = {
   family?: string;
