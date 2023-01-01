@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useEffect, useRef, useState } from 'react';
 
-import { API, OnElementsChange, Position } from 'types';
+import { PanZoomApi, OnElementsChange, Position } from 'types';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
 import { PanZoomWithCover, Element } from './PanZoom';
 
@@ -33,7 +33,7 @@ const Pin = () => (
 export const cover = () => {
   const [distance, setDistance] = useState<number>(null);
   const distanceThrottleRef = useRef<ReturnType<typeof setTimeout>>(null);
-  const panZoomRef = useRef<API>();
+  const panZoomRef = useRef<PanZoomApi>();
   const svgLineRef = useRef<SVGSVGElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const elementsRef = useRef(PINS_INITIAL);
