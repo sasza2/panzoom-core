@@ -23,7 +23,12 @@ export const Multiple = () => {
       for (let i = 0; i < ELEMENTS; i++) {
         panZoomRef.current.addElement(
           document.querySelector(`[data-id="element-${i}"]`),
-          { id: i.toString(), x: i * 10, y: i * 10 },
+          {
+            id: i.toString(),
+            x: i * 10,
+            y: i * 10,
+            family: `family-${Math.floor(i / 5)}`,
+          },
         );
       }
     } else if (panZoomRef.current) {
