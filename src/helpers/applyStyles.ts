@@ -6,6 +6,7 @@ const applyStyles = (node: HTMLElement, styles: Record<string, string>): () => v
     Object.entries(styles).forEach(([key]) => {
       node.style.removeProperty(key);
     });
+    if (!node.getAttribute('style')) node.removeAttribute('style');
   };
 };
 

@@ -49,7 +49,7 @@ const PanZoom = () => {
     const removeStyles = applyStyles(containerNode, CONTAINER_STYLE);
 
     return () => {
-      childNode.setAttribute('draggable', null);
+      childNode.removeAttribute('draggable');
       removeStyles();
     };
   }, []);

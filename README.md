@@ -121,12 +121,17 @@ panZoom.setOptions({ selecting: false })
 
 !["Preview"](docs/selecting.gif "Selecting elements")
 
+# Installing for development
+```
+pnpm i
+```
+
 # Testing
 ```
-npm run test
+pnpm test
 ```
 
 # Examples
 ```
-npm run dev
+pnpm dev
 ```

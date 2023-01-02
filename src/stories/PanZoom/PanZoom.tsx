@@ -2,10 +2,10 @@
 import React, { forwardRef, MutableRefObject, useLayoutEffect } from 'react';
 
 import { PanZoomApi, PanZoomOptions } from 'types';
-import initPanZoom, { getAllowedPanZoomProps } from '@/index';
+import initPanZoom, { getAllowedProps } from '@/index';
 import usePanZoom from './usePanZoom';
 
-const panZoomAllowedProps = getAllowedPanZoomProps();
+const panZoomAllowedProps = getAllowedProps();
 
 const PanZoom: React.FC<PanZoomOptions & { apiRef?: MutableRefObject<PanZoomApi> }> = ({
   apiRef,
