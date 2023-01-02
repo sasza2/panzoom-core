@@ -8,6 +8,7 @@ export const CONTAINER_STYLE = {
 
 export const CHILD_STYLE = {
   position: 'relative',
+  overflow: 'hidden',
   'transform-origin': '0 0',
   'pointer-events': 'none',
 };

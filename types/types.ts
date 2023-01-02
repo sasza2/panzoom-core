@@ -112,10 +112,8 @@ export type Elements = Ref<Record<ElementId, Element>>;
 export type ElementsInMove = Record<ElementId, Position>;
 
 export type ElementsContext = {
-  elementsInMove: ElementsInMove;
   elementsRef: Elements;
   lastElementMouseMoveEventRef: Ref<ClientPosition>;
-  setElementsInMove: (elementsInMove: ElementsInMove) => void;
 };
 
 export type Element = {

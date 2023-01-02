@@ -7,7 +7,6 @@ import { usePanZoom } from '@/provider';
 import { CLASS_NAME } from './consts';
 import { CHILD_DISABLED_STYLE, CHILD_STYLE, CONTAINER_STYLE } from './styles';
 import useApi from './hooks/useApi';
-import useElementAutoMoveAtEdge from './hooks/useElementAutoMoveAtEdge';
 import useMove from './hooks/useMove';
 import useZoom from './hooks/useZoom';
 
@@ -26,7 +25,6 @@ const PanZoom = () => {
 
   useMove();
   useZoom();
-  useElementAutoMoveAtEdge();
   useApi();
 
   useEffect(() => {

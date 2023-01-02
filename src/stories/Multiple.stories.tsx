@@ -4,9 +4,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { PanZoomApi } from 'types';
 import initPanZoom from '@/initPanZoom';
 
-export default { title: 'Init' };
+export default { title: 'Multiple' };
 
-export const Init = () => {
+const ELEMENTS = 50;
+
+export const Multiple = () => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const panZoomRef = useRef<PanZoomApi>();
   const childNode = useRef<HTMLDivElement>();
@@ -18,12 +20,23 @@ export const Init = () => {
   useEffect(() => {
     if (initialized) {
       panZoomRef.current = initPanZoom(childNode.current);
-      panZoomRef.current.addElement(document.querySelector('[data-id="element-a"]'), { id: 'element' });
+      for (let i = 0; i < ELEMENTS; i++) {
+        panZoomRef.current.addElement(
+          document.querySelector(`[data-id="element-${i}"]`),
+          { id: i.toString(), x: i * 10, y: i * 10 },
+        );
+      }
     } else if (panZoomRef.current) {
       panZoomRef.current.destroy();
       panZoomRef.current = null;
     }
   }, [initialized]);
+
+  const renderElements = () => {
+    const elements = [];
+    for (let i = 0; i < ELEMENTS; i++) elements.push(<div key={i} data-id={`element-${i}`}>{i}</div>);
+    return elements;
+  };
 
   return (
     <>
@@ -42,8 +55,7 @@ export const Init = () => {
       }
       <div>
         <div ref={childNode}>
-          <div data-id="element-a">element A</div>
-          <div data-id="element-b">Test</div>
+          {renderElements()}
         </div>
       </div>
     </>

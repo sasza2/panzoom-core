@@ -1,16 +1,30 @@
+import { Position } from 'types';
 import { usePanZoom } from '@/provider';
 import { SELECT_STYLE, SELECT_BOX_STYLE } from '@/styles';
-import { useEffect } from '@/helpers/effects';
+import { useEffect, useRef, useState } from '@/helpers/effects';
 import applyStyles from '@/helpers/applyStyles';
 import valueToCSSAttribute from '@/helpers/valueToCSSAttribute';
 import useBoundary from './hooks/useBoundary';
 import useBoundaryMove from './hooks/useBoundaryMove';
-import useGrabElements from './hooks/useGrabElements';
-import { useSelect } from './SelectProvider';
+import { Boundary, selectContext } from './hooks/useSelect';
 
 const Select = () => {
   const { childNode, selecting } = usePanZoom();
-  const { selectRef, expandingRef, movingRef } = useSelect();
+  const expandingRef = useRef<HTMLDivElement>();
+  const movingRef = useRef<HTMLDivElement>();
+  const selectRef = useRef<HTMLDivElement>();
+  const [boundary, setBoundary] = useState<Boundary | null>(null);
+  const [move, setMove] = useState<Position | null>(null);
+
+  selectContext.current = {
+    boundary,
+    setBoundary,
+    expandingRef,
+    movingRef,
+    selectRef,
+    move,
+    setMove,
+  };
 
   useEffect(() => {
     selectRef.current = document.createElement('div');
@@ -22,6 +36,8 @@ const Select = () => {
     movingRef.current = document.createElement('div');
   }, []);
 
+  const { expanding } = useBoundary();
+
   useEffect(() => {
     if (!selecting) return undefined;
 
@@ -31,8 +47,6 @@ const Select = () => {
       childNode.removeChild(selectRef.current);
     };
   }, [selecting]);
-
-  const { boundary, expanding } = useBoundary();
 
   useEffect(() => {
     if (!boundary) return undefined;
@@ -63,8 +77,7 @@ const Select = () => {
     };
   }, [expanding && !boundary]);
 
-  const grabElementsRef = useGrabElements();
-  useBoundaryMove({ grabElementsRef });
+  useBoundaryMove();
 };
 
 export default Select;

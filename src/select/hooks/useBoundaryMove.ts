@@ -4,11 +4,14 @@ import {
   useElementMouseDownPosition,
   useElementMouseMovePosition,
 } from '@/hooks/useElementEventPosition';
-import { MoveRef, useSelect } from '../SelectProvider';
+import useGrabElements from './useGrabElements';
+import useSelect from './useSelect';
 
-type UseBoundaryMove = ({ grabElementsRef }: { grabElementsRef: MoveRef }) => void;
+type UseBoundaryMove = () => void;
 
-const useBoundaryMove: UseBoundaryMove = ({ grabElementsRef }) => {
+const useBoundaryMove: UseBoundaryMove = () => {
+  const grabElementsRef = useGrabElements();
+
   const {
     boundary, setBoundary, movingRef, selectRef, move, setMove,
   } = useSelect();

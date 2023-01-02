@@ -35,7 +35,6 @@ type ComponentContext = {
   hooks: Array<Hook>,
   render?: () => void,
   props: Props,
-  onRerender?: () => void,
 }
 
 export type RenderComponent = () => void
@@ -44,7 +43,7 @@ export type Component = {
   context: ComponentContext,
   render: RenderComponent,
   unmount: () => void,
-  updateProps: (props: Props) => void,
+  updateProps: (props: Props) => boolean,
 }
 
 type InitializeComponent = (
@@ -59,21 +58,9 @@ const getCurrentContext = () => contextQueue[contextQueue.length - 1];
 export const createRef = <T> (value?: T): Ref<T> => ({ current: value });
 
 export const render = (components: Array<Component>) => {
-  const internalRender = () => {
-    let isRenderingQueue = true;
-    let rerender = false;
-    components.forEach((component) => {
-      component.context.onRerender = () => {
-        if (isRenderingQueue) rerender = true;
-        else internalRender();
-      };
-      component.render();
-    });
-    isRenderingQueue = false;
-    contextQueue.length = 0;
-    if (rerender) internalRender();
-  };
-  return internalRender();
+  components.forEach((component) => {
+    component.render();
+  });
 };
 
 export const initializeComponent: InitializeComponent = (cb, mapNextProps) => {
@@ -95,11 +82,20 @@ export const initializeComponent: InitializeComponent = (cb, mapNextProps) => {
     });
   };
 
-  const updateProps = (nextProps: Props) => {
+  const updateProps = (nextProps: Props): boolean => {
     const mappedNextProps = mapNextProps ? mapNextProps(nextProps) : nextProps;
+    let shouldUpdate = false;
     Object.entries(mappedNextProps).forEach(([key, value]) => {
-      if (value !== undefined) context.props[key] = value;
+      if (value === undefined) return;
+      const property = context.props[key];
+      if (property && typeof property === 'object' && 'current' in property) {
+        property.current = value;
+      } else {
+        context.props[key] = value;
+        shouldUpdate = true;
+      }
     });
+    return shouldUpdate;
   };
 
   return {
@@ -143,7 +139,7 @@ export const useState = <T extends Value>(initialValue: T): [T, (next: T) => voi
   const updateValue = (next: T) => {
     const hook = context.hooks[currentIteration] as StateHook;
     hook.value = next;
-    context.onRerender();
+    setTimeout(context.render, 0);
   };
 
   let hook = context.hooks[currentIteration] as StateHook;

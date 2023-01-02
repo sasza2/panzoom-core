@@ -1,5 +1,5 @@
 import { Position } from 'types';
-import { useEffect, useState } from '@/helpers/effects';
+import { useEffect } from '@/helpers/effects';
 import { onMouseDown, onMouseUp, onMouseMove } from '@/helpers/eventListener';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
 import positionFromEvent from '@/helpers/positionFromEvent';
@@ -10,7 +10,6 @@ import { usePanZoom } from '@/provider';
 import useContainerMouseDownPosition from './useContainerMouseDownPosition';
 
 const useMove = () => {
-  const [moving, setMoving] = useState<Position | null>(null);
   const {
     blockMovingRef,
     boundary,
@@ -28,50 +27,10 @@ const useMove = () => {
 
   const containerMouseDownPosition = useContainerMouseDownPosition();
 
-  // Handle mousedown + mouseup
   useEffect(() => {
     const grabbingClassName = `${className}--grabbing`;
-
-    const mousedown = (e: MouseEvent) => {
-      if (e.button) return;
-
-      const position = containerMouseDownPosition(e);
-      const stop = stopEventPropagation();
-
-      document.body.style.userSelect = 'none';
-      document.body.classList.add(grabbingClassName);
-
-      if (onContainerClickRef.current) {
-        onContainerClickRef.current({
-          e,
-          x: position.x / zoomRef.current,
-          y: position.y / zoomRef.current,
-          stop,
-        });
-      }
-      if (disabled || disabledMove || stop.done) return;
-
-      setMoving(position);
-    };
-
-    const mouseup = () => {
-      document.body.style.userSelect = null;
-      document.body.classList.remove(grabbingClassName);
-      setMoving(null);
-    };
-
-    const mouseDownClear = onMouseDown(containerNode, mousedown);
-    const mouseUpClear = onMouseUp(containerNode, mouseup);
-
-    return () => {
-      mouseDownClear();
-      mouseUpClear();
-    };
-  }, [disabled, disabledMove]);
-
-  // Handle mousemove
-  useEffect(() => {
-    if (!moving) return undefined;
+    let mouseMoveClear: ReturnType<typeof onMouseMove> = null;
+    let moving: Position = null;
 
     const move = (e: MouseEvent) => {
       if (blockMovingRef.current) return;
@@ -103,9 +62,48 @@ const useMove = () => {
       if (onContainerPositionChangeRef.current) onContainerPositionChangeRef.current(eventValue);
     };
 
-    const mouseMoveClear = onMouseMove(move);
-    return mouseMoveClear;
-  }, [boundary, moving]);
+    const mousedown = (e: MouseEvent) => {
+      if (e.button) return;
+
+      const position = containerMouseDownPosition(e);
+      const stop = stopEventPropagation();
+
+      document.body.style.userSelect = 'none';
+      document.body.classList.add(grabbingClassName);
+
+      if (onContainerClickRef.current) {
+        onContainerClickRef.current({
+          e,
+          x: position.x / zoomRef.current,
+          y: position.y / zoomRef.current,
+          stop,
+        });
+      }
+
+      if (disabled || disabledMove || stop.done) return;
+
+      moving = position;
+      mouseMoveClear = onMouseMove(move);
+    };
+
+    const mouseup = () => {
+      document.body.style.userSelect = null;
+      document.body.classList.remove(grabbingClassName);
+      if (mouseMoveClear) {
+        mouseMoveClear();
+        mouseMoveClear = null;
+      }
+    };
+
+    const mouseDownClear = onMouseDown(containerNode, mousedown);
+    const mouseUpClear = onMouseUp(containerNode, mouseup);
+
+    return () => {
+      mouseDownClear();
+      mouseUpClear();
+      if (mouseMoveClear) mouseMoveClear();
+    };
+  }, [boundary, disabled, disabledMove]);
 };
 
 export default useMove;
