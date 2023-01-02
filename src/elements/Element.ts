@@ -59,6 +59,11 @@ const Element = (elementNode: HTMLDivElement) => ({
     setIsMoved(!!nextElementsInMove);
   };
 
+  useEffect(() => () => {
+    elementNode.style.transform = null;
+    elementNode.style.zIndex = null;
+  }, []);
+
   useEffect(() => {
     const position = { x, y };
 

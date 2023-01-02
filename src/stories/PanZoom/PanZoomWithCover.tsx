@@ -2,13 +2,13 @@
 import React, { forwardRef, MutableRefObject, useLayoutEffect } from 'react';
 
 import { PanZoomApi, PanZoomOptions } from 'types';
-import initPanZoom, { getAllowedPanZoomProps } from '@/index';
+import initPanZoom, { getAllowedProps } from '@/index';
 import usePanZoom from './usePanZoom';
 
 type PanZoomWithCoverOmit = Omit<PanZoomOptions, 'boundary'>
 
 const omitFields = ['boundary'];
-const panZoomWithCoverAllowedProps = getAllowedPanZoomProps()
+const panZoomWithCoverAllowedProps = getAllowedProps()
   .filter((propName) => !omitFields.includes(propName)) as Array<keyof PanZoomWithCoverOmit>;
 
 type PanZoomWithCoverProps = {

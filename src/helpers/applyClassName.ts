@@ -7,6 +7,7 @@ const applyClassName = (node: HTMLElement, classNames: string): () => void => {
     classList.forEach((className) => {
       node.classList.remove(className);
     });
+    if (!node.className) node.removeAttribute('class');
   };
 };
 
