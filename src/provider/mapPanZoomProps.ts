@@ -1,4 +1,4 @@
-import { PanZoomOptions, Ref } from 'types';
+import { PanZoomOptions } from 'types';
 import getAllowedProps from './getAllowedProps';
 
 const mapPanZoomProps = (options: PanZoomOptions) => {
@@ -9,8 +9,7 @@ const mapPanZoomProps = (options: PanZoomOptions) => {
     if (!allowedProps.includes(key as keyof PanZoomOptions) || value === undefined) return;
 
     if (typeof value === 'function') {
-      const ref = optionsMap[`${key}Ref`] as Ref<typeof value>;
-      if (ref) ref.current = value;
+      optionsMap[`${key}Ref`] = value;
     } else {
       optionsMap[key] = value;
     }

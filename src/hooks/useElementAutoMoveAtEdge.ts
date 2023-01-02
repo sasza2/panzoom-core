@@ -1,5 +1,5 @@
+import { ElementsInMove } from 'types';
 import { ELEMENT_AUTO_MOVE_SPEED, ELEMENT_AUTO_MOVE_STEP } from '@/consts';
-import { useEffect } from '@/helpers/effects';
 import appendToCurrentPosition from '@/helpers/appendToCurrentPosition';
 import isCursorOnEdge from '@/helpers/isCursorOnEdge';
 import isEdgeVisible from '@/helpers/isEdgeVisible';
@@ -8,22 +8,19 @@ import updateFamilyOfElementsPosition from '@/helpers/updateFamilyOfElementsPosi
 import { useElements } from '@/elements';
 import { usePanZoom } from '@/provider';
 
-type UseElementAutoMoveAtEdge = () => void;
+type UseElementAutoMoveAtEdge = () => (elementsInMove: ElementsInMove) => () => void;
 
 const useElementAutoMoveAtEdge: UseElementAutoMoveAtEdge = () => {
   const {
     childNode,
-    disabledElements,
     onElementsChangeRef,
     positionRef,
     zoomRef,
   } = usePanZoom();
 
-  const { elementsRef, elementsInMove, lastElementMouseMoveEventRef } = useElements();
+  const { elementsRef, lastElementMouseMoveEventRef } = useElements();
 
-  useEffect(() => {
-    if (disabledElements || !elementsInMove) return undefined;
-
+  return (elementsInMove: ElementsInMove) => {
     const timer = setInterval(() => {
       if (!lastElementMouseMoveEventRef.current) return;
 
@@ -72,7 +69,7 @@ const useElementAutoMoveAtEdge: UseElementAutoMoveAtEdge = () => {
       clearInterval(timer);
       lastElementMouseMoveEventRef.current = null;
     };
-  }, [disabledElements, elementsInMove]);
+  };
 };
 
 export default useElementAutoMoveAtEdge;

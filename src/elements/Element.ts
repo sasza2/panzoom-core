@@ -1,7 +1,7 @@
 import { ElementsInMove, ElementOptions } from 'types';
 import { ELEMENT_CLASS_NAME } from '@/consts';
 import { ELEMENT_STYLE } from '@/styles';
-import { useEffect, useState, useRef } from '@/helpers/effects';
+import { useEffect, useRef } from '@/helpers/effects';
 import { onMouseDown, onMouseUp as onMouseUpListener, onMouseMove } from '@/helpers/eventListener';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceStyle from '@/helpers/produceStyle';
@@ -13,6 +13,7 @@ import {
 } from '@/hooks/useElementEventPosition';
 import applyClassName from '@/helpers/applyClassName';
 import applyStyles from '@/helpers/applyStyles';
+import useElementAutoMoveAtEdge from '@/hooks/useElementAutoMoveAtEdge';
 import { useElements } from '@/elements';
 import { usePanZoom } from '@/provider';
 
@@ -32,20 +33,17 @@ const Element = (elementNode: HTMLDivElement) => ({
 }: ElementOptions) => {
   if (!id) throw new Error("'id' prop for element can't be undefined");
 
-  const [isMoved, setIsMoved] = useState<boolean>(false);
-
   const mouseDownPosition = useElementMouseDownPosition();
   const mouseMovePosition = useElementMouseMovePosition();
+  const startAutoMove = useElementAutoMoveAtEdge();
 
   const {
     blockMovingRef, boundary, disabledElements, onElementsChangeRef,
   } = usePanZoom();
 
   const {
-    elementsInMove,
     elementsRef,
     lastElementMouseMoveEventRef,
-    setElementsInMove,
   } = useElements();
 
   const onClickRef = useRef<typeof onClick>();
@@ -53,11 +51,6 @@ const Element = (elementNode: HTMLDivElement) => ({
 
   const onMouseUpRef = useRef<typeof onMouseUp>();
   onMouseUpRef.current = onMouseUp;
-
-  const onElementsAction = (nextElementsInMove: ElementsInMove) => {
-    setElementsInMove(nextElementsInMove);
-    setIsMoved(!!nextElementsInMove);
-  };
 
   useEffect(() => () => {
     elementNode.style.transform = null;
@@ -81,34 +74,27 @@ const Element = (elementNode: HTMLDivElement) => ({
   }, [id, x, y]);
 
   useEffect(() => {
-    if (disabledElements || !isMoved) return undefined;
+    if (disabled || disabledElements) return undefined;
 
-    const mouseup = (e: MouseEvent) => {
-      onElementsAction(null);
+    let mouseUpClear: ReturnType<typeof onMouseUpListener> = null;
+    let mouseMoveClear: ReturnType<typeof onMouseMove> = null;
+    let stopElementsAutoMove: () => void = null;
+    let elementsInMove: ElementsInMove = {};
 
-      if (onMouseUpRef.current) {
-        onMouseUpRef.current({
-          id,
-          family,
-          e,
-          ...elementsRef.current[id as string].position,
-        });
-      }
+    const clearElementsAutoMove = () => {
+      if (!stopElementsAutoMove) return;
+      stopElementsAutoMove();
+      stopElementsAutoMove = null;
     };
 
-    const mouseUpClear = onMouseUpListener(elementNode, mouseup);
-
-    return () => {
-      mouseUpClear();
+    const increaseZIndex = () => {
+      lastZIndex += 1;
+      elementNode.style.zIndex = lastZIndex.toString();
     };
-  }, [disabledElements, id, isMoved]);
-
-  useEffect(() => {
-    if (disabledElements || !elementsInMove || !isMoved) return undefined;
 
     const mousemove = (e: MouseEvent) => {
       if (blockMovingRef.current) {
-        onElementsAction(null);
+        clearElementsAutoMove();
         return;
       }
 
@@ -125,20 +111,26 @@ const Element = (elementNode: HTMLDivElement) => ({
       });
     };
 
-    const mouseMoveClear = onMouseMove(mousemove);
+    const mouseup = (e: MouseEvent) => {
+      clearElementsAutoMove();
 
-    return () => {
-      mouseMoveClear();
-      if (isMoved) setElementsInMove(null);
-    };
-  }, [JSON.stringify(boundary), disabledElements, elementsInMove, id, isMoved]);
+      if (onMouseUpRef.current) {
+        onMouseUpRef.current({
+          id,
+          family,
+          e,
+          ...elementsRef.current[id as string].position,
+        });
+      }
 
-  useEffect(() => {
-    if (disabled) return undefined;
-
-    const increaseZIndex = () => {
-      lastZIndex += 1;
-      elementNode.style.zIndex = lastZIndex.toString();
+      if (mouseUpClear) {
+        mouseUpClear();
+        mouseUpClear = null;
+      }
+      if (mouseMoveClear) {
+        mouseMoveClear();
+        mouseMoveClear = null;
+      }
     };
 
     const mousedown = (e: MouseEvent) => {
@@ -169,19 +161,26 @@ const Element = (elementNode: HTMLDivElement) => ({
 
       if (stop.done) return;
 
-      onElementsAction(
-        elements.reduce((curr, element) => {
-          curr[element.id] = mouseDownPosition(e, element.node.current);
-          return curr;
-        }, {} as ElementsInMove),
-      );
+      elementsInMove = elements.reduce((curr, element) => {
+        curr[element.id] = mouseDownPosition(e, element.node.current);
+        return curr;
+      }, {} as ElementsInMove);
 
+      stopElementsAutoMove = startAutoMove(elementsInMove);
+
+      mouseUpClear = onMouseUpListener(elementNode, mouseup);
+      mouseMoveClear = onMouseMove(mousemove);
       increaseZIndex();
     };
 
     const mouseDownClear = onMouseDown(elementNode, mousedown);
-    return mouseDownClear;
-  }, [disabled, family, JSON.stringify(followers), id]);
+    return () => {
+      clearElementsAutoMove();
+      mouseDownClear();
+      if (mouseUpClear) mouseUpClear();
+      if (mouseMoveClear) mouseMoveClear();
+    };
+  }, [disabled, disabledElements, family, JSON.stringify(followers), JSON.stringify(boundary), id]);
 
   useEffect(
     () => applyStyles(elementNode, ELEMENT_STYLE),

@@ -3,7 +3,7 @@ import {
 } from 'types';
 import { initializeComponent, render } from './helpers/effects';
 import ElementsProvider, { createElementsQueue } from './elements';
-import Select, { SelectProvider } from './select';
+import Select from './select';
 import PanZoomProvider, { getDefaultContext, mapPanZoomProps } from './provider';
 import PanZoom from './PanZoom';
 
@@ -15,7 +15,6 @@ const initPanZoom = (childNode: HTMLDivElement, options: PanZoomOptions = {}): P
 
   const elementsProvider = initializeComponent(ElementsProvider);
   const panZoomComponent = initializeComponent(PanZoom);
-  const selectProvider = initializeComponent(SelectProvider);
   const selectComponent = initializeComponent(Select);
 
   const renderPanZoom = () => render([
@@ -23,15 +22,12 @@ const initPanZoom = (childNode: HTMLDivElement, options: PanZoomOptions = {}): P
     elementsProvider,
     panZoomComponent,
     ...elements.queue,
-    selectProvider,
     selectComponent,
   ]);
 
-  elements.setRender(renderPanZoom);
-
   const setOptions = (nextOptions: PanZoomOptions) => {
-    panZoomProvider.updateProps(nextOptions);
-    renderPanZoom();
+    const shouldUpdate = panZoomProvider.updateProps(nextOptions);
+    if (shouldUpdate) renderPanZoom();
   };
 
   const destroy = () => {

@@ -3,9 +3,9 @@ import { useEffect, useRef } from '@/helpers/effects';
 import { usePanZoom } from '@/provider';
 import { useElements } from '@/elements';
 import produceElementPosition from '@/helpers/produceElementPosition';
-import { MoveRef, useSelect } from '../SelectProvider';
 import collectElements from '../helpers/collectElements';
 import copyElementsPositions from '../helpers/copyElementsPositions';
+import useSelect, { MoveRef } from './useSelect';
 
 const useGrabElements = (): MoveRef => {
   const { boundary } = useSelect();

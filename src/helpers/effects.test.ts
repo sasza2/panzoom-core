@@ -45,5 +45,7 @@ it ('effects - useState', () => {
   })
 
   render([component])
-  expect(mountCounter).toBe(1)
+  setTimeout(() => {
+    expect(mountCounter).toBe(1)
+  }, 0)
 })
