@@ -17,8 +17,11 @@ export const Init = () => {
 
   useEffect(() => {
     if (initialized) {
-      panZoomRef.current = initPanZoom(childNode.current);
-      panZoomRef.current.addElement(document.querySelector('[data-id="element-a"]'), { id: 'element' });
+      panZoomRef.current = initPanZoom(childNode.current, { height: 200 });
+      panZoomRef.current.addElement(
+        document.querySelector('[data-id="element-a"]'),
+        { id: 'element', x: 50, y: 50 },
+      );
     } else if (panZoomRef.current) {
       panZoomRef.current.destroy();
       panZoomRef.current = null;

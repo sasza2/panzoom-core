@@ -96,7 +96,7 @@ export const cover = () => {
         {distance}
         m
       </div>
-      <div style={{ width: 400, height: 500 }}>
+      <div style={{ width: '100%', maxWidth: 500, height: 500 }}>
         <PanZoomWithCover
           ref={panZoomRef}
           cover="https://raw.githubusercontent.com/sasza2/react-panzoom/master/docs/openstreetmap.jpg"
@@ -118,7 +118,7 @@ export const cover = () => {
             xmlns="http://www.w3.org/2000/svg"
             ref={svgLineRef}
           >
-            <path ref={pathRef} stroke="black" strokeDasharray="0 4 0" strokeWidth="calc(1/var(--zoom))" />
+            <path ref={pathRef} stroke="black" strokeDasharray="0 4 0" strokeWidth="calc(2/var(--zoom), 2)" />
           </svg>
         </PanZoomWithCover>
       </div>
