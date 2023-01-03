@@ -66,7 +66,7 @@ const isEdgeLeftVisible = (
   const [visibleWidth] = getParentVisibleSize(childNode);
 
   return (
-    positionRef.current.x + parentRect.left > 0
+    positionRef.current.x + parentRect.left >= 0
     && positionRef.current.x >= 0
     && positionRef.current.x < visibleWidth + scroll.x
   );
@@ -81,7 +81,7 @@ const isEdgeTopVisible = (
   const [, visibleHeight] = getParentVisibleSize(childNode);
 
   return (
-    positionRef.current.y + parentRect.top > 0
+    positionRef.current.y + parentRect.top >= 0
     && positionRef.current.y >= 0
     && positionRef.current.y < visibleHeight + scroll.y
   );
