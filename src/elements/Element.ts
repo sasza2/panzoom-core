@@ -55,6 +55,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   useEffect(() => () => {
     elementNode.style.transform = null;
     elementNode.style.zIndex = null;
+    delete elementsRef.current[id as string];
   }, []);
 
   useEffect(() => {
@@ -67,11 +68,12 @@ const Element = (elementNode: HTMLDivElement) => ({
       node: { current: elementNode },
       position,
     };
-
-    return () => {
-      delete elementsRef.current[id as string];
-    };
   }, [id, x, y]);
+
+  useEffect(() => {
+    const element = elementsRef.current[id as string];
+    if (element) element.family = family;
+  }, [family]);
 
   useEffect(() => {
     if (disabled || disabledElements) return undefined;
@@ -180,7 +182,15 @@ const Element = (elementNode: HTMLDivElement) => ({
       if (mouseUpClear) mouseUpClear();
       if (mouseMoveClear) mouseMoveClear();
     };
-  }, [disabled, disabledElements, family, JSON.stringify(followers), JSON.stringify(boundary), id]);
+  }, [
+    disabled,
+    disabledElements,
+    draggableSelector,
+    family,
+    JSON.stringify(followers),
+    JSON.stringify(boundary),
+    id,
+  ]);
 
   useEffect(
     () => applyStyles(elementNode, ELEMENT_STYLE),
