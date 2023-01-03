@@ -29,17 +29,17 @@ export const useElementMouseDownPosition = (): useElementMouseDownPositionThunk 
 type UseElementMouseMovePosition = (
   e: MouseEvent | TouchEvent,
   from: Position,
-  elementNode: HTMLDivElement,
+  element: HTMLDivElement,
 ) => Position;
 
 export const useElementMouseMovePosition = (): UseElementMouseMovePosition => {
   const { childNode, positionRef, zoomRef } = usePanZoom();
-  return (e, from, elementNode) => {
+  return (e, from, element) => {
     const eventPosition = positionFromEvent(e);
     const scroll = getScrollOffset(childNode);
 
     return produceElementPosition({
-      element: elementNode,
+      element,
       childNode,
       x: (eventPosition.clientX - positionRef.current.x + scroll.x) / zoomRef.current - from.x,
       y: (eventPosition.clientY - positionRef.current.y + scroll.y) / zoomRef.current - from.y,

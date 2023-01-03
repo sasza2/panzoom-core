@@ -1,7 +1,7 @@
 import { ElementsInMove, ElementOptions } from 'types';
 import { ELEMENT_CLASS_NAME } from '@/consts';
 import { ELEMENT_STYLE } from '@/styles';
-import { useEffect, useRef } from '@/helpers/effects';
+import { useEffect, useRef, useState } from '@/helpers/effects';
 import { onMouseDown, onMouseUp as onMouseUpListener, onMouseMove } from '@/helpers/eventListener';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceStyle from '@/helpers/produceStyle';
@@ -36,6 +36,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   const mouseDownPosition = useElementMouseDownPosition();
   const mouseMovePosition = useElementMouseMovePosition();
   const startAutoMove = useElementAutoMoveAtEdge();
+  const [elementsInMove, setElementsInMove] = useState<ElementsInMove>(null);
 
   const {
     blockMovingRef, boundary, disabledElements, onElementsChangeRef,
@@ -78,61 +79,9 @@ const Element = (elementNode: HTMLDivElement) => ({
   useEffect(() => {
     if (disabled || disabledElements) return undefined;
 
-    let mouseUpClear: ReturnType<typeof onMouseUpListener> = null;
-    let mouseMoveClear: ReturnType<typeof onMouseMove> = null;
-    let stopElementsAutoMove: () => void = null;
-    let elementsInMove: ElementsInMove = {};
-
-    const clearElementsAutoMove = () => {
-      if (!stopElementsAutoMove) return;
-      stopElementsAutoMove();
-      stopElementsAutoMove = null;
-    };
-
     const increaseZIndex = () => {
       lastZIndex += 1;
       elementNode.style.zIndex = lastZIndex.toString();
-    };
-
-    const mousemove = (e: MouseEvent) => {
-      if (blockMovingRef.current) {
-        clearElementsAutoMove();
-        return;
-      }
-
-      lastElementMouseMoveEventRef.current = positionFromEvent(e);
-
-      updateFamilyOfElementsPosition({
-        elementsRef,
-        elementsInMove,
-        produceNextPosition: (from, currentElement) => {
-          const position = mouseMovePosition(e, from, currentElement.node.current);
-          return position;
-        },
-        onElementsChange: onElementsChangeRef.current,
-      });
-    };
-
-    const mouseup = (e: MouseEvent) => {
-      clearElementsAutoMove();
-
-      if (onMouseUpRef.current) {
-        onMouseUpRef.current({
-          id,
-          family,
-          e,
-          ...elementsRef.current[id as string].position,
-        });
-      }
-
-      if (mouseUpClear) {
-        mouseUpClear();
-        mouseUpClear = null;
-      }
-      if (mouseMoveClear) {
-        mouseMoveClear();
-        mouseMoveClear = null;
-      }
     };
 
     const mousedown = (e: MouseEvent) => {
@@ -163,25 +112,16 @@ const Element = (elementNode: HTMLDivElement) => ({
 
       if (stop.done) return;
 
-      elementsInMove = elements.reduce((curr, element) => {
+      setElementsInMove(elements.reduce((curr, element) => {
         curr[element.id] = mouseDownPosition(e, element.node.current);
         return curr;
-      }, {} as ElementsInMove);
+      }, {} as ElementsInMove));
 
-      stopElementsAutoMove = startAutoMove(elementsInMove);
-
-      mouseUpClear = onMouseUpListener(elementNode, mouseup);
-      mouseMoveClear = onMouseMove(mousemove);
       increaseZIndex();
     };
 
     const mouseDownClear = onMouseDown(elementNode, mousedown);
-    return () => {
-      clearElementsAutoMove();
-      mouseDownClear();
-      if (mouseUpClear) mouseUpClear();
-      if (mouseMoveClear) mouseMoveClear();
-    };
+    return mouseDownClear;
   }, [
     disabled,
     disabledElements,
@@ -191,6 +131,53 @@ const Element = (elementNode: HTMLDivElement) => ({
     JSON.stringify(boundary),
     id,
   ]);
+
+  useEffect(() => {
+    if (!elementsInMove) return undefined;
+
+    const stopElementsAutoMove = startAutoMove(elementsInMove);
+
+    const mousemove = (e: MouseEvent) => {
+      if (blockMovingRef.current) {
+        setElementsInMove(null);
+        return;
+      }
+
+      lastElementMouseMoveEventRef.current = positionFromEvent(e);
+
+      updateFamilyOfElementsPosition({
+        elementsRef,
+        elementsInMove,
+        produceNextPosition: (from, currentElement) => {
+          const position = mouseMovePosition(e, from, currentElement.node.current);
+          return position;
+        },
+        onElementsChange: onElementsChangeRef.current,
+      });
+    };
+
+    const mouseup = (e: MouseEvent) => {
+      if (onMouseUpRef.current) {
+        onMouseUpRef.current({
+          id,
+          family,
+          e,
+          ...elementsRef.current[id as string].position,
+        });
+      }
+
+      setElementsInMove(null);
+    };
+
+    const mouseUpClear = onMouseUpListener(elementNode, mouseup);
+    const mouseMoveClear = onMouseMove(mousemove);
+
+    return () => {
+      stopElementsAutoMove();
+      mouseUpClear();
+      mouseMoveClear();
+    };
+  }, [elementsInMove]);
 
   useEffect(
     () => applyStyles(elementNode, ELEMENT_STYLE),
