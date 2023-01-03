@@ -19,7 +19,7 @@ export const Multiple = () => {
 
   useEffect(() => {
     if (initialized) {
-      panZoomRef.current = initPanZoom(childNode.current);
+      panZoomRef.current = initPanZoom(childNode.current, { height: 300 });
       const cx = 120;
       const cy = 120;
       const r = 100;
@@ -62,7 +62,7 @@ export const Multiple = () => {
             </button>
           )
       }
-      <div style={{ minHeight: 300 }}>
+      <div>
         <div ref={childNode}>
           {renderElements()}
         </div>
