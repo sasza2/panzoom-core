@@ -1,5 +1,5 @@
 import { Position } from 'types';
-import { useEffect } from '@/helpers/effects';
+import { useEffect, useState } from '@/helpers/effects';
 import { onMouseDown, onMouseUp, onMouseMove } from '@/helpers/eventListener';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
 import positionFromEvent from '@/helpers/positionFromEvent';
@@ -25,12 +25,40 @@ const useMove = () => {
     zoomRef,
   } = usePanZoom();
 
+  const [moving, setMoving] = useState<Position | null>(null);
   const containerMouseDownPosition = useContainerMouseDownPosition();
+  const grabbingClassName = `${className}--grabbing`;
 
   useEffect(() => {
-    const grabbingClassName = `${className}--grabbing`;
-    let mouseMoveClear: ReturnType<typeof onMouseMove> = null;
-    let moving: Position = null;
+    const mousedown = (e: MouseEvent) => {
+      if (e.button) return;
+
+      const position = containerMouseDownPosition(e);
+      const stop = stopEventPropagation();
+
+      document.body.style.userSelect = 'none';
+      document.body.classList.add(grabbingClassName);
+
+      if (onContainerClickRef.current) {
+        onContainerClickRef.current({
+          e,
+          x: position.x / zoomRef.current,
+          y: position.y / zoomRef.current,
+          stop,
+        });
+      }
+
+      if (disabled || disabledMove || stop.done) return;
+
+      setMoving(position);
+    };
+
+    const mouseDownClear = onMouseDown(containerNode, mousedown);
+    return mouseDownClear;
+  }, [boundary, disabled, disabledMove]);
+
+  useEffect(() => {
+    if (!moving) return undefined;
 
     const move = (e: MouseEvent) => {
       if (blockMovingRef.current) return;
@@ -62,48 +90,20 @@ const useMove = () => {
       if (onContainerPositionChangeRef.current) onContainerPositionChangeRef.current(eventValue);
     };
 
-    const mousedown = (e: MouseEvent) => {
-      if (e.button) return;
-
-      const position = containerMouseDownPosition(e);
-      const stop = stopEventPropagation();
-
-      document.body.style.userSelect = 'none';
-      document.body.classList.add(grabbingClassName);
-
-      if (onContainerClickRef.current) {
-        onContainerClickRef.current({
-          e,
-          x: position.x / zoomRef.current,
-          y: position.y / zoomRef.current,
-          stop,
-        });
-      }
-
-      if (disabled || disabledMove || stop.done) return;
-
-      moving = position;
-      mouseMoveClear = onMouseMove(move);
-    };
-
     const mouseup = () => {
       document.body.style.userSelect = null;
       document.body.classList.remove(grabbingClassName);
-      if (mouseMoveClear) {
-        mouseMoveClear();
-        mouseMoveClear = null;
-      }
+      setMoving(null);
     };
 
-    const mouseDownClear = onMouseDown(containerNode, mousedown);
     const mouseUpClear = onMouseUp(containerNode, mouseup);
+    const mouseMoveClear = onMouseMove(move);
 
     return () => {
-      mouseDownClear();
       mouseUpClear();
-      if (mouseMoveClear) mouseMoveClear();
+      mouseMoveClear();
     };
-  }, [boundary, disabled, disabledMove]);
+  }, [moving]);
 };
 
 export default useMove;
