@@ -31,6 +31,7 @@ type Hook = EffectHook | StateHook | RefHook
 type Props = Record<string, unknown>
 
 type ComponentContext = {
+  batchTimeoutRender: ReturnType<typeof setTimeout>,
   it: number,
   hooks: Array<Hook>,
   render?: () => void,
@@ -65,6 +66,7 @@ export const render = (components: Array<Component>) => {
 
 export const initializeComponent: InitializeComponent = (cb, mapNextProps) => {
   const context: ComponentContext = {
+    batchTimeoutRender: null,
     it: 0,
     hooks: [],
     render: () => {
@@ -139,7 +141,8 @@ export const useState = <T extends Value>(initialValue: T): [T, (next: T) => voi
   const updateValue = (next: T) => {
     const hook = context.hooks[currentIteration] as StateHook;
     hook.value = next;
-    setTimeout(context.render, 0);
+    clearTimeout(context.batchTimeoutRender);
+    context.batchTimeoutRender = setTimeout(context.render, 0);
   };
 
   let hook = context.hooks[currentIteration] as StateHook;
