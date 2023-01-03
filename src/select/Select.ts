@@ -1,12 +1,14 @@
 import { Position } from 'types';
 import { usePanZoom } from '@/provider';
 import { SELECT_STYLE, SELECT_BOX_STYLE } from '@/styles';
-import { useEffect, useRef, useState } from '@/helpers/effects';
+import {
+  useEffect, useProvider, useRef, useState,
+} from '@/helpers/effects';
 import applyStyles from '@/helpers/applyStyles';
 import valueToCSSAttribute from '@/helpers/valueToCSSAttribute';
 import useBoundary from './hooks/useBoundary';
 import useBoundaryMove from './hooks/useBoundaryMove';
-import { Boundary, selectContext } from './hooks/useSelect';
+import { Boundary, SELECT_CONTEXT_ID } from './hooks/useSelect';
 
 const Select = () => {
   const { childNode, selecting } = usePanZoom();
@@ -16,7 +18,7 @@ const Select = () => {
   const [boundary, setBoundary] = useState<Boundary | null>(null);
   const [move, setMove] = useState<Position | null>(null);
 
-  selectContext.current = {
+  useProvider(SELECT_CONTEXT_ID, {
     boundary,
     setBoundary,
     expandingRef,
@@ -24,7 +26,7 @@ const Select = () => {
     selectRef,
     move,
     setMove,
-  };
+  });
 
   useEffect(() => {
     selectRef.current = document.createElement('div');

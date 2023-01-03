@@ -1,16 +1,16 @@
 import { ElementApi, ElementOptions } from 'types';
-import { Component, initializeComponent } from '@/helpers/effects';
+import { Component, createComponentQueue } from '@/helpers/effects';
 import ElementWrapper from './Element';
 
 type AddElement = (elementNode: HTMLDivElement, elementOptions: ElementOptions) => ElementApi
 
-type CreateElementQueue = () => {
+type CreateElementQueue = (initializeComponent: ReturnType<typeof createComponentQueue>) => {
   add: AddElement,
   queue: Array<Component>,
   unmount: () => void,
 }
 
-const createElementsQueue: CreateElementQueue = () => {
+const createElementsQueue: CreateElementQueue = (initializeComponent) => {
   const queue: Array<Component> = [];
 
   const add: AddElement = (elementNode, elementOptions) => {
@@ -26,7 +26,6 @@ const createElementsQueue: CreateElementQueue = () => {
       const indexToRemove = queue.findIndex((current) => current === elementComponent);
       if (indexToRemove < 0) return;
       queue.splice(indexToRemove, 1);
-      elementComponent.render();
     };
 
     const setOptionsElement = (nextElementOptions: ElementOptions) => {
