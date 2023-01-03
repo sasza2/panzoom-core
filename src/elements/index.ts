@@ -1,5 +1,5 @@
-import ElementsProvider from './ElementsProvider';
+import ElementsProvider, { useElements } from './ElementsProvider';
 
 export { default as createElementsQueue } from './createElementsQueue';
-export { default as useElements } from './useElements';
+export { useElements };
 export default ElementsProvider;

@@ -1,10 +1,12 @@
 import { PanZoomContext } from 'types';
-import { createRef } from '@/helpers/effects';
+import { useContext, useProvider } from '@/helpers/effects';
 
-export const panZoomContext = createRef<PanZoomContext>(null);
+const PANZOOM_CONTEXT_ID = 'panzoom';
+
+export const usePanZoom = () => useContext<PanZoomContext>(PANZOOM_CONTEXT_ID);
 
 const PanZoomProvider = (props: PanZoomContext) => {
-  panZoomContext.current = props;
+  useProvider(PANZOOM_CONTEXT_ID, props);
 };
 
 export default PanZoomProvider;

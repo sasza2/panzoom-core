@@ -1,5 +1,7 @@
 import { Position, Ref } from 'types';
-import { createRef } from '@/helpers/effects';
+import { useContext } from '@/helpers/effects';
+
+export const SELECT_CONTEXT_ID = 'select';
 
 export type MoveRef = Ref<(position: Position) => void>;
 
@@ -22,8 +24,6 @@ type SelectContext = {
   setMove: (position: Position | null) => void;
 }
 
-export const selectContext = createRef<SelectContext>(null);
-
-const useSelect = (): SelectContext => selectContext.current;
+const useSelect = () => useContext<SelectContext>(SELECT_CONTEXT_ID);
 
 export default useSelect;
