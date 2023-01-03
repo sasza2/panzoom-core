@@ -2,13 +2,12 @@ export const CONTAINER_STYLE = {
   width: '100%',
   height: '100%',
   overflow: 'hidden',
-  position: 'relative',
   'touch-action': 'none',
   '-webkit-font-smoothing': 'antialiased',
 };
 
 export const CHILD_STYLE = {
-  position: 'absolute',
+  position: 'relative',
   overflow: 'hidden',
   'transform-origin': '0 0',
   'pointer-events': 'none',
