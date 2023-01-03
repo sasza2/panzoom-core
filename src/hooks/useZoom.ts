@@ -45,8 +45,6 @@ const useZoom = (): Zoom => {
   useEffect(() => {
     if (disabled || disabledZoom) return undefined;
 
-    const isMobile = 'ontouchstart' in window;
-
     const [touchEventToZoom, resetTouchEvent] = touchEventToZoomInit();
     let blockTimer: ReturnType<typeof setTimeout> = null;
 
@@ -54,7 +52,7 @@ const useZoom = (): Zoom => {
       const childRect = getBoundingClientRect(childNode);
       const parentRect = getBoundingClientRect(containerNode);
 
-      if (isMobile) {
+      if (e.hasTouches) {
         clearTimeout(blockTimer);
         blockTimer = setTimeout(() => {
           blockMovingRef.current = false;
@@ -68,7 +66,7 @@ const useZoom = (): Zoom => {
 
       const nextZoom = produceNextZoom({
         e,
-        isMobile,
+        isTouchEvent: e.hasTouches,
         zoomRef,
         zoomSpeed,
         zoomMin,
@@ -114,26 +112,21 @@ const useZoom = (): Zoom => {
       wheelMobile(touchEventToZoom(e));
     };
 
-    if (isMobile) {
-      containerNode.addEventListener('touchmove', onWheelMobile);
-      containerNode.addEventListener('touchup', resetTouchEvent);
-      containerNode.addEventListener('touchend', resetTouchEvent);
-      containerNode.addEventListener('touchcancel', resetTouchEvent);
-    } else {
-      containerNode.addEventListener('wheel', onWheel);
-    }
+    containerNode.addEventListener('touchmove', onWheelMobile);
+    containerNode.addEventListener('touchup', resetTouchEvent);
+    containerNode.addEventListener('touchend', resetTouchEvent);
+    containerNode.addEventListener('touchcancel', resetTouchEvent);
+    containerNode.addEventListener('wheel', onWheel);
 
     return () => {
-      if (isMobile) {
-        containerNode.removeEventListener('touchmove', onWheelMobile);
-        containerNode.removeEventListener('touchup', resetTouchEvent);
-        containerNode.removeEventListener('touchend', resetTouchEvent);
-        containerNode.removeEventListener('touchcancel', resetTouchEvent);
-        wheelMobile.cancel();
-      } else {
-        containerNode.removeEventListener('wheel', onWheel);
-        wheelDesktop.cancel();
-      }
+      containerNode.removeEventListener('touchmove', onWheelMobile);
+      containerNode.removeEventListener('touchup', resetTouchEvent);
+      containerNode.removeEventListener('touchend', resetTouchEvent);
+      containerNode.removeEventListener('touchcancel', resetTouchEvent);
+      wheelMobile.cancel();
+
+      containerNode.removeEventListener('wheel', onWheel);
+      wheelDesktop.cancel();
     };
   }, dependencies);
 

@@ -40,9 +40,10 @@ type OnContainerClick = (
 export type Zoom = Ref<number>;
 
 export type ZoomEvent = {
-  deltaY: number;
   clientX: number;
   clientY: number;
+  deltaY: number;
+  hasTouches: boolean,
 };
 
 export type API = {
