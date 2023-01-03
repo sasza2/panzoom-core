@@ -39,7 +39,7 @@ const touchEventToZoomInit: TouchEventToZoomInit = () => {
         deltaY: 0,
         clientX,
         clientY,
-        hasTouches: true,
+        isTouchEvent: true,
       };
     }
 
@@ -50,7 +50,7 @@ const touchEventToZoomInit: TouchEventToZoomInit = () => {
       deltaY,
       clientX,
       clientY,
-      hasTouches: true,
+      isTouchEvent: true,
     };
   };
 

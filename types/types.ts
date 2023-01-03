@@ -43,7 +43,7 @@ export type ZoomEvent = {
   clientX: number;
   clientY: number;
   deltaY: number;
-  hasTouches: boolean,
+  isTouchEvent: boolean,
 };
 
 export type API = {

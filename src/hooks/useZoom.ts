@@ -52,7 +52,7 @@ const useZoom = (): Zoom => {
       const childRect = getBoundingClientRect(childNode);
       const parentRect = getBoundingClientRect(containerNode);
 
-      if (e.hasTouches) {
+      if (e.isTouchEvent) {
         clearTimeout(blockTimer);
         blockTimer = setTimeout(() => {
           blockMovingRef.current = false;
@@ -66,7 +66,7 @@ const useZoom = (): Zoom => {
 
       const nextZoom = produceNextZoom({
         e,
-        isTouchEvent: e.hasTouches,
+        isTouchEvent: e.isTouchEvent,
         zoomRef,
         zoomSpeed,
         zoomMin,
