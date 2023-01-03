@@ -39,6 +39,7 @@ const touchEventToZoomInit: TouchEventToZoomInit = () => {
         deltaY: 0,
         clientX,
         clientY,
+        isTouchEvent: true,
       };
     }
 
@@ -49,7 +50,8 @@ const touchEventToZoomInit: TouchEventToZoomInit = () => {
       deltaY,
       clientX,
       clientY,
-    } as WheelEvent;
+      isTouchEvent: true,
+    };
   };
 
   const reset = (e?: TouchEvent) => {
