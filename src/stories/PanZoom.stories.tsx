@@ -215,7 +215,7 @@ export const TwoInstances = () => {
   return (
     <>
       <div style={{ border: '1px solid red', height: 300 }}>
-        <PanZoom>
+        <PanZoom height={320}>
           <Element id="a">element A</Element>
         </PanZoom>
       </div>
@@ -226,7 +226,7 @@ export const TwoInstances = () => {
       {
         hasTwoInstances && (
           <div style={{ border: '1px solid red', height: 300 }}>
-            <PanZoom>
+            <PanZoom height={450}>
               <Element id="b">element B</Element>
               <Element id="c" x={100} y={100}>element C</Element>
             </PanZoom>
