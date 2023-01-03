@@ -4,7 +4,13 @@ Library for pan and zoom with possibility to moving and selecting elements insid
 !["Preview"](docs/preview.gif "Example preview")
 
 # Demo
-...
+https://codesandbox.io/s/quiet-snow-qldnic<br />
+https://codesandbox.io/s/black-sound-vn77k9 (map with pin)<br />
+https://codesandbox.io/s/young-darkness-igcf67 (example from above)<br />
+https://codesandbox.io/s/gifted-pine-dhw9m6 (selecting elements)<br />
+https://codesandbox.io/s/festive-matsumoto-ccskw0(Tic Tac Toe)<br />
+Library <a href="https://www.npmjs.com/package/@sasza/react-panzoom">@sasza/react-panzoom</a><br />
+Library <a href="https://www.npmjs.com/package/react-drawing">react-drawing</a>
 
 # Installation
 ```npm install panzoom-core```
@@ -45,7 +51,7 @@ const panZoom = initializePanZoom(node, options)
 </div>
 ```
 
-panZoom contains methods like:
+panzoom methods:
 
 | Function | Description |
 | --- | --- |
