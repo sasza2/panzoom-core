@@ -1,7 +1,7 @@
 {
   "name": "panzoom-core",
   "version": "1.0.0",
-  "description": "-",
+  "description": "Library for pan and zoom with possibility to moving and selecting elements inside",
   "main": "dist/main.umd.cjs",
   "module": "./dist/main.js",
   "exports": {
@@ -15,6 +15,7 @@
     "zoom",
     "move",
     "panzoom",
+    "pinch",
     "moving",
     "selecting"
   ],
