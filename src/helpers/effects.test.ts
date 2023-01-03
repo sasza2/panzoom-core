@@ -1,11 +1,12 @@
 import { expect, it,  } from 'vitest';
 
-import { initializeComponent, render, useEffect, useState } from './effects';
+import { createComponentQueue, render, useEffect, useState } from './effects';
 
 it('effect - useEffect, mount, unmount', () => {
   let mountCounter = 0
   let unMountCounter = 0
   const props = { count: 1 }
+  const initializeComponent = createComponentQueue()
   const component = initializeComponent(() => {
     useEffect(() => {
       mountCounter++
@@ -30,6 +31,7 @@ it ('effects - useState', () => {
 
   let mountCounter = 0
 
+  const initializeComponent = createComponentQueue()
   const component = initializeComponent(() => {
     const [value, setValue] = useState<string>(initialValue)
     useEffect(() => {
