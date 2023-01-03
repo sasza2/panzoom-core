@@ -2,7 +2,6 @@
   "name": "panzoom-core",
   "version": "1.0.0",
   "description": "-",
-  "files": ["dist"],
   "main": "dist/main.umd.cjs",
   "module": "./dist/main.js",
   "exports": {
