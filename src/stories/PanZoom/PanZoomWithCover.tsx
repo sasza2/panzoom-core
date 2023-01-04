@@ -34,11 +34,14 @@ const PanZoomWithCover: React.FC<PanZoomWithCoverProps> = ({
   });
 
   useLayoutEffect(() => {
+    let mounted = true;
     setInitialized(false);
 
     const image = new Image();
     image.src = cover;
     image.onload = () => {
+      if (!mounted) return;
+
       const containerNode = parentRef.current.parentNode as HTMLElement;
       const containerSize = containerNode.getBoundingClientRect();
 
@@ -73,6 +76,7 @@ const PanZoomWithCover: React.FC<PanZoomWithCoverProps> = ({
     };
 
     return () => {
+      mounted = false;
       if (!panZoomRef.current) return;
       panZoomRef.current.destroy();
       panZoomRef.current = null;

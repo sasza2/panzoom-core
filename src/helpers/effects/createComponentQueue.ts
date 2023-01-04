@@ -18,15 +18,20 @@ const initializeComponent: InitializeComponent = (initializationId, cb, mapNextP
     it: 0,
     hooks: [],
     render: () => {
+      if (context.unmounted) return;
       contextQueue.push(context, initializationId);
       context.it = 0;
       cb(context.props);
       contextQueue.pop();
     },
     props: {},
+    unmounted: false,
   };
 
   const unmount = () => {
+    if (context.unmounted) return;
+
+    context.unmounted = true;
     context.hooks.forEach((hook) => {
       if (hook.type === HOOKS.EFFECT && hook.onUnmount) hook.onUnmount();
     });
