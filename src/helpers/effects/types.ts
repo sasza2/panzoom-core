@@ -40,6 +40,7 @@ export type ComponentContext = {
   hooks: Array<Hook>,
   render?: () => void,
   props: Props,
+  unmounted: boolean,
 }
 
 export type Component = {
