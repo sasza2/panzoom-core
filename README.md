@@ -81,10 +81,11 @@ const panZoom = initializePanZoom(node, options)
 
 const elementA = panZoom.addElement(
   document.querySelector('[data-id="element-a"]'),
+  { id: 'a' },
 )
 const elementB = panZoom.addElement(
   document.querySelector('[data-id="element-b"]'),
-  { x: 100, y: 100 },
+  { id: 'b', x: 100, y: 100 },
 )
 ```
 ```html
