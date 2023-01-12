@@ -20,12 +20,13 @@
     "selecting"
   ],
   "types": "types/index.d.ts",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "build": "tsc && vite build",
     "dev": "ladle serve",
     "lint": "eslint src --fix",
     "test": "vitest",
+    "test:e2e": "playwright test",
     "coverage": "vitest run --coverage"
   },
   "repository": {
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@ladle/react": "^2.4.5",
+    "@playwright/test": "^1.29.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "12.1.4",
     "@types/react": "^16.14.0",
