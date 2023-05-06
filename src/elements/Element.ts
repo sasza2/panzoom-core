@@ -29,6 +29,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   x = 0,
   y = 0,
   family,
+  height,
   onAfterResize,
   onClick,
   onMouseUp,
@@ -36,6 +37,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   resizerWidth,
   resizedMaxWidth,
   resizedMinWidth,
+  width,
 }: ElementOptions) => {
   if (!id) throw new Error("'id' prop for element can't be undefined");
 
@@ -44,6 +46,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   const startAutoMove = useElementAutoMoveAtEdge();
   const [elementsInMove, setElementsInMove] = useState<ElementsInMove>(null);
   useElementResize(elementNode, {
+    disabled,
     id,
     onAfterResize,
     resizable,
@@ -207,6 +210,14 @@ const Element = (elementNode: HTMLDivElement) => ({
     if (!disabled) return undefined;
     return applyClassName(elementNode, `${className}--disabled`);
   }, [className, disabled]);
+
+  useEffect(() => {
+    elementNode.style.width = width === undefined ? null : `${width}px`;
+  }, [width]);
+
+  useEffect(() => {
+    elementNode.style.height = height === undefined ? null : `${height}px`;
+  }, [height]);
 };
 
 export default Element;
