@@ -1,5 +1,5 @@
 # panzoom-core
-Library for pan and zoom with possibility to moving and selecting elements inside.
+Library for pan and zoom with possibility to moving, resizing and selecting elements inside.
 
 !["Preview"](docs/preview.gif "Example preview")
 

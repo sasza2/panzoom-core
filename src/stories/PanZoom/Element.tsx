@@ -6,7 +6,16 @@ import ElementsContext from './ElementsContext';
 import useDidUpdateEffect from './useDidUpdateEffect';
 
 const Element: React.FC<ElementOptions> = ({
-  children, className, disabled, id, onClick, x, y,
+  children,
+  className,
+  disabled,
+  id,
+  onAfterResize,
+  onClick,
+  resizable,
+  resizedMaxWidth,
+  x,
+  y,
 }) => {
   const nodeRef = useRef<HTMLDivElement>();
   const elementRef = useRef<ElementApi>();
@@ -16,7 +25,10 @@ const Element: React.FC<ElementOptions> = ({
     className: className || 'react-panzoom-element',
     id,
     disabled,
+    onAfterResize,
     onClick,
+    resizable,
+    resizedMaxWidth,
     x,
     y,
   };

@@ -14,6 +14,7 @@ import {
 import applyClassName from '@/helpers/applyClassName';
 import applyStyles from '@/helpers/applyStyles';
 import useElementAutoMoveAtEdge from '@/hooks/useElementAutoMoveAtEdge';
+import useElementResize from '@/hooks/useElementResize';
 import { useElements } from '@/elements';
 import { usePanZoom } from '@/provider';
 
@@ -28,8 +29,13 @@ const Element = (elementNode: HTMLDivElement) => ({
   x = 0,
   y = 0,
   family,
+  onAfterResize,
   onClick,
   onMouseUp,
+  resizable,
+  resizerWidth,
+  resizedMaxWidth,
+  resizedMinWidth,
 }: ElementOptions) => {
   if (!id) throw new Error("'id' prop for element can't be undefined");
 
@@ -37,6 +43,14 @@ const Element = (elementNode: HTMLDivElement) => ({
   const mouseMovePosition = useElementMouseMovePosition();
   const startAutoMove = useElementAutoMoveAtEdge();
   const [elementsInMove, setElementsInMove] = useState<ElementsInMove>(null);
+  useElementResize(elementNode, {
+    id,
+    onAfterResize,
+    resizable,
+    resizerWidth,
+    resizedMaxWidth,
+    resizedMinWidth,
+  });
 
   const {
     blockMovingRef, boundary, disabledElements, onElementsChangeRef,

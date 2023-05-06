@@ -12,7 +12,7 @@ export type ClientPosition = {
   clientY: number;
 };
 
-type Edge = string | number;
+export type Edge = string | number;
 
 export type Position = {
   x: number;
@@ -141,6 +141,21 @@ type ElementOnMouseUp = (
   } & Position
 ) => unknown;
 
+export type ElementOnAfterResize = (
+  props: {
+    id: ElementId;
+  }
+) => unknown;
+
+export type ElementResizeOptions = {
+  id: ElementId;
+  onAfterResize?: ElementOnAfterResize;
+  resizable?: boolean;
+  resizedMaxWidth?: number;
+  resizedMinWidth?: number;
+  resizerWidth?: number;
+}
+
 export type ElementOptions = {
   className?: string;
   disabled?: boolean;
@@ -152,7 +167,7 @@ export type ElementOptions = {
   onMouseUp?: ElementOnMouseUp;
   x?: number;
   y?: number;
-};
+} & ElementResizeOptions;
 
 export type PanZoomApi = {
   addElement: (node: HTMLDivElement, elementOptions: ElementOptions) => ElementApi,
