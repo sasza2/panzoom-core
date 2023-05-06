@@ -148,6 +148,7 @@ export type ElementOnAfterResize = (
 ) => unknown;
 
 export type ElementResizeOptions = {
+  disabled?: boolean;
   id: ElementId;
   onAfterResize?: ElementOnAfterResize;
   resizable?: boolean;
@@ -162,11 +163,13 @@ export type ElementOptions = {
   draggableSelector?: string;
   family?: string;
   followers?: Array<ElementId>;
+  height?: number;
   id: ElementId;
   onClick?: ElementOnClick;
   onMouseUp?: ElementOnMouseUp;
   x?: number;
   y?: number;
+  width?: number;
 } & ElementResizeOptions;
 
 export type PanZoomApi = {

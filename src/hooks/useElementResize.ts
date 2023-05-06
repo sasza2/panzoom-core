@@ -1,23 +1,26 @@
-import { ElementOnAfterResize, ElementResizeOptions, Zoom } from 'types';
+import {
+  Elements, ElementId, ElementOnAfterResize, ElementResizeOptions, Zoom,
+} from 'types';
 import { ELEMENT_RESIZED_MIN_WIDTH, ELEMENT_RESIZER_WIDTH } from '@/consts';
 import { useEffect, useRef } from '@/helpers/effects';
 import { onMouseDown, onMouseMove, onMouseUp } from '@/helpers/eventListener';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceElementPosition from '@/helpers/produceElementPosition';
 import produceStyle from '@/helpers/produceStyle';
+import { useElements } from '@/elements';
 import { usePanZoom } from '@/provider';
 
 type Resizer = (options: {
   childNode: HTMLDivElement,
   element: HTMLDivElement,
+  elementsRef: Elements,
+  id: ElementId,
   onAfterResize: () => void,
   resizerWidth: number,
   zoomRef: Zoom,
 } & ElementResizeOptions) => (() => void);
 
 const getResizerWidth = (resizerWidth: number): string => `${resizerWidth}px`;
-
-const getResizerWidthOffset = (resizerWidth: number): string => `-${Math.floor(resizerWidth / 3)}px`;
 
 const handleResizeEvent = ({
   node,
@@ -49,13 +52,14 @@ const handleResizeEvent = ({
 const createResizerNode = () => {
   const node = document.createElement('div');
   node.style.position = 'absolute';
-  node.setAttribute('resizable', 'true');
   return node;
 };
 
 const createLeftResizer: Resizer = ({
   childNode,
   element,
+  elementsRef,
+  id,
   onAfterResize,
   resizedMaxWidth,
   resizedMinWidth,
@@ -63,7 +67,7 @@ const createLeftResizer: Resizer = ({
   zoomRef,
 }) => {
   const left = createResizerNode();
-  left.style.left = getResizerWidthOffset(resizerWidth);
+  left.style.left = '0px';
   left.style.top = '0px';
   left.style.width = getResizerWidth(resizerWidth);
   left.style.height = '100%';
@@ -116,6 +120,7 @@ const createLeftResizer: Resizer = ({
         }
 
         element.style.transform = produceStyle({ position });
+        elementsRef.current[id].position = position;
       });
     },
     onAfterResize,
@@ -131,6 +136,8 @@ const createLeftResizer: Resizer = ({
 const createRightResizer: Resizer = ({
   childNode,
   element,
+  elementsRef,
+  id,
   onAfterResize,
   resizedMaxWidth,
   resizedMinWidth,
@@ -138,7 +145,7 @@ const createRightResizer: Resizer = ({
   zoomRef,
 }) => {
   const right = createResizerNode();
-  right.style.right = getResizerWidthOffset(resizerWidth);
+  right.style.right = '0px';
   right.style.top = '0px';
   right.style.width = getResizerWidth(resizerWidth);
   right.style.height = '100%';
@@ -178,6 +185,7 @@ const createRightResizer: Resizer = ({
         });
 
         element.style.transform = produceStyle({ position });
+        elementsRef.current[id].position = position;
       });
     },
     onAfterResize,
@@ -192,11 +200,13 @@ const createRightResizer: Resizer = ({
 
 const useElementResize = (element: HTMLDivElement, options: ElementResizeOptions) => {
   const { childNode, zoomRef } = usePanZoom();
+  const { elementsRef } = useElements();
+
   const onAfterResizeRef = useRef<ElementOnAfterResize>();
   onAfterResizeRef.current = options.onAfterResize;
 
   useEffect(() => {
-    if (!options.resizable) return undefined;
+    if (options.disabled || !options.resizable) return undefined;
 
     const resizedMinWidth = options.resizedMinWidth || ELEMENT_RESIZED_MIN_WIDTH;
     const resizerWidth = options.resizerWidth || ELEMENT_RESIZER_WIDTH;
@@ -212,6 +222,7 @@ const useElementResize = (element: HTMLDivElement, options: ElementResizeOptions
     const leftNodeClear = createLeftResizer({
       childNode,
       element,
+      elementsRef,
       ...options,
       onAfterResize,
       resizedMinWidth,
@@ -222,6 +233,7 @@ const useElementResize = (element: HTMLDivElement, options: ElementResizeOptions
     const rightNodeClear = createRightResizer({
       childNode,
       element,
+      elementsRef,
       ...options,
       onAfterResize,
       resizedMinWidth,
@@ -233,7 +245,13 @@ const useElementResize = (element: HTMLDivElement, options: ElementResizeOptions
       leftNodeClear();
       rightNodeClear();
     };
-  }, [options.resizable, options.resizedMaxWidth, options.resizedMinWidth, options.resizerWidth]);
+  }, [
+    options.disabled,
+    options.resizable,
+    options.resizedMaxWidth,
+    options.resizedMinWidth,
+    options.resizerWidth,
+  ]);
 };
 
 export default useElementResize;
