@@ -34,12 +34,12 @@ type UseElementMouseMovePosition = (
 
 export const useElementMouseMovePosition = (): UseElementMouseMovePosition => {
   const { childNode, positionRef, zoomRef } = usePanZoom();
-  return (e, from, element) => {
+  return (e, from, elementNode) => {
     const eventPosition = positionFromEvent(e);
     const scroll = getScrollOffset(childNode);
 
     return produceElementPosition({
-      element,
+      elementNode,
       childNode,
       x: (eventPosition.clientX - positionRef.current.x + scroll.x) / zoomRef.current - from.x,
       y: (eventPosition.clientY - positionRef.current.y + scroll.y) / zoomRef.current - from.y,
