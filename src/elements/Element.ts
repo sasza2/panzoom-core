@@ -46,6 +46,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   const startAutoMove = useElementAutoMoveAtEdge();
   const [elementsInMove, setElementsInMove] = useState<ElementsInMove>(null);
   useElementResize(elementNode, {
+    className,
     disabled,
     id,
     onAfterResize,

@@ -148,6 +148,7 @@ export type ElementOnAfterResize = (
 ) => unknown;
 
 export type ElementResizeOptions = {
+  className?: string;
   disabled?: boolean;
   id: ElementId;
   onAfterResize?: ElementOnAfterResize;
