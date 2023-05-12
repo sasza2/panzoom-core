@@ -13,12 +13,11 @@ import {
 } from '@/hooks/useElementEventPosition';
 import applyClassName from '@/helpers/applyClassName';
 import applyStyles from '@/helpers/applyStyles';
+import setNextZIndex from '@/helpers/setNextZIndex';
 import useElementAutoMoveAtEdge from '@/hooks/useElementAutoMoveAtEdge';
 import useElementResize from '@/hooks/useElementResize';
 import { useElements } from '@/elements';
 import { usePanZoom } from '@/provider';
-
-let lastZIndex = 2;
 
 const Element = (elementNode: HTMLDivElement) => ({
   id,
@@ -97,11 +96,6 @@ const Element = (elementNode: HTMLDivElement) => ({
   useEffect(() => {
     if (disabled || disabledElements) return undefined;
 
-    const increaseZIndex = () => {
-      lastZIndex += 1;
-      elementNode.style.zIndex = lastZIndex.toString();
-    };
-
     const mousedown = (e: MouseEvent) => {
       if (e.button) return;
       if (draggableSelector && !(e.target as HTMLElement).closest(draggableSelector)) return;
@@ -135,7 +129,7 @@ const Element = (elementNode: HTMLDivElement) => ({
         return curr;
       }, {} as ElementsInMove));
 
-      increaseZIndex();
+      setNextZIndex(elementNode);
     };
 
     const mouseDownClear = onMouseDown(elementNode, mousedown);

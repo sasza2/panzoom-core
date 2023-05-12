@@ -8,6 +8,7 @@ import { onMouseDown, onMouseMove, onMouseUp } from '@/helpers/eventListener';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceElementPosition from '@/helpers/produceElementPosition';
 import produceStyle from '@/helpers/produceStyle';
+import setNextZIndex from '@/helpers/setNextZIndex';
 import { useElements } from '@/elements';
 import { usePanZoom } from '@/provider';
 
@@ -56,6 +57,8 @@ const handleResizeEvent = ({
     };
 
     cleanOnMouseUp = onMouseUp(resizerNode, handleMouseUp);
+
+    setNextZIndex(elementNode);
   });
 };
 
