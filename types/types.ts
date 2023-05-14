@@ -141,6 +141,12 @@ type ElementOnMouseUp = (
   } & Position
 ) => unknown;
 
+export type ElementOnStartResizing = (
+  props: {
+    id: ElementId;
+  }
+) => unknown;
+
 export type ElementOnAfterResize = (
   props: {
     id: ElementId;
@@ -151,6 +157,7 @@ export type ElementResizeOptions = {
   className?: string;
   disabled?: boolean;
   id: ElementId;
+  onStartResizing?: ElementOnStartResizing;
   onAfterResize?: ElementOnAfterResize;
   resizable?: boolean;
   resizedMaxWidth?: number;

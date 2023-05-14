@@ -1,5 +1,5 @@
 import {
-  Elements, ElementId, ElementOnAfterResize, ElementResizeOptions, Zoom,
+  Elements, ElementId, ElementOnAfterResize, ElementResizeOptions, Zoom, ElementOnStartResizing,
 } from 'types';
 import { ELEMENT_RESIZED_MIN_WIDTH, ELEMENT_RESIZER_WIDTH } from '@/consts';
 import applyClassName from '@/helpers/applyClassName';
@@ -18,6 +18,7 @@ type Resizer = (options: {
   elementsRef: Elements,
   id: ElementId,
   onAfterResize: () => void,
+  onStartResizing: () => void,
   resizerWidth: number,
   zoomRef: Zoom,
 } & ElementResizeOptions) => (() => void);
@@ -75,6 +76,7 @@ const createLeftResizer: Resizer = ({
   elementsRef,
   id,
   onAfterResize,
+  onStartResizing,
   resizedMaxWidth,
   resizedMinWidth,
   resizerWidth,
@@ -102,6 +104,8 @@ const createLeftResizer: Resizer = ({
       const size = elementNode.getBoundingClientRect();
       let maxWidth = (size.right - childSize.left) / zoomRef.current;
       if (resizedMaxWidth && resizedMaxWidth < maxWidth) maxWidth = resizedMaxWidth;
+
+      onStartResizing();
 
       return onMouseMove((mouseMoveEvent: MouseEvent) => {
         const current = positionFromEvent(mouseMoveEvent);
@@ -156,6 +160,7 @@ const createRightResizer: Resizer = ({
   elementsRef,
   id,
   onAfterResize,
+  onStartResizing,
   resizedMaxWidth,
   resizedMinWidth,
   resizerWidth,
@@ -178,6 +183,8 @@ const createRightResizer: Resizer = ({
       const childSize = childNode.getBoundingClientRect();
       let maxWidth = (childSize.right - size.left) / zoomRef.current;
       if (resizedMaxWidth && resizedMaxWidth < maxWidth) maxWidth = resizedMaxWidth;
+
+      onStartResizing();
 
       return onMouseMove((mouseMoveEvent: MouseEvent) => {
         const current = positionFromEvent(mouseMoveEvent);
@@ -224,6 +231,9 @@ const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOpt
   const onAfterResizeRef = useRef<ElementOnAfterResize>();
   onAfterResizeRef.current = options.onAfterResize;
 
+  const onStartResizingRef = useRef<ElementOnStartResizing>();
+  onStartResizingRef.current = options.onStartResizing;
+
   useEffect(() => {
     if (options.disabled || !options.resizable) return undefined;
 
@@ -238,12 +248,21 @@ const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOpt
       });
     };
 
+    const onStartResizing = () => {
+      if (!onStartResizingRef.current) return;
+
+      onStartResizingRef.current({
+        id: options.id,
+      });
+    };
+
     const leftNodeClear = createLeftResizer({
       childNode,
       elementNode,
       elementsRef,
       ...options,
       onAfterResize,
+      onStartResizing,
       resizedMinWidth,
       resizerWidth,
       zoomRef,
@@ -255,6 +274,7 @@ const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOpt
       elementsRef,
       ...options,
       onAfterResize,
+      onStartResizing,
       resizedMinWidth,
       resizerWidth,
       zoomRef,
