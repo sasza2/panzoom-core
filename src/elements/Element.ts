@@ -1,6 +1,7 @@
 import { ElementsInMove, ElementOptions } from 'types';
 import { ELEMENT_CLASS_NAME } from '@/consts';
 import { ELEMENT_STYLE } from '@/styles';
+import bodyClassList from '@/helpers/bodyClassList';
 import { useEffect, useRef, useState } from '@/helpers/effects';
 import { onMouseDown, onMouseUp as onMouseUpListener, onMouseMove } from '@/helpers/eventListener';
 import positionFromEvent from '@/helpers/positionFromEvent';
@@ -45,6 +46,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   const mouseMovePosition = useElementMouseMovePosition();
   const startAutoMove = useElementAutoMoveAtEdge();
   const [elementsInMove, setElementsInMove] = useState<ElementsInMove>(null);
+
   useElementResize(elementNode, {
     className,
     disabled,
@@ -58,8 +60,14 @@ const Element = (elementNode: HTMLDivElement) => ({
   });
 
   const {
-    blockMovingRef, boundary, disabledElements, onElementsChangeRef,
+    blockMovingRef,
+    boundary,
+    className: containerClassName,
+    disabledElements,
+    onElementsChangeRef,
   } = usePanZoom();
+
+  const movingClassName = `${containerClassName}--element-moving`;
 
   const {
     elementsRef,
@@ -101,6 +109,8 @@ const Element = (elementNode: HTMLDivElement) => ({
     const mousedown = (e: MouseEvent) => {
       if (e.button) return;
       if (draggableSelector && !(e.target as HTMLElement).closest(draggableSelector)) return;
+
+      bodyClassList.add(movingClassName);
 
       const elements = Object.values(elementsRef.current).filter(
         (element) => element.id === id
@@ -144,6 +154,7 @@ const Element = (elementNode: HTMLDivElement) => ({
     JSON.stringify(followers),
     JSON.stringify(boundary),
     id,
+    movingClassName,
   ]);
 
   useEffect(() => {
@@ -181,6 +192,7 @@ const Element = (elementNode: HTMLDivElement) => ({
       }
 
       setElementsInMove(null);
+      bodyClassList.remove(movingClassName);
     };
 
     const mouseUpClear = onMouseUpListener(elementNode, mouseup);

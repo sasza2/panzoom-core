@@ -1,4 +1,5 @@
 import { Position } from 'types';
+import bodyClassList from '@/helpers/bodyClassList';
 import { useEffect, useState } from '@/helpers/effects';
 import { onMouseDown, onMouseUp, onMouseMove } from '@/helpers/eventListener';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
@@ -37,7 +38,7 @@ const useMove = () => {
       const stop = stopEventPropagation();
 
       document.body.style.userSelect = 'none';
-      document.body.classList.add(grabbingClassName);
+      bodyClassList.add(grabbingClassName);
 
       if (onContainerClickRef.current) {
         onContainerClickRef.current({
@@ -92,7 +93,7 @@ const useMove = () => {
 
     const mouseup = () => {
       document.body.style.userSelect = null;
-      document.body.classList.remove(grabbingClassName);
+      bodyClassList.remove(grabbingClassName);
       setMoving(null);
     };
 
