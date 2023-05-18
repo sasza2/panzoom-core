@@ -3,6 +3,7 @@ import {
 } from 'types';
 import { ELEMENT_RESIZED_MIN_WIDTH, ELEMENT_RESIZER_WIDTH } from '@/consts';
 import applyClassName from '@/helpers/applyClassName';
+import bodyClassList from '@/helpers/bodyClassList';
 import { useEffect, useRef } from '@/helpers/effects';
 import { onMouseDown, onMouseMove, onMouseUp } from '@/helpers/eventListener';
 import positionFromEvent from '@/helpers/positionFromEvent';
@@ -225,8 +226,9 @@ const createRightResizer: Resizer = ({
 };
 
 const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOptions) => {
-  const { childNode, zoomRef } = usePanZoom();
+  const { childNode, className, zoomRef } = usePanZoom();
   const { elementsRef } = useElements();
+  const resizingClassName = `${className}--element-resizing`;
 
   const onAfterResizeRef = useRef<ElementOnAfterResize>();
   onAfterResizeRef.current = options.onAfterResize;
@@ -240,18 +242,22 @@ const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOpt
     const resizedMinWidth = options.resizedMinWidth || ELEMENT_RESIZED_MIN_WIDTH;
     const resizerWidth = options.resizerWidth || ELEMENT_RESIZER_WIDTH;
 
-    const onAfterResize = () => {
-      if (!onAfterResizeRef.current) return;
+    const onStartResizing = () => {
+      bodyClassList.add(resizingClassName);
 
-      onAfterResizeRef.current({
+      if (!onStartResizingRef.current) return;
+
+      onStartResizingRef.current({
         id: options.id,
       });
     };
 
-    const onStartResizing = () => {
-      if (!onStartResizingRef.current) return;
+    const onAfterResize = () => {
+      bodyClassList.remove(resizingClassName);
 
-      onStartResizingRef.current({
+      if (!onAfterResizeRef.current) return;
+
+      onAfterResizeRef.current({
         id: options.id,
       });
     };
@@ -285,6 +291,7 @@ const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOpt
       rightNodeClear();
     };
   }, [
+    resizingClassName,
     options.className,
     options.disabled,
     options.resizable,
