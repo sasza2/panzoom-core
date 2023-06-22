@@ -46,6 +46,12 @@ const Element = (elementNode: HTMLDivElement) => ({
   const mouseMovePosition = useElementMouseMovePosition();
   const startAutoMove = useElementAutoMoveAtEdge();
   const [elementsInMove, setElementsInMove] = useState<ElementsInMove>(null);
+  const { elementsInMoveRef } = useElements();
+
+  const updateElementsInMove = (nextElementsInMove: ElementsInMove) => {
+    setElementsInMove(nextElementsInMove);
+    elementsInMoveRef.current = nextElementsInMove;
+  };
 
   useElementResize(elementNode, {
     className,
@@ -64,6 +70,7 @@ const Element = (elementNode: HTMLDivElement) => ({
     boundary,
     className: containerClassName,
     disabledElements,
+    elementsAutoMoveAtEdge,
     onElementsChangeRef,
   } = usePanZoom();
 
@@ -136,7 +143,7 @@ const Element = (elementNode: HTMLDivElement) => ({
 
       if (stop.done) return;
 
-      setElementsInMove(elements.reduce((curr, element) => {
+      updateElementsInMove(elements.reduce((curr, element) => {
         curr[element.id] = mouseDownPosition(e, element.node.current);
         return curr;
       }, {} as ElementsInMove));
@@ -160,11 +167,14 @@ const Element = (elementNode: HTMLDivElement) => ({
   useEffect(() => {
     if (!elementsInMove) return undefined;
 
-    const stopElementsAutoMove = startAutoMove(elementsInMove);
+    let stopElementsAutoMove: ReturnType<typeof startAutoMove> = null;
+    if (elementsAutoMoveAtEdge) {
+      stopElementsAutoMove = startAutoMove(elementsInMove);
+    }
 
     const mousemove = (e: MouseEvent) => {
       if (blockMovingRef.current) {
-        setElementsInMove(null);
+        updateElementsInMove(null);
         return;
       }
 
@@ -191,7 +201,7 @@ const Element = (elementNode: HTMLDivElement) => ({
         });
       }
 
-      setElementsInMove(null);
+      updateElementsInMove(null);
       bodyClassList.remove(movingClassName);
     };
 
@@ -199,11 +209,11 @@ const Element = (elementNode: HTMLDivElement) => ({
     const mouseMoveClear = onMouseMove(mousemove);
 
     return () => {
-      stopElementsAutoMove();
+      if (stopElementsAutoMove) stopElementsAutoMove();
       mouseUpClear();
       mouseMoveClear();
     };
-  }, [elementsInMove]);
+  }, [elementsAutoMoveAtEdge, elementsInMove]);
 
   useEffect(
     () => applyStyles(elementNode, ELEMENT_STYLE),
