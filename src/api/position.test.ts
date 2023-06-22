@@ -17,6 +17,7 @@ it('api/position/get', () => {
 
 it('api/position/set', () => {
   const childNode = document.createElement('div')
+  const containerNode = document.createElement('div')
 
   const positionRef = createRef() as Ref<Position>;
   positionRef.current = { x: 250, y: 400 };
@@ -25,14 +26,14 @@ it('api/position/set', () => {
   zoomRef.current = 1.1;
 
   // To (200, 300)
-  setPosition({ childNode, positionRef, zoomRef })(200, 300);
+  setPosition({ childNode, containerNode, positionRef, zoomRef })(200, 300);
 
   expect(positionRef.current).toStrictEqual({ x: 200, y: 300 });
   expect(zoomRef.current).toBe(1.1);
   expect(childNode.style.transform).toBe('translate(200px, 300px) scale(1.1)');
 
   // To (600, 100)
-  setPosition({ childNode, positionRef, zoomRef })(600, 100);
+  setPosition({ childNode, containerNode, positionRef, zoomRef })(600, 100);
 
   expect(positionRef.current).toStrictEqual({ x: 600, y: 100 });
   expect(zoomRef.current).toBe(1.1);

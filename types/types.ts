@@ -50,6 +50,7 @@ export type API = {
   childNode: HTMLDivElement,
   move: (x: number, y: number) => void;
   getElements: () => Elements['current'];
+  getElementsInMove: () => ElementsInMove,
   updateElementPosition: (id: string | number, position: Position) => void;
   getPosition: () => Position;
   setPosition: (x: number, y: number) => void;
@@ -68,6 +69,7 @@ export type PanZoomOptions = {
   disabledMove?: boolean;
   disabledUserSelect?: boolean;
   disabledZoom?: boolean;
+  elementsAutoMoveAtEdge?: boolean;
   onElementsChange?: OnElementsChange;
   onContainerChange?: OnContainerChange;
   onContainerClick?: OnContainerClick,
@@ -92,6 +94,7 @@ export type PanZoomContext = {
   disabledMove: boolean,
   disabledUserSelect: boolean,
   disabledZoom: boolean,
+  elementsAutoMoveAtEdge: boolean,
   onContainerChangeRef: Ref<OnContainerChange>,
   onContainerClickRef: Ref<OnContainerClick>,
   onContainerPositionChangeRef: Ref<OnContainerChange>,
@@ -113,6 +116,7 @@ export type Elements = Ref<Record<ElementId, Element>>;
 export type ElementsInMove = Record<ElementId, Position>;
 
 export type ElementsContext = {
+  elementsInMoveRef: Ref<ElementsInMove>;
   elementsRef: Elements;
   lastElementMouseMoveEventRef: Ref<ClientPosition>;
 };

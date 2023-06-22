@@ -12,10 +12,16 @@ import useEventsCallback from './useEventsCallback';
 
 const useApi = (): void => {
   const {
-    apiRef, childNode, positionRef, zoomRef,
+    apiRef,
+    boundary,
+    childNode,
+    containerNode,
+    onElementsChangeRef,
+    positionRef,
+    zoomRef,
   } = usePanZoom();
 
-  const { elementsRef } = useElements();
+  const { elementsRef, elementsInMoveRef } = useElements();
 
   const { withEventAll, withEventPosition, withEventZoom } = useEventsCallback();
 
@@ -29,11 +35,17 @@ const useApi = (): void => {
       }),
     ),
     getElements: getElements({ elementsRef }),
-    updateElementPosition: updateElementPosition({ elementsRef }),
+    getElementsInMove: () => elementsInMoveRef.current || {},
+    updateElementPosition: updateElementPosition({
+      elementsRef,
+      onElementsChangeRef,
+    }),
     getPosition: getPosition({ positionRef }),
     setPosition: withEventPosition(
       setPosition({
+        boundary,
         childNode,
+        containerNode,
         positionRef,
         zoomRef,
       }),
