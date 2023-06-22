@@ -22,7 +22,9 @@ const getDefaultContext = (childNode: HTMLDivElement, options: PanZoomOptions): 
     disabledUserSelect: options.disabledUserSelect || false,
     disabledZoom: options.disabledZoom || false,
     disabledMove: false,
-    elementsAutoMoveAtEdge: options.elementsAutoMoveAtEdge ?? true,
+    elementsAutoMoveAtEdge: options.elementsAutoMoveAtEdge === undefined
+      ? true
+      : options.elementsAutoMoveAtEdge,
     onContainerChangeRef: createRef(options.onContainerChange),
     onContainerClickRef: createRef(options.onContainerClick),
     onContainerPositionChangeRef: createRef(options.onContainerPositionChange),
