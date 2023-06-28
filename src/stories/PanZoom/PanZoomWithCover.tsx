@@ -72,7 +72,7 @@ const PanZoomWithCover: React.FC<PanZoomWithCoverProps> = ({
       );
 
       setInitialized(true);
-      onCoverLoad();
+      if (onCoverLoad) onCoverLoad();
     };
 
     return () => {
