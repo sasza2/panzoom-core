@@ -1,6 +1,8 @@
 import { SCROLL_WHEEL_DELAY } from '@/consts';
 import { useElements } from '@/elements';
 import { useEffect } from '@/helpers/effects';
+import getBoundingClientRect from '@/helpers/getBoundingClientRect';
+import produceBounding from '@/helpers/produceBounding';
 import produceElementPosition from '@/helpers/produceElementPosition';
 import produceStyle from '@/helpers/produceStyle';
 import updateFamilyOfElementsPosition from '@/helpers/updateFamilyOfElementsPosition';
@@ -8,6 +10,7 @@ import { usePanZoom } from '@/provider';
 
 const useScroll = () => {
   const {
+    boundary,
     childNode,
     containerNode,
     disabledScrollHorizontal,
@@ -23,6 +26,7 @@ const useScroll = () => {
   useEffect(() => {
     if (disabledScrollHorizontal && disabledScrollVertical) return undefined;
 
+    const parentSize = getBoundingClientRect(containerNode);
     let prevTime = 0;
 
     const onWheel = (e: WheelEvent) => {
@@ -36,10 +40,15 @@ const useScroll = () => {
       const addX = disabledScrollHorizontal ? 0 : scrollSpeed;
       const addY = disabledScrollVertical ? 0 : scrollSpeed;
       const scrollUp = e.deltaY > 0;
-      const nextPosition = {
+
+      const nextPosition = produceBounding({
+        boundary,
         x: scrollUp ? position.x - addX : position.x + addX,
         y: scrollUp ? position.y - addY : position.y + addY,
-      };
+        parentSize,
+        childSize: getBoundingClientRect(childNode),
+      });
+
       positionRef.current = nextPosition;
       childNode.style.transform = produceStyle({
         position: nextPosition,
@@ -73,7 +82,7 @@ const useScroll = () => {
     return () => {
       containerNode.removeEventListener('wheel', onWheel);
     };
-  }, [disabledScrollHorizontal, disabledScrollVertical, scrollSpeed]);
+  }, [JSON.stringify(boundary), disabledScrollHorizontal, disabledScrollVertical, scrollSpeed]);
 };
 
 export default useScroll;
