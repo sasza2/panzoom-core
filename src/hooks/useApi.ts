@@ -18,6 +18,8 @@ const useApi = (): void => {
     containerNode,
     onElementsChangeRef,
     positionRef,
+    zoomMax,
+    zoomMin,
     zoomRef,
   } = usePanZoom();
 
@@ -59,6 +61,8 @@ const useApi = (): void => {
       setZoom({
         childNode,
         positionRef,
+        zoomMax,
+        zoomMin,
         zoomRef,
       }),
     ),
@@ -66,6 +70,8 @@ const useApi = (): void => {
       zoomIn({
         childNode,
         positionRef,
+        zoomMax,
+        zoomMin,
         zoomRef,
       }),
     ),
@@ -73,6 +79,8 @@ const useApi = (): void => {
       zoomOut({
         childNode,
         positionRef,
+        zoomMax,
+        zoomMin,
         zoomRef,
       }),
     ),

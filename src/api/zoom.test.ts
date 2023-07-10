@@ -23,14 +23,14 @@ it('api/zoom/set', () => {
 
   // Change to 1.5
   positionRef.current = { x: 15, y: 30 };
-  setZoom({ childNode, positionRef, zoomRef })(1.5);
+  setZoom({ childNode, positionRef, zoomRef, zoomMin: 1, zoomMax: 2 })(1.5);
 
   expect(childNode.style.transform).toBe('translate(15px, 30px) scale(1.5)');
   expect(positionRef.current).toStrictEqual({ x: 15, y: 30 });
   expect(zoomRef.current).toBe(1.5);
 
   // Change to 2.1
-  setZoom({ childNode, positionRef, zoomRef })(2.1);
+  setZoom({ childNode, positionRef, zoomRef, zoomMin: 1, zoomMax: 3 })(2.1);
 
   expect(childNode.style.transform).toBe('translate(15px, 30px) scale(2.1)');
   expect(positionRef.current).toStrictEqual({ x: 15, y: 30 });
@@ -45,13 +45,13 @@ it('api/zoom/in', () => {
   zoomRef.current = 1;
 
   positionRef.current = { x: 20, y: 40 };
-  zoomIn({ childNode, positionRef, zoomRef })(0.2);
+  zoomIn({ childNode, positionRef, zoomRef, zoomMin: 0.2, zoomMax: 1.5 })(0.2);
 
   expect(childNode.style.transform).toBe('translate(20px, 40px) scale(1.2)');
   expect(positionRef.current).toStrictEqual({ x: 20, y: 40 });
   expect(zoomRef.current).toBe(1.2);
 
-  zoomIn({ childNode, positionRef, zoomRef })(0.3);
+  zoomIn({ childNode, positionRef, zoomRef, zoomMin: 0.3, zoomMax: 2 })(0.3);
 
   expect(childNode.style.transform).toBe('translate(20px, 40px) scale(1.5)');
   expect(positionRef.current).toStrictEqual({ x: 20, y: 40 });
@@ -66,13 +66,13 @@ it('api/zoom/out', () => {
   zoomRef.current = 1.5;
 
   positionRef.current = { x: 20, y: 40 };
-  zoomOut({ childNode, positionRef, zoomRef })(0.2);
+  zoomOut({ childNode, positionRef, zoomRef, zoomMin: 0.1, zoomMax: 1.5 })(0.2);
 
   expect(childNode.style.transform).toBe('translate(20px, 40px) scale(1.3)');
   expect(positionRef.current).toStrictEqual({ x: 20, y: 40 });
   expect(zoomRef.current).toBe(1.3);
 
-  zoomOut({ childNode, positionRef, zoomRef })(0.3);
+  zoomOut({ childNode, positionRef, zoomRef, zoomMin: 0.3, zoomMax: 1 })(0.3);
 
   expect(childNode.style.transform).toBe('translate(20px, 40px) scale(1)');
   expect(positionRef.current).toStrictEqual({ x: 20, y: 40 });

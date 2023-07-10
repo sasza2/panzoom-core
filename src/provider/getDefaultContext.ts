@@ -1,6 +1,7 @@
 import { API, PanZoomContext, PanZoomOptions } from 'types';
 import { createRef } from '@/helpers/effects';
 import {
+  SCROLL_SPEED_DEFAULT,
   ZOOM_INITIAL,
   ZOOM_MIN_DEFAULT,
   ZOOM_MAX_DEFAULT,
@@ -19,6 +20,12 @@ const getDefaultContext = (childNode: HTMLDivElement, options: PanZoomOptions): 
     containerNode,
     disabled: options.disabled || false,
     disabledElements: options.disabledElements || false,
+    disabledScrollHorizontal: options.disabledScrollHorizontal === undefined
+      ? true
+      : options.disabledScrollHorizontal,
+    disabledScrollVertical: options.disabledScrollVertical === undefined
+      ? true
+      : options.disabledScrollVertical,
     disabledUserSelect: options.disabledUserSelect || false,
     disabledZoom: options.disabledZoom || false,
     disabledMove: false,
@@ -32,6 +39,7 @@ const getDefaultContext = (childNode: HTMLDivElement, options: PanZoomOptions): 
     onElementsChangeRef: createRef(options.onElementsChange),
     positionRef: createRef({ x: 0, y: 0 }),
     selecting: options.selecting || false,
+    scrollSpeed: options.scrollSpeed || SCROLL_SPEED_DEFAULT,
     width: options.width || '100%',
     height: options.height || '100%',
     zoomRef: createRef(options.zoomInitial || ZOOM_INITIAL),
