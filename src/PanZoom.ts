@@ -8,6 +8,7 @@ import { CLASS_NAME } from './consts';
 import { CHILD_DISABLED_STYLE, CHILD_STYLE, CONTAINER_STYLE } from './styles';
 import useApi from './hooks/useApi';
 import useMove from './hooks/useMove';
+import useScroll from './hooks/useScroll';
 import useZoom from './hooks/useZoom';
 
 const PanZoom = () => {
@@ -26,6 +27,7 @@ const PanZoom = () => {
   useMove();
   useZoom();
   useApi();
+  useScroll();
 
   useEffect(() => {
     const childStyle = {

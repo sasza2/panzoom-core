@@ -68,6 +68,8 @@ export type PanZoomOptions = {
   disabled?: boolean;
   disabledElements?: boolean;
   disabledMove?: boolean;
+  disabledScrollHorizontal?: boolean;
+  disabledScrollVertical?: boolean;
   disabledUserSelect?: boolean;
   disabledZoom?: boolean;
   elementsAutoMoveAtEdge?: boolean;
@@ -77,6 +79,7 @@ export type PanZoomOptions = {
   onContainerPositionChange?: OnContainerChange;
   onContainerZoomChange?: OnContainerChange;
   selecting?: boolean;
+  scrollSpeed?: number;
   zoomInitial?: number;
   zoomMax?: number;
   zoomMin?: number;
@@ -93,6 +96,8 @@ export type PanZoomContext = {
   disabled: boolean,
   disabledElements: boolean,
   disabledMove: boolean,
+  disabledScrollHorizontal: boolean;
+  disabledScrollVertical: boolean;
   disabledUserSelect: boolean,
   disabledZoom: boolean,
   elementsAutoMoveAtEdge: boolean,
@@ -103,6 +108,7 @@ export type PanZoomContext = {
   onElementsChangeRef: Ref<OnElementsChange>,
   positionRef: Ref<Position>,
   selecting: boolean,
+  scrollSpeed: number,
   zoomRef: Zoom,
   zoomInitial?: number;
   zoomMax?: number;
