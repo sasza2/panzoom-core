@@ -1,6 +1,6 @@
 import { PanZoomApi, PanZoomOptions } from './types';
 
-export { API } from './types';
+export { API, PanZoomOptions } from './types';
 
 export function getAllowedProps(): Array<keyof PanZoomOptions>;
 
