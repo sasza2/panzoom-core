@@ -26,7 +26,6 @@ const useScroll = () => {
   useEffect(() => {
     if (disabledScrollHorizontal && disabledScrollVertical) return undefined;
 
-    const parentSize = getBoundingClientRect(containerNode);
     let prevTime = 0;
 
     const onWheel = (e: WheelEvent) => {
@@ -40,6 +39,8 @@ const useScroll = () => {
       const addX = disabledScrollHorizontal ? 0 : scrollSpeed;
       const addY = disabledScrollVertical ? 0 : scrollSpeed;
       const scrollUp = e.deltaY > 0;
+
+      const parentSize = getBoundingClientRect(containerNode);
 
       const nextPosition = produceBounding({
         boundary,
