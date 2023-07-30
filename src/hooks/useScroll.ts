@@ -15,6 +15,8 @@ const useScroll = () => {
     containerNode,
     disabledScrollHorizontal,
     disabledScrollVertical,
+    onContainerChangeRef,
+    onContainerPositionChangeRef,
     onElementsChangeRef,
     positionRef,
     scrollSpeed,
@@ -55,6 +57,14 @@ const useScroll = () => {
         position: nextPosition,
         zoom: zoomRef.current,
       });
+
+      const eventValue = {
+        position: nextPosition,
+        zoom: zoomRef.current,
+      };
+
+      if (onContainerChangeRef.current) onContainerChangeRef.current(eventValue);
+      if (onContainerPositionChangeRef.current) onContainerPositionChangeRef.current(eventValue);
 
       const diff = {
         x: scrollUp ? position.x - nextPosition.x : nextPosition.x - position.x,
