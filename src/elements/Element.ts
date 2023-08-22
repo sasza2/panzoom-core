@@ -78,6 +78,7 @@ const Element = (elementNode: HTMLDivElement) => ({
 
   const {
     elementsRef,
+    elementsUpdatePositionApiRef,
     lastElementMouseMoveEventRef,
   } = useElements();
 
@@ -87,11 +88,16 @@ const Element = (elementNode: HTMLDivElement) => ({
   const onMouseUpRef = useRef<typeof onMouseUp>();
   onMouseUpRef.current = onMouseUp;
 
-  useEffect(() => () => {
-    elementNode.style.transform = null;
-    elementNode.style.zIndex = null;
-    delete elementsRef.current[id as string];
-  }, []);
+  useEffect(() => {
+    elementsUpdatePositionApiRef.current[id] = updateElementsInMove
+
+    return () => {
+      elementNode.style.transform = null;
+      elementNode.style.zIndex = null;
+      delete elementsRef.current[id as string];
+      delete elementsUpdatePositionApiRef.current[id];
+    }
+  }, [])
 
   useEffect(() => {
     const position = { x, y };

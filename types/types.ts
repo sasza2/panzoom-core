@@ -51,8 +51,9 @@ export type API = {
   move: (x: number, y: number) => void;
   getElements: () => Elements['current'];
   getElementsInMove: () => ElementsInMove,
-  updateElementPosition: (id: string | number, position: Position) => void;
-  updateElementPositionSilent: (id: string | number, position: Position) => void;
+  grabElement: (id: ElementId, position?: Position) => null | (() => void);
+  updateElementPosition: (id: ElementId, position: Position) => void;
+  updateElementPositionSilent: (id: ElementId, position: Position) => void;
   getPosition: () => Position;
   setPosition: (x: number, y: number) => void;
   getZoom: () => number;
@@ -122,8 +123,11 @@ export type Elements = Ref<Record<ElementId, Element>>;
 
 export type ElementsInMove = Record<ElementId, Position>;
 
+export type ElementsUpdatePositionApi = Record<ElementId, (elementsInMove: ElementsInMove) => void>
+
 export type ElementsContext = {
   elementsInMoveRef: Ref<ElementsInMove>;
+  elementsUpdatePositionApiRef: Ref<ElementsUpdatePositionApi>,
   elementsRef: Elements;
   lastElementMouseMoveEventRef: Ref<ClientPosition>;
 };

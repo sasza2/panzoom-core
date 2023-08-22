@@ -1,7 +1,7 @@
 import { API } from 'types';
 import { usePanZoom } from '@/provider';
 import { useElements } from '@/elements';
-import { getElements, updateElementPosition, updateElementPositionSilent } from '@/api/elements';
+import { getElements, grabElement, updateElementPosition, updateElementPositionSilent } from '@/api/elements';
 import move from '@/api/move';
 import { getPosition, setPosition } from '@/api/position';
 import reset from '@/api/reset';
@@ -23,7 +23,7 @@ const useApi = (): void => {
     zoomRef,
   } = usePanZoom();
 
-  const { elementsRef, elementsInMoveRef } = useElements();
+  const { elementsRef, elementsInMoveRef, elementsUpdatePositionApiRef } = useElements();
 
   const { withEventAll, withEventPosition, withEventZoom } = useEventsCallback();
 
@@ -38,6 +38,7 @@ const useApi = (): void => {
     ),
     getElements: getElements({ elementsRef }),
     getElementsInMove: () => elementsInMoveRef.current || {},
+    grabElement: grabElement({ elementsRef, elementsUpdatePositionApiRef }),
     updateElementPosition: updateElementPosition({
       elementsRef,
       onElementsChangeRef,
