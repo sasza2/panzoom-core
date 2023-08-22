@@ -1,5 +1,6 @@
 import {
-  Elements, OnElementsChange, Position, Ref,
+  ElementId,
+  Elements, ElementsUpdatePositionApi, OnElementsChange, Position, Ref,
 } from 'types';
 import produceStyle from '@/helpers/produceStyle';
 
@@ -57,3 +58,35 @@ export const updateElementPositionSilent: UpdateElementPosition = ({
     position,
   });
 };
+
+type GrabElement = ({
+  elementsRef,
+  elementsUpdatePositionApiRef,
+}: {
+  elementsRef: Elements,
+  elementsUpdatePositionApiRef: Ref<ElementsUpdatePositionApi>,
+}) => (id: ElementId, position?: Position) => null | (() => void)
+
+export const grabElement: GrabElement = ({
+  elementsRef,
+  elementsUpdatePositionApiRef,
+}) => (id, position) => {
+  const element = elementsRef.current[id]
+  if (!element) return null
+
+  const setElementsInMove = elementsUpdatePositionApiRef.current[id]
+  if (!setElementsInMove) return null
+
+  setElementsInMove({
+    [id]: position || {
+      x: 0,
+      y: 0,
+    }
+  })
+
+  return () => {
+    const setElementsInMoveUnmount = elementsUpdatePositionApiRef.current[id]
+    if (setElementsInMoveUnmount) setElementsInMoveUnmount(null)
+  }
+}
+
