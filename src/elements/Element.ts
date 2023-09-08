@@ -218,6 +218,7 @@ const Element = (elementNode: HTMLDivElement) => ({
       if (stopElementsAutoMove) stopElementsAutoMove();
       mouseUpClear();
       mouseMoveClear();
+      bodyClassList.remove(movingClassName);
     };
   }, [elementsAutoMoveAtEdge, elementsInMove]);
 
