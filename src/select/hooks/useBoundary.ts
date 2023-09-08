@@ -3,6 +3,7 @@ import { usePanZoom } from '@/provider';
 import { useEffect, useRef, useState } from '@/helpers/effects';
 import { onMouseUp, onMouseMove } from '@/helpers/eventListener';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
+import getWindow from '@/helpers/getWindow';
 import useContainerMouseDownPosition from '@/hooks/useContainerMouseDownPosition';
 import useSelect, { Boundary } from './useSelect';
 
@@ -88,7 +89,7 @@ const useBoundary: UseBoundary = () => {
     const mousemove = (e: MouseEvent) => mouseEvent(e, expanding);
 
     const mouseMoveClear = onMouseMove(mousemove);
-    const mouseUpClear = onMouseUp(window, mouseup);
+    const mouseUpClear = onMouseUp(getWindow(), mouseup);
 
     return () => {
       mouseMoveClear();

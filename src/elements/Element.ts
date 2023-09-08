@@ -89,15 +89,15 @@ const Element = (elementNode: HTMLDivElement) => ({
   onMouseUpRef.current = onMouseUp;
 
   useEffect(() => {
-    elementsUpdatePositionApiRef.current[id] = updateElementsInMove
+    elementsUpdatePositionApiRef.current[id] = updateElementsInMove;
 
     return () => {
       elementNode.style.transform = null;
       elementNode.style.zIndex = null;
       delete elementsRef.current[id as string];
       delete elementsUpdatePositionApiRef.current[id];
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
     const position = { x, y };
@@ -179,7 +179,7 @@ const Element = (elementNode: HTMLDivElement) => ({
     }
 
     const mousemove = (e: MouseEvent) => {
-      if (blockMovingRef.current) {
+      if (blockMovingRef.current || e.buttons === 0) {
         updateElementsInMove(null);
         return;
       }

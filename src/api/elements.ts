@@ -71,22 +71,21 @@ export const grabElement: GrabElement = ({
   elementsRef,
   elementsUpdatePositionApiRef,
 }) => (id, position) => {
-  const element = elementsRef.current[id]
-  if (!element) return null
+  const element = elementsRef.current[id];
+  if (!element) return null;
 
-  const setElementsInMove = elementsUpdatePositionApiRef.current[id]
-  if (!setElementsInMove) return null
+  const setElementsInMove = elementsUpdatePositionApiRef.current[id];
+  if (!setElementsInMove) return null;
 
   setElementsInMove({
     [id]: position || {
       x: 0,
       y: 0,
-    }
-  })
+    },
+  });
 
   return () => {
-    const setElementsInMoveUnmount = elementsUpdatePositionApiRef.current[id]
-    if (setElementsInMoveUnmount) setElementsInMoveUnmount(null)
-  }
-}
-
+    const setElementsInMoveUnmount = elementsUpdatePositionApiRef.current[id];
+    if (setElementsInMoveUnmount) setElementsInMoveUnmount(null);
+  };
+};

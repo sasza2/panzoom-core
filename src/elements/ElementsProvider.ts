@@ -10,7 +10,7 @@ export const useElements = () => useContext<ElementsContext>(ELEMENTS_CONTEXT_ID
 const ElementsProvider = () => {
   const elementsRef: Elements = useRef({});
   const elementsInMoveRef: ElementsInMove = useRef(null);
-  const elementsUpdatePositionApiRef = useRef<ElementsUpdatePositionApi>({})
+  const elementsUpdatePositionApiRef = useRef<ElementsUpdatePositionApi>({});
   const lastElementMouseMoveEventRef = useRef<ClientPosition>();
 
   useProvider(ELEMENTS_CONTEXT_ID, {
