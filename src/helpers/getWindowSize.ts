@@ -1,4 +1,5 @@
 import getBoundingClientRect from './getBoundingClientRect';
+import getWindow from './getWindow';
 
 type Size = {
   width: number,
@@ -7,15 +8,17 @@ type Size = {
 
 const getWindowSize = (): Size => {
   const bodyRect = getBoundingClientRect(document.body);
+  const currentWindow = getWindow();
+
   if (!bodyRect.width || !bodyRect.height) {
     return {
-      width: window.innerWidth,
-      height: window.innerHeight,
+      width: currentWindow.innerWidth,
+      height: currentWindow.innerHeight,
     };
   }
   return {
-    width: Math.min(bodyRect.width, window.innerWidth),
-    height: Math.min(bodyRect.height, window.innerHeight),
+    width: Math.min(bodyRect.width, currentWindow.innerWidth),
+    height: Math.min(bodyRect.height, currentWindow.innerHeight),
   };
 };
 

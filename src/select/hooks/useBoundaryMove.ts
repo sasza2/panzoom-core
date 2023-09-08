@@ -1,5 +1,6 @@
 import { useEffect } from '@/helpers/effects';
 import { onMouseDown, onMouseUp, onMouseMove } from '@/helpers/eventListener';
+import getWindow from '@/helpers/getWindow';
 import {
   useElementMouseDownPosition,
   useElementMouseMovePosition,
@@ -67,7 +68,7 @@ const useBoundaryMove: UseBoundaryMove = () => {
     };
 
     const mouseMoveClear = onMouseMove(mousemove);
-    const mouseUpClear = onMouseUp(window, mouseup);
+    const mouseUpClear = onMouseUp(getWindow(), mouseup);
 
     return () => {
       mouseMoveClear();

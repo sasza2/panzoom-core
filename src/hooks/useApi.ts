@@ -1,7 +1,9 @@
 import { API } from 'types';
 import { usePanZoom } from '@/provider';
 import { useElements } from '@/elements';
-import { getElements, grabElement, updateElementPosition, updateElementPositionSilent } from '@/api/elements';
+import {
+  getElements, grabElement, updateElementPosition, updateElementPositionSilent,
+} from '@/api/elements';
 import move from '@/api/move';
 import { getPosition, setPosition } from '@/api/position';
 import reset from '@/api/reset';

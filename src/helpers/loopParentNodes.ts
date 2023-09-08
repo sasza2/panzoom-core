@@ -8,6 +8,7 @@ const loopParentNodes = <T extends HTMLElement>(node: T) => {
       !!currentNode === true;
       currentNode = currentNode.parentNode as T
     ) {
+      if (!currentNode) break;
       if (stop && stop(currentNode)) break;
       cb(currentNode);
     }

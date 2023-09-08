@@ -23,6 +23,7 @@ const useElementAutoMoveAtEdge: UseElementAutoMoveAtEdge = () => {
   return (elementsInMove: ElementsInMove) => {
     const timer = setInterval(() => {
       if (!lastElementMouseMoveEventRef.current) return;
+      if (!childNode) return;
 
       const addPosition = {
         x: 0,

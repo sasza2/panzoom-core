@@ -18,6 +18,8 @@ const getParentVisibleSize = (childNode: HTMLDivElement): [number, number] => {
 
   loopParentNodes(childNode.parentNode as HTMLDivElement)
     .forEach((node) => {
+      if (!node.getBoundingClientRect) return;
+
       const rect = getBoundingClientRect(node);
       if (rect.right > 0) widths.push(rect.right - rect.left);
       if (rect.bottom > 0) heights.push(rect.bottom - rect.top);

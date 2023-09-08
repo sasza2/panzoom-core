@@ -1,3 +1,4 @@
+import getWindow from './getWindow';
 import isEventMobileZoom from './isEventMobileZoom';
 
 type EventNames = Array<
@@ -39,7 +40,7 @@ export const onMouseUp = (
   node: Window | HTMLDivElement,
   callback: Callback,
 ): EventListenerClean => {
-  const cleanMouseUp = eventListener(window, ['mouseup'], callback);
+  const cleanMouseUp = eventListener(getWindow(), ['mouseup'], callback);
   const cleanTouch = eventListener(node, ['touchend', 'touchcancel'], callback);
   return () => {
     cleanMouseUp();
@@ -48,7 +49,7 @@ export const onMouseUp = (
 };
 
 export const onMouseMove = (callback: Callback): EventListenerClean => {
-  const cleanMouseMove = eventListener(window, ['mousemove'], callback);
+  const cleanMouseMove = eventListener(getWindow(), ['mousemove'], callback);
 
   const callbackMobileWrapper: Callback = (e) => {
     if (isEventMobileZoom(e)) return;
@@ -56,7 +57,7 @@ export const onMouseMove = (callback: Callback): EventListenerClean => {
     callback(e);
   };
 
-  const cleanTouchMove = eventListener(window, ['touchmove'], callbackMobileWrapper);
+  const cleanTouchMove = eventListener(getWindow(), ['touchmove'], callbackMobileWrapper);
 
   return () => {
     cleanMouseMove();

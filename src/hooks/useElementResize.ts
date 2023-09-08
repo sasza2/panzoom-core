@@ -6,6 +6,7 @@ import applyClassName from '@/helpers/applyClassName';
 import bodyClassList from '@/helpers/bodyClassList';
 import { useEffect, useRef } from '@/helpers/effects';
 import { onMouseDown, onMouseMove, onMouseUp } from '@/helpers/eventListener';
+import getWindow from '@/helpers/getWindow';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceElementPosition from '@/helpers/produceElementPosition';
 import produceStyle from '@/helpers/produceStyle';
@@ -99,7 +100,7 @@ const createLeftResizer: Resizer = ({
 
       const childSize = childNode.getBoundingClientRect();
 
-      const style = window.getComputedStyle(elementNode);
+      const style = getWindow().getComputedStyle(elementNode);
       const matrix = new DOMMatrixReadOnly(style.transform);
 
       const size = elementNode.getBoundingClientRect();
