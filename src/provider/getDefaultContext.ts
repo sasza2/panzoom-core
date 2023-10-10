@@ -16,7 +16,7 @@ const getDefaultContext = (childNode: HTMLDivElement, options: PanZoomOptions): 
     blockMovingRef: createRef(false),
     boundary: options.boundary,
     childNode,
-    className: options.className,
+    className: options.className || 'panzoom-core',
     containerNode,
     disabled: options.disabled || false,
     disabledElements: options.disabledElements || false,

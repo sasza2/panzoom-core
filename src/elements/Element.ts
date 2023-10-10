@@ -123,8 +123,6 @@ const Element = (elementNode: HTMLDivElement) => ({
       if (e.button) return;
       if (draggableSelector && !(e.target as HTMLElement).closest(draggableSelector)) return;
 
-      bodyClassList.add(movingClassName);
-
       const elements = Object.values(elementsRef.current).filter(
         (element) => element.id === id
           || (family && element.family === family)
@@ -172,6 +170,8 @@ const Element = (elementNode: HTMLDivElement) => ({
 
   useEffect(() => {
     if (!elementsInMove) return undefined;
+
+    bodyClassList.add(movingClassName);
 
     let stopElementsAutoMove: ReturnType<typeof startAutoMove> = null;
     if (elementsAutoMoveAtEdge) {
