@@ -9,6 +9,7 @@ type EventNames = Array<
   | 'touchcancel'
   | 'mousemove'
   | 'touchmove'
+  | 'contextmenu'
 >;
 
 type Callback = (e: MouseEvent) => void;
@@ -63,4 +64,12 @@ export const onMouseMove = (callback: Callback): EventListenerClean => {
     cleanMouseMove();
     cleanTouchMove();
   };
+};
+
+export const onContextMenu = (
+  node: HTMLDivElement,
+  callback: Callback,
+): EventListenerClean => {
+  const cleanContextMenu = eventListener(node, ['contextmenu'], callback);
+  return cleanContextMenu;
 };
