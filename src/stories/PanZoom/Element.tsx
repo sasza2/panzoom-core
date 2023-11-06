@@ -14,6 +14,7 @@ const Element: React.FC<ElementOptions> = ({
   onAfterResize,
   onStartResizing,
   onClick,
+  onContextMenu,
   resizable,
   resizedMaxWidth,
   width,
@@ -32,6 +33,7 @@ const Element: React.FC<ElementOptions> = ({
     onAfterResize,
     onStartResizing,
     onClick,
+    onContextMenu,
     resizable,
     resizedMaxWidth,
     width,
@@ -48,7 +50,7 @@ const Element: React.FC<ElementOptions> = ({
 
   useDidUpdateEffect(() => {
     elementRef.current.setOptions(options);
-  }, [disabled, id, onClick, x, y]);
+  }, [disabled, id, onClick, onContextMenu, x, y]);
 
   return (
     <div ref={nodeRef}>{children}</div>

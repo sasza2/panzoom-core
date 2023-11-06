@@ -1,7 +1,12 @@
 import { Position } from 'types';
 import bodyClassList from '@/helpers/bodyClassList';
 import { useEffect, useState } from '@/helpers/effects';
-import { onMouseDown, onMouseUp, onMouseMove } from '@/helpers/eventListener';
+import {
+  onMouseDown,
+  onMouseUp,
+  onMouseMove,
+  onContextMenu as onContextMenuListener,
+} from '@/helpers/eventListener';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceBounding from '@/helpers/produceBounding';
@@ -19,6 +24,7 @@ const useMove = () => {
     className,
     disabled,
     disabledMove,
+    onContextMenuRef,
     onContainerChangeRef,
     onContainerClickRef,
     onContainerPositionChangeRef,
@@ -54,8 +60,25 @@ const useMove = () => {
       setMoving(position);
     };
 
+    const contextmenu = (e: MouseEvent) => {
+      if (!onContextMenuRef.current) return;
+
+      const position = containerMouseDownPosition(e);
+
+      onContextMenuRef.current({
+        e,
+        x: position.x / zoomRef.current,
+        y: position.y / zoomRef.current,
+      });
+    };
+
     const mouseDownClear = onMouseDown(containerNode, mousedown);
-    return mouseDownClear;
+    const onContextMenuClear = onContextMenuListener(containerNode, contextmenu);
+
+    return () => {
+      mouseDownClear();
+      onContextMenuClear();
+    };
   }, [boundary, disabled, disabledMove]);
 
   useEffect(() => {

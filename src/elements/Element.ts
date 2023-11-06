@@ -3,7 +3,12 @@ import { ELEMENT_CLASS_NAME } from '@/consts';
 import { ELEMENT_STYLE } from '@/styles';
 import bodyClassList from '@/helpers/bodyClassList';
 import { useEffect, useRef, useState } from '@/helpers/effects';
-import { onMouseDown, onMouseUp as onMouseUpListener, onMouseMove } from '@/helpers/eventListener';
+import {
+  onContextMenu as onContextMenuListener,
+  onMouseDown,
+  onMouseUp as onMouseUpListener,
+  onMouseMove,
+} from '@/helpers/eventListener';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceStyle from '@/helpers/produceStyle';
 import stopEventPropagation from '@/helpers/stopEventPropagation';
@@ -31,6 +36,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   family,
   height,
   onAfterResize,
+  onContextMenu,
   onStartResizing,
   onClick,
   onMouseUp,
@@ -88,6 +94,9 @@ const Element = (elementNode: HTMLDivElement) => ({
   const onMouseUpRef = useRef<typeof onMouseUp>();
   onMouseUpRef.current = onMouseUp;
 
+  const onContextMenuRef = useRef<typeof onContextMenu>();
+  onContextMenuRef.current = onContextMenu;
+
   useEffect(() => {
     elementsUpdatePositionApiRef.current[id] = updateElementsInMove;
 
@@ -119,9 +128,12 @@ const Element = (elementNode: HTMLDivElement) => ({
   useEffect(() => {
     if (disabled || disabledElements) return undefined;
 
+    const blockByDraggableSelector = (e: MouseEvent) => draggableSelector
+      && !(e.target as HTMLElement).closest(draggableSelector);
+
     const mousedown = (e: MouseEvent) => {
       if (e.button) return;
-      if (draggableSelector && !(e.target as HTMLElement).closest(draggableSelector)) return;
+      if (blockByDraggableSelector(e)) return;
 
       const elements = Object.values(elementsRef.current).filter(
         (element) => element.id === id
@@ -155,8 +167,27 @@ const Element = (elementNode: HTMLDivElement) => ({
       setNextZIndex(elementNode);
     };
 
+    const contextmenu = (e: MouseEvent) => {
+      if (!onContextMenuRef.current) return;
+      if (blockByDraggableSelector(e)) return;
+
+      const position = mouseDownPosition(e, elementNode);
+
+      onContextMenuRef.current({
+        id,
+        family,
+        e,
+        ...position,
+      });
+    };
+
     const mouseDownClear = onMouseDown(elementNode, mousedown);
-    return mouseDownClear;
+    const onContextMenuClear = onContextMenuListener(elementNode, contextmenu);
+
+    return () => {
+      mouseDownClear();
+      onContextMenuClear();
+    };
   }, [
     disabled,
     disabledElements,

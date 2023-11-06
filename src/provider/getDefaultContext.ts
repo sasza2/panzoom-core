@@ -32,6 +32,7 @@ const getDefaultContext = (childNode: HTMLDivElement, options: PanZoomOptions): 
     elementsAutoMoveAtEdge: options.elementsAutoMoveAtEdge === undefined
       ? true
       : options.elementsAutoMoveAtEdge,
+    onContextMenuRef: createRef(options.onContextMenu),
     onContainerChangeRef: createRef(options.onContainerChange),
     onContainerClickRef: createRef(options.onContainerClick),
     onContainerPositionChangeRef: createRef(options.onContainerPositionChange),
