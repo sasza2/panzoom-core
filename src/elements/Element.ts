@@ -1,5 +1,5 @@
-import { ElementsInMove, ElementOptions } from 'types';
-import { ELEMENT_CLASS_NAME } from '@/consts';
+import { ElementsInMove, ElementOptions, OnElementsChange, Position } from 'types';
+import { ELEMENT_CLASS_NAME, ON_ELEMENTS_CHANGE_WATCH_INTERVAL } from '@/consts';
 import { ELEMENT_STYLE } from '@/styles';
 import bodyClassList from '@/helpers/bodyClassList';
 import { useEffect, useRef, useState } from '@/helpers/effects';
@@ -209,6 +209,13 @@ const Element = (elementNode: HTMLDivElement) => ({
       stopElementsAutoMove = startAutoMove(elementsInMove);
     }
 
+    let lastElementsChange: Record<string, Position> = {}
+
+    const mouseMoveOnElementsChange: OnElementsChange = (nextElements) => {
+      lastElementsChange = nextElements
+      if (onElementsChangeRef.current) onElementsChangeRef.current(nextElements)
+    }
+
     const mousemove = (e: MouseEvent) => {
       if (blockMovingRef.current || e.buttons === 0) {
         updateElementsInMove(null);
@@ -224,7 +231,7 @@ const Element = (elementNode: HTMLDivElement) => ({
           const position = mouseMovePosition(e, from, currentElement.node.current);
           return position;
         },
-        onElementsChange: onElementsChangeRef.current,
+        onElementsChange: mouseMoveOnElementsChange,
       });
     };
 
@@ -242,6 +249,10 @@ const Element = (elementNode: HTMLDivElement) => ({
       bodyClassList.remove(movingClassName);
     };
 
+    const updateAPIEvenIfNotMovingMouse = setInterval(() => {
+      mouseMoveOnElementsChange(lastElementsChange)
+    }, ON_ELEMENTS_CHANGE_WATCH_INTERVAL)
+
     const mouseUpClear = onMouseUpListener(elementNode, mouseup);
     const mouseMoveClear = onMouseMove(mousemove);
 
@@ -249,6 +260,7 @@ const Element = (elementNode: HTMLDivElement) => ({
       if (stopElementsAutoMove) stopElementsAutoMove();
       mouseUpClear();
       mouseMoveClear();
+      clearInterval(updateAPIEvenIfNotMovingMouse)
       bodyClassList.remove(movingClassName);
     };
   }, [elementsAutoMoveAtEdge, elementsInMove]);
