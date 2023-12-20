@@ -114,9 +114,13 @@ const useMove = () => {
       if (onContainerPositionChangeRef.current) onContainerPositionChangeRef.current(eventValue);
     };
 
-    const mouseup = () => {
+    const clearStyles = () => {
       document.body.style.userSelect = null;
       bodyClassList.remove(grabbingClassName);
+    }
+
+    const mouseup = () => {
+      clearStyles()
       setMoving(null);
     };
 
@@ -124,6 +128,7 @@ const useMove = () => {
     const mouseMoveClear = onMouseMove(move);
 
     return () => {
+      clearStyles()
       mouseUpClear();
       mouseMoveClear();
     };
