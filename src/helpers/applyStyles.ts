@@ -1,3 +1,5 @@
+import clearStyleAttribute from './clearStyleAttribute';
+
 const applyStyles = (node: HTMLElement, styles: Record<string, string>): () => void => {
   Object.entries(styles).forEach(([key, value]) => {
     node.style.setProperty(key, value);
@@ -6,7 +8,7 @@ const applyStyles = (node: HTMLElement, styles: Record<string, string>): () => v
     Object.entries(styles).forEach(([key]) => {
       node.style.removeProperty(key);
     });
-    if (!node.getAttribute('style')) node.removeAttribute('style');
+    clearStyleAttribute(node);
   };
 };
 
