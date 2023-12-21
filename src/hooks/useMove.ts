@@ -1,6 +1,7 @@
 import { Position } from 'types';
 import bodyClassList from '@/helpers/bodyClassList';
-import { useEffect, useState } from '@/helpers/effects';
+import clearStyleAttribute from '@/helpers/clearStyleAttribute';
+import { useEffect } from '@/helpers/effects';
 import {
   onMouseDown,
   onMouseUp,
@@ -32,60 +33,45 @@ const useMove = () => {
     zoomRef,
   } = usePanZoom();
 
-  const [moving, setMoving] = useState<Position | null>(null);
   const containerMouseDownPosition = useContainerMouseDownPosition();
   const grabbingClassName = `${className}--grabbing`;
 
   useEffect(() => {
-    const mousedown = (e: MouseEvent) => {
-      if (e.button) return;
+    let moving: Position | null = null;
 
-      const position = containerMouseDownPosition(e);
-      const stop = stopEventPropagation();
+    let mouseUpClear: ReturnType<typeof onMouseUp> | null = null;
+    let mouseMoveClear: ReturnType<typeof onMouseMove> | null = null;
 
-      document.body.style.userSelect = 'none';
-      bodyClassList.add(grabbingClassName);
+    const clearStyles = () => {
+      document.body.style.userSelect = null;
+      clearStyleAttribute(document.body);
+      bodyClassList.remove(grabbingClassName);
+      moving = null;
+    };
 
-      if (onContainerClickRef.current) {
-        onContainerClickRef.current({
-          e,
-          x: position.x / zoomRef.current,
-          y: position.y / zoomRef.current,
-          stop,
-        });
+    const clearMouseUpEvents = () => {
+      if (mouseUpClear) {
+        mouseUpClear();
+        mouseUpClear = null;
       }
-
-      if (disabled || disabledMove || stop.done) return;
-
-      setMoving(position);
+      if (mouseMoveClear) {
+        mouseMoveClear();
+        mouseMoveClear = null;
+      }
     };
 
-    const contextmenu = (e: MouseEvent) => {
-      if (!onContextMenuRef.current) return;
-
-      const position = containerMouseDownPosition(e);
-
-      onContextMenuRef.current({
-        e,
-        x: position.x / zoomRef.current,
-        y: position.y / zoomRef.current,
-      });
+    const mouseup = () => {
+      clearStyles();
+      clearMouseUpEvents();
     };
-
-    const mouseDownClear = onMouseDown(containerNode, mousedown);
-    const onContextMenuClear = onContextMenuListener(containerNode, contextmenu);
-
-    return () => {
-      mouseDownClear();
-      onContextMenuClear();
-    };
-  }, [boundary, disabled, disabledMove]);
-
-  useEffect(() => {
-    if (!moving) return undefined;
 
     const move = (e: MouseEvent) => {
       if (blockMovingRef.current) return;
+
+      if (!moving || e.buttons === 0) {
+        mouseup();
+        return;
+      }
 
       childNode.style.transition = null;
 
@@ -114,25 +100,56 @@ const useMove = () => {
       if (onContainerPositionChangeRef.current) onContainerPositionChangeRef.current(eventValue);
     };
 
-    const clearStyles = () => {
-      document.body.style.userSelect = null;
-      bodyClassList.remove(grabbingClassName);
-    }
+    const mousedown = (e: MouseEvent) => {
+      if (e.button) return;
 
-    const mouseup = () => {
-      clearStyles()
-      setMoving(null);
+      const position = containerMouseDownPosition(e);
+      const stop = stopEventPropagation();
+
+      document.body.style.userSelect = 'none';
+      bodyClassList.add(grabbingClassName);
+
+      if (onContainerClickRef.current) {
+        onContainerClickRef.current({
+          e,
+          x: position.x / zoomRef.current,
+          y: position.y / zoomRef.current,
+          stop,
+        });
+      }
+
+      if (disabled || disabledMove || stop.done) return;
+
+      moving = position;
+
+      clearMouseUpEvents();
+
+      mouseUpClear = onMouseUp(containerNode, mouseup);
+      mouseMoveClear = onMouseMove(move);
     };
 
-    const mouseUpClear = onMouseUp(containerNode, mouseup);
-    const mouseMoveClear = onMouseMove(move);
+    const contextmenu = (e: MouseEvent) => {
+      if (!onContextMenuRef.current) return;
+
+      const position = containerMouseDownPosition(e);
+
+      onContextMenuRef.current({
+        e,
+        x: position.x / zoomRef.current,
+        y: position.y / zoomRef.current,
+      });
+    };
+
+    const mouseDownClear = onMouseDown(containerNode, mousedown);
+    const onContextMenuClear = onContextMenuListener(containerNode, contextmenu);
 
     return () => {
-      clearStyles()
-      mouseUpClear();
-      mouseMoveClear();
+      clearStyles();
+      clearMouseUpEvents();
+      mouseDownClear();
+      onContextMenuClear();
     };
-  }, [moving]);
+  }, [boundary, disabled, disabledMove]);
 };
 
 export default useMove;
