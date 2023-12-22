@@ -106,9 +106,6 @@ const useMove = () => {
       const position = containerMouseDownPosition(e);
       const stop = stopEventPropagation();
 
-      document.body.style.userSelect = 'none';
-      bodyClassList.add(grabbingClassName);
-
       if (onContainerClickRef.current) {
         onContainerClickRef.current({
           e,
@@ -119,6 +116,9 @@ const useMove = () => {
       }
 
       if (disabled || disabledMove || stop.done) return;
+
+      document.body.style.userSelect = 'none';
+      bodyClassList.add(grabbingClassName);
 
       moving = position;
 
