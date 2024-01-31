@@ -9,6 +9,8 @@ https://codesandbox.io/s/black-sound-vn77k9 (map with pin)<br />
 https://codesandbox.io/s/young-darkness-igcf67 (example from above)<br />
 https://codesandbox.io/s/gifted-pine-dhw9m6 (selecting elements)<br />
 https://codesandbox.io/s/festive-matsumoto-ccskw0 (Tic Tac Toe)<br />
+Library <a href="https://www.npmjs.com/package/react-web-builder">react-web-builder</a><br />
+Library <a href="https://www.npmjs.com/package/react-grid-panzoom">react-grid-panzoom</a><br />
 Library <a href="https://www.npmjs.com/package/@sasza/react-panzoom">@sasza/react-panzoom</a><br />
 Library <a href="https://www.npmjs.com/package/react-drawing">react-drawing</a>
 

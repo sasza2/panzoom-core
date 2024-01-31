@@ -3,7 +3,7 @@ import {
 } from 'types';
 import { ELEMENT_CLASS_NAME, ON_ELEMENTS_CHANGE_WATCH_INTERVAL } from '@/consts';
 import { ELEMENT_STYLE } from '@/styles';
-import bodyClassList from '@/helpers/bodyClassList';
+import actionsClassList from '@/helpers/actionsClassList';
 import { useEffect, useRef, useState } from '@/helpers/effects';
 import {
   onContextMenu as onContextMenuListener,
@@ -76,6 +76,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   const {
     blockMovingRef,
     boundary,
+    childNode,
     className: containerClassName,
     disabledElements,
     elementsAutoMoveAtEdge,
@@ -204,7 +205,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   useEffect(() => {
     if (!elementsInMove) return undefined;
 
-    bodyClassList.add(movingClassName);
+    actionsClassList.add(childNode, movingClassName);
 
     let stopElementsAutoMove: ReturnType<typeof startAutoMove> = null;
     if (elementsAutoMoveAtEdge) {
@@ -248,7 +249,7 @@ const Element = (elementNode: HTMLDivElement) => ({
       }
 
       updateElementsInMove(null);
-      bodyClassList.remove(movingClassName);
+      actionsClassList.remove(childNode, movingClassName);
     };
 
     const updateAPIEvenIfNotMovingMouse = setInterval(() => {
@@ -263,7 +264,7 @@ const Element = (elementNode: HTMLDivElement) => ({
       mouseUpClear();
       mouseMoveClear();
       clearInterval(updateAPIEvenIfNotMovingMouse);
-      bodyClassList.remove(movingClassName);
+      actionsClassList.remove(childNode, movingClassName);
     };
   }, [elementsAutoMoveAtEdge, elementsInMove]);
 

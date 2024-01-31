@@ -1,5 +1,5 @@
 import { Position } from 'types';
-import bodyClassList from '@/helpers/bodyClassList';
+import actionsClassList from '@/helpers/actionsClassList';
 import clearStyleAttribute from '@/helpers/clearStyleAttribute';
 import { useEffect } from '@/helpers/effects';
 import {
@@ -45,7 +45,7 @@ const useMove = () => {
     const clearStyles = () => {
       document.body.style.userSelect = null;
       clearStyleAttribute(document.body);
-      bodyClassList.remove(grabbingClassName);
+      actionsClassList.remove(childNode, grabbingClassName);
       moving = null;
     };
 
@@ -118,7 +118,7 @@ const useMove = () => {
       if (disabled || disabledMove || stop.done) return;
 
       document.body.style.userSelect = 'none';
-      bodyClassList.add(grabbingClassName);
+      actionsClassList.add(childNode, grabbingClassName);
 
       moving = position;
 

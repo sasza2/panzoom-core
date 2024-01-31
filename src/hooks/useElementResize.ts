@@ -3,7 +3,7 @@ import {
 } from 'types';
 import { ELEMENT_RESIZED_MIN_WIDTH, ELEMENT_RESIZER_WIDTH } from '@/consts';
 import applyClassName from '@/helpers/applyClassName';
-import bodyClassList from '@/helpers/bodyClassList';
+import actionsClassList from '@/helpers/actionsClassList';
 import { useEffect, useRef } from '@/helpers/effects';
 import { onMouseDown, onMouseMove, onMouseUp } from '@/helpers/eventListener';
 import getWindow from '@/helpers/getWindow';
@@ -244,7 +244,7 @@ const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOpt
     const resizerWidth = options.resizerWidth || ELEMENT_RESIZER_WIDTH;
 
     const onStartResizing = () => {
-      bodyClassList.add(resizingClassName);
+      actionsClassList.add(childNode, resizingClassName);
 
       if (!onStartResizingRef.current) return;
 
@@ -254,7 +254,7 @@ const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOpt
     };
 
     const onAfterResize = () => {
-      bodyClassList.remove(resizingClassName);
+      actionsClassList.remove(childNode, resizingClassName);
 
       if (!onAfterResizeRef.current) return;
 
