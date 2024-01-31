@@ -23,10 +23,16 @@
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
+    "changeset": "changeset",
     "dev": "ladle serve",
     "lint": "eslint src --fix",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "publish:package": "changeset publish",
+    "version:package": "changeset version"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -44,6 +50,7 @@
     "[module-name]": false
   },
   "devDependencies": {
+    "@changesets/cli": "2.27.1",
     "@ladle/react": "2.16.1",
     "@testing-library/jest-dom": "5.17.0",
     "@testing-library/react": "14.0.0",
@@ -51,6 +58,7 @@
     "@typescript-eslint/eslint-plugin": "6.2.0",
     "@typescript-eslint/parser": "6.2.0",
     "@vitest/coverage-c8": "0.33.0",
+    "changeset": "0.2.6",
     "eslint": "8.46.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-import-resolver-alias": "1.1.2",
