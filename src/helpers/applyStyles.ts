@@ -1,8 +1,15 @@
-const applyStyles = (node: HTMLElement, styles: Record<string, string>) => {
-  const nodeStyle = node.style as unknown as typeof styles // TODO
-  Object.entries(styles).forEach(([key, value]) => {
-    nodeStyle[key] = value
-  })
-}
+import clearStyleAttribute from './clearStyleAttribute';
 
-export default applyStyles
+const applyStyles = (node: HTMLElement, styles: Record<string, string>): () => void => {
+  Object.entries(styles).forEach(([key, value]) => {
+    node.style.setProperty(key, value);
+  });
+  return () => {
+    Object.entries(styles).forEach(([key]) => {
+      node.style.removeProperty(key);
+    });
+    clearStyleAttribute(node);
+  };
+};
+
+export default applyStyles;

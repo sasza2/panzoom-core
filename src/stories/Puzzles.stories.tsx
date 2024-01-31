@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import React, { useEffect, useRef, useState } from 'react';
 
 import PanZoom, { Element } from './PanZoom';
@@ -31,7 +32,7 @@ export const Puzzles = () => {
   };
 
   return (
-    <div style={{ border: '1px dashed #000', width: 400, height: 400 }}>
+    <div style={{ border: '1px solid red', width: 360, height: 400 }}>
       <PanZoom
         disabledUserSelect
         onElementsChange={onElementsChange}
@@ -42,6 +43,7 @@ export const Puzzles = () => {
               opacity: connected ? 1 : 0.5,
               transition: 'all 1s',
               width: 180,
+              pointerEvents: 'none',
             }}
             src={
               connected

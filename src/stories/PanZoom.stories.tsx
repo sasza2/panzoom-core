@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import React, { useLayoutEffect, useState } from 'react';
 
+import { PanZoomApi } from 'types';
 import PanZoom, { Element } from './PanZoom';
 
 const Rectangles = () => (
@@ -56,8 +58,41 @@ export const imageSVG = () => (
   </div>
 );
 
+export const imageSVGAnimation = () => {
+  const ref = React.createRef<PanZoomApi>();
+  useLayoutEffect(() => {
+    const timer = setInterval(() => {
+      ref.current.setPosition(120, Math.floor(Math.random() * 240 - 120));
+    }, 500);
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <div style={{ border: '1px solid red' }}>
+      <PanZoom ref={ref}>
+        <svg height="210" width="500">
+          <polygon
+            points="200,10 250,190 160,210"
+            style={{ fill: 'lime', stroke: 'purple', strokeWidth: 1 }}
+          />
+        </svg>
+      </PanZoom>
+    </div>
+  );
+};
+
 export const boxBounding = () => (
   <div style={{ border: '1px dashed #000', width: 400, height: 400 }}>
+    <style
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: `
+          .react-panzoom__in {
+            background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 50%, #eee 50%, #eee 75%, transparent 75%, #fff);
+            background-size: 200px 200px;
+          }
+        `,
+      }}
+    />
     <PanZoom
       disabledUserSelect
       boundary
@@ -99,10 +134,64 @@ export const boxBounding = () => (
   </div>
 );
 
+export const resizableElements = () => (
+  <div style={{ border: '1px dashed #000', height: 400 }}>
+    <style
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: `
+          .react-panzoom__in {
+            background-color: #ddd;
+          }
+        `,
+      }}
+    />
+    <PanZoom
+      disabledUserSelect
+      boundary
+      width={800}
+      height={400}
+    >
+      <Element id="orange" resizable resizedMaxWidth={400} width={100}>
+        <div
+          style={{
+            aspectRatio: '1 / 1',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: '50%',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'orange',
+            fontSize: 14,
+          }}
+        >
+          <span>resize me</span>
+        </div>
+      </Element>
+      <Element id="red" x={100} y={150} resizable>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: 60,
+            backgroundColor: 'red',
+            fontSize: 14,
+          }}
+        >
+          <span>or me</span>
+        </div>
+      </Element>
+    </PanZoom>
+  </div>
+);
+
 export const selectingBoxes = () => {
   const [selecting, setSelecting] = useState(true);
 
-  const toggle: React.ChangeEventHandler<HTMLInputElement> = e => setSelecting(e.target.checked)
+  const toggle: React.ChangeEventHandler<HTMLInputElement> = (e) => setSelecting(e.target.checked);
 
   return (
     <>
@@ -167,6 +256,37 @@ export const selectingBoxes = () => {
           </Element>
         </PanZoom>
       </div>
+    </>
+  );
+};
+
+export const TwoInstances = () => {
+  const [hasTwoInstances, setHasTwoInstances] = useState(true);
+  const toggle: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setHasTwoInstances(e.target.checked);
+  };
+
+  return (
+    <>
+      <div style={{ border: '1px solid red', height: 300 }}>
+        <PanZoom height={320}>
+          <Element id="a">element A</Element>
+        </PanZoom>
+      </div>
+      <label htmlFor="twoInstances">
+        Has two instances
+        <input id="twoInstances" type="checkbox" onChange={toggle} checked={hasTwoInstances} />
+      </label>
+      {
+        hasTwoInstances && (
+          <div style={{ border: '1px solid red', height: 300 }}>
+            <PanZoom height={450}>
+              <Element id="b">element B</Element>
+              <Element id="c" x={100} y={100}>element C</Element>
+            </PanZoom>
+          </div>
+        )
+      }
     </>
   );
 };

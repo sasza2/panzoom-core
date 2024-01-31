@@ -1,13 +1,21 @@
 {
   "name": "panzoom-core",
-  "version": "1.0.0",
-  "description": "-",
+  "version": "1.4.4",
+  "description": "Library for pan and zoom with possibility to moving, resizing and selecting elements inside",
   "main": "dist/main.umd.cjs",
+  "module": "./dist/main.js",
+  "exports": {
+    ".": {
+      "import": "./dist/main.js",
+      "require": "./dist/main.umd.cjs"
+    }
+  },
   "keywords": [
     "pan",
     "zoom",
     "move",
     "panzoom",
+    "pinch",
     "moving",
     "selecting"
   ],
@@ -15,14 +23,20 @@
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
+    "changeset": "changeset",
     "dev": "ladle serve",
     "lint": "eslint src --fix",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "publish:package": "changeset publish",
+    "version:package": "changeset version"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sasza2/react-panzoom.git"
+    "url": "git+https://github.com/sasza2/panzoom-core.git"
   },
   "author": "sasza",
   "contributors": [
@@ -30,29 +44,32 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sasza2/react-panzoom/issues"
+    "url": "https://github.com/sasza2/panzoom-core/issues"
   },
   "browser": {
     "[module-name]": false
   },
   "devDependencies": {
-    "@ladle/react": "^2.4.5",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "12.1.4",
+    "@changesets/cli": "2.27.1",
+    "@ladle/react": "2.16.1",
+    "@testing-library/jest-dom": "5.17.0",
+    "@testing-library/react": "14.0.0",
     "@types/react": "^16.14.0",
-    "@typescript-eslint/eslint-plugin": "^5.47.0",
-    "@typescript-eslint/parser": "^5.47.0",
-    "@vitest/coverage-c8": "^0.26.2",
-    "eslint": "^8.30.0",
-    "eslint-import-resolver-alias": "^1.1.2",
-    "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-jsx-a11y": "6.6.1",
-    "eslint-plugin-react": "^7.31.11",
-    "jsdom": "^20.0.3",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "typescript": "^4.9.4",
-    "vite": "^4.0.3",
-    "vitest": "^0.26.2"
+    "@typescript-eslint/eslint-plugin": "6.2.0",
+    "@typescript-eslint/parser": "6.2.0",
+    "@vitest/coverage-c8": "0.33.0",
+    "changeset": "0.2.6",
+    "eslint": "8.46.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-import-resolver-alias": "1.1.2",
+    "eslint-plugin-import": "2.28.0",
+    "eslint-plugin-jsx-a11y": "6.7.1",
+    "eslint-plugin-react": "7.33.1",
+    "jsdom": "22.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "5.1.6",
+    "vite": "4.4.7",
+    "vitest": "0.33.0"
   }
 }

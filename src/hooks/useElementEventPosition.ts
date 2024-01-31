@@ -3,7 +3,7 @@ import getBoundingClientRect from '@/helpers/getBoundingClientRect';
 import getScrollOffset from '@/helpers/getScrollOffset';
 import positionFromEvent from '@/helpers/positionFromEvent';
 import produceElementPosition from '@/helpers/produceElementPosition';
-import { usePanZoom } from '@/panZoomProvider';
+import { usePanZoom } from '@/provider';
 
 type useElementMouseDownPositionThunk = (
   e: MouseEvent | TouchEvent,
@@ -29,7 +29,7 @@ export const useElementMouseDownPosition = (): useElementMouseDownPositionThunk 
 type UseElementMouseMovePosition = (
   e: MouseEvent | TouchEvent,
   from: Position,
-  elementNode: HTMLDivElement,
+  element: HTMLDivElement,
 ) => Position;
 
 export const useElementMouseMovePosition = (): UseElementMouseMovePosition => {
@@ -39,8 +39,8 @@ export const useElementMouseMovePosition = (): UseElementMouseMovePosition => {
     const scroll = getScrollOffset(childNode);
 
     return produceElementPosition({
-      element: elementNode,
-      container: childNode, // TODO
+      elementNode,
+      childNode,
       x: (eventPosition.clientX - positionRef.current.x + scroll.x) / zoomRef.current - from.x,
       y: (eventPosition.clientY - positionRef.current.y + scroll.y) / zoomRef.current - from.y,
       zoom: zoomRef.current,

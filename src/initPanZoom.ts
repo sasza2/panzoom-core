@@ -1,82 +1,57 @@
-import { ElementApi, ElementOptions, PanZoomApi, PanZoomOptions } from 'types'
-import { initializeComponent, Component } from './helpers/effects';
-import useElementAutoMoveAtEdge from './hooks/useElementAutoMoveAtEdge'
-import useMove from './hooks/useMove'
-import useZoom from './hooks/useZoom'
-import { createPanZoomProvider } from './panZoomProvider'
-import addElement, { withElementsProvider } from './elements'
-import initSelect, { withSelectProvider } from './select'
-import updatePanZoomOptions from './helpers/updatePanZoomOptions'
+import {
+  API, PanZoomApi, PanZoomOptions, Ref,
+} from 'types';
+import { createComponentQueue, render } from './helpers/effects';
+import ElementsProvider, { createElementsQueue } from './elements';
+import Select from './select';
+import PanZoomProvider, { getDefaultContext, mapPanZoomProps } from './provider';
+import PanZoom from './PanZoom';
+
+let initializationId = 1;
 
 const initPanZoom = (childNode: HTMLDivElement, options: PanZoomOptions = {}): PanZoomApi => {
-  const elementComponents: Array<Component> = []
-  const [withPanZoomProvider, getPanZoomContext] = createPanZoomProvider(childNode, options)
+  const initializeComponent = createComponentQueue(initializationId);
+  const panZoomProvider = initializeComponent(PanZoomProvider, mapPanZoomProps);
+  panZoomProvider.context.props = getDefaultContext(childNode, options);
 
-  const selectComponent = initializeComponent(initSelect)
+  const elements = createElementsQueue(initializeComponent);
 
-  const panZoomComponent = initializeComponent(() => {
-    withPanZoomProvider(() => {
-      withElementsProvider(() => {
-        useMove()
-        useZoom()
-        useElementAutoMoveAtEdge()
+  const elementsProvider = initializeComponent(ElementsProvider);
+  const panZoomComponent = initializeComponent(PanZoom);
+  const selectComponent = initializeComponent(Select);
 
-        elementComponents.forEach(elementComponent => {
-          elementComponent.render()
-        })
+  const renderPanZoom = () => render([
+    panZoomProvider,
+    elementsProvider,
+    panZoomComponent,
+    ...elements.queue,
+    selectComponent,
+  ]);
 
-        withSelectProvider(() => {
-          selectComponent.render()
-        })
-      })
-    })
-
-  })
-
-  const addElementWrapper= (node: HTMLDivElement, elementOptions: ElementOptions): ElementApi => {
-    const element = addElement(node, elementOptions)
-    elementComponents.push(element.component)
-    panZoomComponent.render()
-
-    const destroyElement = () => {
-      element.destroy()
-      const indexToRemove = elementComponents.findIndex(elementComponent => elementComponent === element.component)
-      if (indexToRemove < 0) return
-      elementComponents.splice(indexToRemove, 1)
-      panZoomComponent.render()
-    }
-
-    const setOptionsElement = (elementOptions: ElementOptions) => {
-      element.setOptions(elementOptions)
-      panZoomComponent.render()
-    }
-
-    return {
-      destroy: destroyElement,
-      setOptions: setOptionsElement,
-    }
-  }
-
-  const setOptions = (options: PanZoomOptions) => {
-    updatePanZoomOptions(getPanZoomContext(), options)
-    panZoomComponent.render()
-  }
-
-  panZoomComponent.render()
+  const setOptions = (nextOptions: PanZoomOptions) => {
+    const shouldUpdate = panZoomProvider.updateProps(nextOptions);
+    if (shouldUpdate) renderPanZoom();
+  };
 
   const destroy = () => {
-    selectComponent.unmount()
-    elementComponents.forEach(elementComponent => {
-      elementComponent.unmount()
-    })
-    panZoomComponent.unmount()
-  }
+    elements.unmount();
+    elementsProvider.unmount();
+    selectComponent.unmount();
+    panZoomComponent.unmount();
+    panZoomProvider.unmount();
+  };
+
+  renderPanZoom();
+  const apiRef = panZoomProvider.context.props.apiRef as Ref<API>;
+
+  initializationId++;
 
   return {
-    addElement: addElementWrapper,
+    addElement: elements.add,
     destroy,
     setOptions,
-  }
-}
+    ...apiRef.current,
+  };
+};
 
-export default initPanZoom
+export default initPanZoom;

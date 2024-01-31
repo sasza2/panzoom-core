@@ -40,6 +40,8 @@ const isCursorOnEdge = (childNode: HTMLDivElement, e: ClientPosition): Edges => 
 
   loopParentNodes(childNode.parentNode as HTMLDivElement)
     .forEach((node) => {
+      if (!node.getBoundingClientRect) return;
+
       const rect = getBoundingClientRect(node);
 
       if (rect.right > 0) horizontalBoundary.push(rect.right - offsetX);

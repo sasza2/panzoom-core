@@ -1,28 +1,20 @@
-export const CLASS_NAME = 'react-panzoom';
-
-export const GRABBING_CLASS_NAME = `${CLASS_NAME}--grabbing`;
-
 export const CONTAINER_STYLE = {
   width: '100%',
   height: '100%',
   overflow: 'hidden',
-  touchAction: 'none',
-  WebkitFontSmoothing: 'antialiased',
+  'touch-action': 'none',
+  '-webkit-font-smoothing': 'antialiased',
 };
 
 export const CHILD_STYLE = {
   position: 'relative',
-  transformOrigin: '0 0',
-  pointerEvents: 'none',
+  overflow: 'hidden',
+  'transform-origin': '0 0',
+  'pointer-events': 'none',
 };
 
 export const CHILD_DISABLED_STYLE = {
-  WebkitTouchCallout: 'none',
-  WebkitUserSelect: 'none',
-  KhtmlUserSelect: 'none',
-  MozUserSelect: 'none',
-  msUserSelect: 'none',
-  userSelect: 'none',
+  'user-select': 'none',
 };
 
 export const ELEMENT_STYLE = {
@@ -30,7 +22,7 @@ export const ELEMENT_STYLE = {
   position: 'absolute',
   left: '0px',
   top: '0px',
-  pointerEvents: 'all',
+  'pointer-events': 'all',
 };
 
 export const SELECT_STYLE = {
@@ -39,10 +31,10 @@ export const SELECT_STYLE = {
   height: '100%',
   left: '0px',
   top: '0px',
+  'z-index': '2147483647',
 };
 
 export const SELECT_BOX_STYLE = {
-  backgroundColor: '#ccc',
+  'background-color': '#ccc',
   opacity: '0.5',
-  zIndex: '2147483647',
 };

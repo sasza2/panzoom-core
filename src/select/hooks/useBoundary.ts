@@ -1,10 +1,11 @@
 import { Position } from 'types';
-import { usePanZoom } from '@/panZoomProvider';
-import { useEffect, useRef, useState } from '@/helpers/effects'
+import { usePanZoom } from '@/provider';
+import { useEffect, useRef, useState } from '@/helpers/effects';
 import { onMouseUp, onMouseMove } from '@/helpers/eventListener';
 import getBoundingClientRect from '@/helpers/getBoundingClientRect';
+import getWindow from '@/helpers/getWindow';
 import useContainerMouseDownPosition from '@/hooks/useContainerMouseDownPosition';
-import { Boundary, useSelect } from '../createProvider';
+import useSelect, { Boundary } from './useSelect';
 
 type UseBoundary = () => {
   expanding: Position | null;
@@ -88,7 +89,7 @@ const useBoundary: UseBoundary = () => {
     const mousemove = (e: MouseEvent) => mouseEvent(e, expanding);
 
     const mouseMoveClear = onMouseMove(mousemove);
-    const mouseUpClear = onMouseUp(window, mouseup);
+    const mouseUpClear = onMouseUp(getWindow(), mouseup);
 
     return () => {
       mouseMoveClear();

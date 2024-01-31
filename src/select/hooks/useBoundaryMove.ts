@@ -1,14 +1,18 @@
-import { useEffect } from '@/helpers/effects'
+import { useEffect } from '@/helpers/effects';
 import { onMouseDown, onMouseUp, onMouseMove } from '@/helpers/eventListener';
+import getWindow from '@/helpers/getWindow';
 import {
   useElementMouseDownPosition,
   useElementMouseMovePosition,
 } from '@/hooks/useElementEventPosition';
-import { MoveRef, useSelect } from '../createProvider';
+import useGrabElements from './useGrabElements';
+import useSelect from './useSelect';
 
-type UseBoundaryMove = ({ grabElementsRef }: { grabElementsRef: MoveRef }) => void;
+type UseBoundaryMove = () => void;
 
-const useBoundaryMove: UseBoundaryMove = ({ grabElementsRef }) => {
+const useBoundaryMove: UseBoundaryMove = () => {
+  const grabElementsRef = useGrabElements();
+
   const {
     boundary, setBoundary, movingRef, selectRef, move, setMove,
   } = useSelect();
@@ -64,7 +68,7 @@ const useBoundaryMove: UseBoundaryMove = ({ grabElementsRef }) => {
     };
 
     const mouseMoveClear = onMouseMove(mousemove);
-    const mouseUpClear = onMouseUp(window, mouseup);
+    const mouseUpClear = onMouseUp(getWindow(), mouseup);
 
     return () => {
       mouseMoveClear();

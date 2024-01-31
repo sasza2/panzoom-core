@@ -1,11 +1,11 @@
 import { Position } from 'types';
-import { useEffect, useRef } from '@/helpers/effects'
-import { usePanZoom } from '@/panZoomProvider';
+import { useEffect, useRef } from '@/helpers/effects';
+import { usePanZoom } from '@/provider';
 import { useElements } from '@/elements';
 import produceElementPosition from '@/helpers/produceElementPosition';
-import { MoveRef, useSelect } from '../createProvider';
 import collectElements from '../helpers/collectElements';
 import copyElementsPositions from '../helpers/copyElementsPositions';
+import useSelect, { MoveRef } from './useSelect';
 
 const useGrabElements = (): MoveRef => {
   const { boundary } = useSelect();
@@ -28,8 +28,8 @@ const useGrabElements = (): MoveRef => {
         const { node } = element;
 
         const position = produceElementPosition({
-          element: element.node.current,
-          container: childNode,
+          elementNode: element.node.current,
+          childNode,
           x: positionOnStart.x + (nextPosition.x - fromPosition.x),
           y: positionOnStart.y + (nextPosition.y - fromPosition.y),
           zoom: zoomRef.current,
