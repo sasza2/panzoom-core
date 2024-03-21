@@ -1,5 +1,11 @@
 # panzoom-core
 
+## 1.6.0
+
+### Minor Changes
+
+- 1709052: add zoom position option
+
 ## 1.5.0
 
 ### Minor Changes
