@@ -24,6 +24,7 @@ const getAllowedProps = (): Array<keyof PanZoomOptions> => [
   'zoomInitial',
   'zoomMax',
   'zoomMin',
+  'zoomPosition',
   'zoomSpeed',
 ];
 

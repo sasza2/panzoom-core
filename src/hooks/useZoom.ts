@@ -12,6 +12,7 @@ import produceBounding from '@/helpers/produceBounding';
 import produceNextZoom from '@/helpers/produceNextZoom';
 import touchEventToZoomInit from '@/helpers/touchEventToZoomInit';
 import throttle from '@/helpers/throttle';
+import { getZoomPositionInParentRect } from '@/helpers/zoomPositionInParentRect';
 import { usePanZoom } from '@/provider';
 
 const useZoom = (): Zoom => {
@@ -28,6 +29,7 @@ const useZoom = (): Zoom => {
     zoomInitial,
     zoomMax,
     zoomMin,
+    zoomPosition,
     zoomRef,
     zoomSpeed,
   } = usePanZoom();
@@ -40,6 +42,8 @@ const useZoom = (): Zoom => {
     zoomSpeed,
     zoomMax,
     zoomMin,
+    zoomPosition?.x,
+    zoomPosition?.y,
   ];
 
   useEffect(() => {
@@ -61,8 +65,12 @@ const useZoom = (): Zoom => {
         blockMovingRef.current = true;
       }
 
-      const xOffset = (e.clientX - parentRect.left - positionRef.current.x) / zoomRef.current;
-      const yOffset = (e.clientY - parentRect.top - positionRef.current.y) / zoomRef.current;
+      const zoomPositionInParentRect = getZoomPositionInParentRect({
+        e, parentRect, zoomPosition,
+      });
+
+      const xOffset = (zoomPositionInParentRect.x - positionRef.current.x) / zoomRef.current;
+      const yOffset = (zoomPositionInParentRect.y - positionRef.current.y) / zoomRef.current;
 
       const nextZoom = produceNextZoom({
         e,
@@ -78,8 +86,8 @@ const useZoom = (): Zoom => {
 
       const nextPosition = produceBounding({
         boundary,
-        x: e.clientX - parentRect.left - xOffset * nextZoom,
-        y: e.clientY - parentRect.top - yOffset * nextZoom,
+        x: zoomPositionInParentRect.x - xOffset * nextZoom,
+        y: zoomPositionInParentRect.y - yOffset * nextZoom,
         parentSize: parentRect,
         childSize: {
           width: childRect.width * (nextZoom / prevZoom),
