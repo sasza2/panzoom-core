@@ -53,6 +53,11 @@ export type ZoomEvent = {
   isTouchEvent: boolean,
 };
 
+export type ZoomPosition = {
+  x?: number | 'center',
+  y?: number | 'center',
+}
+
 export type API = {
   childNode: HTMLDivElement,
   move: (x: number, y: number) => void;
@@ -92,6 +97,7 @@ export type PanZoomOptions = {
   zoomInitial?: number;
   zoomMax?: number;
   zoomMin?: number;
+  zoomPosition?: ZoomPosition,
   zoomSpeed?: number;
 } & Size
 
@@ -123,6 +129,7 @@ export type PanZoomContext = {
   zoomInitial?: number;
   zoomMax?: number;
   zoomMin?: number;
+  zoomPosition?: ZoomPosition,
   zoomSpeed?: number;
 } & Size
 

@@ -47,6 +47,7 @@ const getDefaultContext = (childNode: HTMLDivElement, options: PanZoomOptions): 
     zoomInitial: options.zoomInitial || ZOOM_INITIAL,
     zoomMin: options.zoomMin || ZOOM_MIN_DEFAULT,
     zoomMax: options.zoomMax || ZOOM_MAX_DEFAULT,
+    zoomPosition: options.zoomPosition,
     zoomSpeed: options.zoomSpeed || ZOOM_SPEED_DEFAULT,
   };
 };
