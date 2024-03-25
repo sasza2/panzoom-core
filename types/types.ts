@@ -97,7 +97,7 @@ export type PanZoomOptions = {
   zoomInitial?: number;
   zoomMax?: number;
   zoomMin?: number;
-  zoomPosition?: ZoomPosition,
+  zoomPosition?: ZoomPosition | null,
   zoomSpeed?: number;
 } & Size
 
@@ -129,7 +129,7 @@ export type PanZoomContext = {
   zoomInitial?: number;
   zoomMax?: number;
   zoomMin?: number;
-  zoomPosition?: ZoomPosition,
+  zoomPosition?: ZoomPosition | null,
   zoomSpeed?: number;
 } & Size
 
@@ -207,6 +207,7 @@ export type ElementResizeOptions = {
 export type ElementOptions = {
   className?: string;
   disabled?: boolean;
+  disabledMove?: boolean;
   draggableSelector?: string;
   family?: string;
   followers?: Array<ElementId>;

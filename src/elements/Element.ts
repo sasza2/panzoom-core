@@ -31,6 +31,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   id,
   className = ELEMENT_CLASS_NAME,
   disabled,
+  disabledMove,
   draggableSelector,
   followers = [],
   x = 0,
@@ -138,12 +139,6 @@ const Element = (elementNode: HTMLDivElement) => ({
       if (e.button) return;
       if (blockByDraggableSelector(e)) return;
 
-      const elements = Object.values(elementsRef.current).filter(
-        (element) => element.id === id
-          || (family && element.family === family)
-          || followers.includes(element.id),
-      );
-
       const position = mouseDownPosition(e, elementNode);
       const stop = stopEventPropagation();
 
@@ -160,7 +155,13 @@ const Element = (elementNode: HTMLDivElement) => ({
       e.preventDefault();
       e.stopPropagation();
 
-      if (stop.done) return;
+      if (stop.done || disabledMove) return;
+
+      const elements = Object.values(elementsRef.current).filter(
+        (element) => element.id === id
+          || (family && element.family === family)
+          || followers.includes(element.id),
+      );
 
       updateElementsInMove(elements.reduce((curr, element) => {
         curr[element.id] = mouseDownPosition(e, element.node.current);
@@ -194,6 +195,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   }, [
     disabled,
     disabledElements,
+    disabledMove,
     draggableSelector,
     family,
     JSON.stringify(followers),
