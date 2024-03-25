@@ -1,5 +1,11 @@
 # panzoom-core
 
+## 1.7.0
+
+### Minor Changes
+
+- f8a9047: element disabledMove prop
+
 ## 1.6.0
 
 ### Minor Changes
