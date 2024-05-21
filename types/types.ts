@@ -63,6 +63,7 @@ export type API = {
   move: (x: number, y: number) => void;
   getElements: () => Elements['current'];
   getElementsInMove: () => ElementsInMove,
+  goBackToBoundary: () => void,
   grabElement: (id: ElementId, position?: Position) => null | (() => void);
   updateElementPosition: (id: ElementId, position: Position) => void;
   updateElementPositionSilent: (id: ElementId, position: Position) => void;
