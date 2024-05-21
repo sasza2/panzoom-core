@@ -41,6 +41,21 @@ const useApi = (): void => {
     getElements: getElements({ elementsRef }),
     getElementsInMove: () => elementsInMoveRef.current || {},
     grabElement: grabElement({ elementsRef, elementsUpdatePositionApiRef }),
+    goBackToBoundary: () => {
+      const position = getPosition({ positionRef })();
+
+      const setPositionWithDispatchEvent = withEventPosition(
+        setPosition({
+          boundary,
+          childNode,
+          containerNode,
+          positionRef,
+          zoomRef,
+        }),
+      ) as API['setPosition'];
+
+      setPositionWithDispatchEvent(position.x, position.y);
+    },
     updateElementPosition: updateElementPosition({
       elementsRef,
       onElementsChangeRef,
