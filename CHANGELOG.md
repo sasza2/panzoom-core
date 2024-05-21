@@ -1,5 +1,11 @@
 # panzoom-core
 
+## 1.8.0
+
+### Minor Changes
+
+- 4541152: api new method - goBackToBoundary() - move component to containers boundary (for e.g. when container size has changed)
+
 ## 1.7.0
 
 ### Minor Changes
