@@ -1,8 +1,7 @@
-let lastZIndex = 2;
-
 const setNextZIndex = (elementNode: HTMLDivElement) => {
-  lastZIndex += 1;
-  elementNode.style.zIndex = lastZIndex.toString();
+  const elementZIndex = Number(elementNode.style.zIndex);
+  const newZIndex = (elementZIndex + 1 > 3) ? elementZIndex + 1 : 3;
+  elementNode.style.zIndex = newZIndex.toString();
 };
 
 export default setNextZIndex;
