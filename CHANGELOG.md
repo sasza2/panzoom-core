@@ -1,5 +1,11 @@
 # panzoom-core
 
+## 1.8.1
+
+### Patch Changes
+
+- bb19798: fix setting zoom property in api
+
 ## 1.8.0
 
 ### Minor Changes
