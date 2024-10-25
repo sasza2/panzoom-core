@@ -31,6 +31,8 @@ export const setZoom: SetZoom = ({
     position: positionRef.current,
     zoom: zoomRef.current,
   });
+
+  childNode.style.setProperty('--zoom', zoomRef.current.toString());
 };
 
 type ZoomIn = SetZoom;

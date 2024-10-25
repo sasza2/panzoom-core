@@ -50,6 +50,7 @@ const initializeComponent: InitializeComponent = (initializationId, cb, mapNextP
         shouldUpdate = true;
       }
     });
+
     return shouldUpdate;
   };
 
