@@ -10,6 +10,9 @@
       "require": "./dist/main.umd.cjs"
     }
   },
+  "engines": {
+    "pnpm": "8.15.5"
+  },
   "keywords": [
     "pan",
     "zoom",
