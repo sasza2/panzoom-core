@@ -1,5 +1,11 @@
 # panzoom-core
 
+## 1.8.2
+
+### Patch Changes
+
+- 3841ac1: fix ipad problem with scroll
+
 ## 1.8.1
 
 ### Patch Changes
