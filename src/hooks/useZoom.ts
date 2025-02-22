@@ -120,6 +120,7 @@ const useZoom = (): Zoom => {
       wheelMobile(touchEventToZoom(e));
     };
 
+    containerNode.addEventListener('touchstart', onWheelMobile);
     containerNode.addEventListener('touchmove', onWheelMobile);
     containerNode.addEventListener('touchup', resetTouchEvent);
     containerNode.addEventListener('touchend', resetTouchEvent);
@@ -127,6 +128,7 @@ const useZoom = (): Zoom => {
     containerNode.addEventListener('wheel', onWheel);
 
     return () => {
+      containerNode.removeEventListener('touchstart', onWheelMobile);
       containerNode.removeEventListener('touchmove', onWheelMobile);
       containerNode.removeEventListener('touchup', resetTouchEvent);
       containerNode.removeEventListener('touchend', resetTouchEvent);
