@@ -20,6 +20,7 @@ const Element: React.FC<ElementOptions> = ({
   width,
   x,
   y,
+  zIndex,
 }) => {
   const nodeRef = useRef<HTMLDivElement>();
   const elementRef = useRef<ElementApi>();
@@ -39,6 +40,7 @@ const Element: React.FC<ElementOptions> = ({
     width,
     x,
     y,
+    zIndex,
   };
 
   useLayoutEffect(() => {
@@ -50,7 +52,7 @@ const Element: React.FC<ElementOptions> = ({
 
   useDidUpdateEffect(() => {
     elementRef.current.setOptions(options);
-  }, [disabled, id, onClick, onContextMenu, x, y]);
+  }, [disabled, id, onClick, onContextMenu, x, y, zIndex]);
 
   return (
     <div ref={nodeRef}>{children}</div>

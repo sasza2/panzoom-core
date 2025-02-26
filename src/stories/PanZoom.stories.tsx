@@ -4,7 +4,7 @@ import React, { useLayoutEffect, useState } from 'react';
 import { PanZoomApi } from 'types';
 import PanZoom, { Element } from './PanZoom';
 
-const Rectangles = () => (
+export const KeepZIndex = () => (
   <div style={{
     display: 'inline-block',
     position: 'relative',
@@ -14,7 +14,7 @@ const Rectangles = () => (
   >
     <PanZoom>
       <div style={{ width: 500, height: 400 }}>
-        <Element id="a" x={50} y={90}>
+        <Element id="a" x={50} y={90} zIndex={1}>
           <div style={{
             width: 100,
             height: 100,
@@ -24,7 +24,7 @@ const Rectangles = () => (
             111
           </div>
         </Element>
-        <Element id="b" x={210} y={260}>
+        <Element id="b" x={210} y={240} zIndex={2}>
           <div style={{
             width: 40,
             height: 170,
@@ -291,4 +291,4 @@ export const TwoInstances = () => {
   );
 };
 
-export default { title: 'PanZoom', component: Rectangles };
+export default { title: 'PanZoom' };
