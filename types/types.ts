@@ -43,7 +43,6 @@ type OnContextMenu = (
   } & Position
 ) => unknown;
 
-
 export type Zoom = Ref<number>;
 
 export type ZoomEvent = {
@@ -220,6 +219,7 @@ export type ElementOptions = {
   x?: number;
   y?: number;
   width?: number;
+  zIndex?: number,
 } & ElementResizeOptions;
 
 export type PanZoomApi = {

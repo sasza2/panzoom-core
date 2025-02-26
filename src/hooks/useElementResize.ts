@@ -22,8 +22,14 @@ type Resizer = (options: {
   onAfterResize: () => void,
   onStartResizing: () => void,
   resizerWidth: number,
+  updateZIndex: boolean,
   zoomRef: Zoom,
 } & ElementResizeOptions) => (() => void);
+
+type UseElementResize = (
+  elementNode: HTMLDivElement,
+  options: ElementResizeOptions & { updateZIndex: boolean },
+) => void;
 
 const getResizerWidth = (resizerWidth: number): string => `${resizerWidth}px`;
 
@@ -33,12 +39,14 @@ const handleResizeEvent = ({
   cb,
   onAfterResize,
   resizerNode,
+  updateZIndex,
 }: {
   className?: string,
   elementNode: HTMLDivElement,
   cb: (e: MouseEvent) => () => void,
   onAfterResize: () => void,
   resizerNode: HTMLDivElement,
+  updateZIndex: boolean,
 }) => {
   onMouseDown(resizerNode, (e) => {
     if (e.button) return;
@@ -61,7 +69,9 @@ const handleResizeEvent = ({
 
     cleanOnMouseUp = onMouseUp(resizerNode, handleMouseUp);
 
-    setNextZIndex(elementNode);
+    if (updateZIndex) {
+      setNextZIndex(elementNode);
+    }
   });
 };
 
@@ -82,6 +92,7 @@ const createLeftResizer: Resizer = ({
   resizedMaxWidth,
   resizedMinWidth,
   resizerWidth,
+  updateZIndex,
   zoomRef,
 }) => {
   const left = createResizerNode();
@@ -146,6 +157,7 @@ const createLeftResizer: Resizer = ({
       });
     },
     onAfterResize,
+    updateZIndex,
   });
 
   elementNode.appendChild(left);
@@ -166,6 +178,7 @@ const createRightResizer: Resizer = ({
   resizedMaxWidth,
   resizedMinWidth,
   resizerWidth,
+  updateZIndex,
   zoomRef,
 }) => {
   const right = createResizerNode();
@@ -217,6 +230,7 @@ const createRightResizer: Resizer = ({
       });
     },
     onAfterResize,
+    updateZIndex,
   });
 
   elementNode.appendChild(right);
@@ -226,7 +240,7 @@ const createRightResizer: Resizer = ({
   };
 };
 
-const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOptions) => {
+const useElementResize: UseElementResize = (elementNode, options) => {
   const { childNode, className, zoomRef } = usePanZoom();
   const { elementsRef } = useElements();
   const resizingClassName = `${className}--element-resizing`;
@@ -299,6 +313,7 @@ const useElementResize = (elementNode: HTMLDivElement, options: ElementResizeOpt
     options.resizedMaxWidth,
     options.resizedMinWidth,
     options.resizerWidth,
+    options.updateZIndex,
   ]);
 };
 

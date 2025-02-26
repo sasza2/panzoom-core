@@ -48,6 +48,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   resizedMaxWidth,
   resizedMinWidth,
   width,
+  zIndex,
 }: ElementOptions) => {
   if (!id) throw new Error("'id' prop for element can't be undefined");
 
@@ -56,6 +57,7 @@ const Element = (elementNode: HTMLDivElement) => ({
   const startAutoMove = useElementAutoMoveAtEdge();
   const [elementsInMove, setElementsInMove] = useState<ElementsInMove>(null);
   const { elementsInMoveRef } = useElements();
+  const updateZIndex = zIndex === undefined;
 
   const updateElementsInMove = (nextElementsInMove: ElementsInMove) => {
     setElementsInMove(nextElementsInMove);
@@ -72,6 +74,7 @@ const Element = (elementNode: HTMLDivElement) => ({
     resizerWidth,
     resizedMaxWidth,
     resizedMinWidth,
+    updateZIndex,
   });
 
   const {
@@ -125,6 +128,14 @@ const Element = (elementNode: HTMLDivElement) => ({
   }, [id, x, y]);
 
   useEffect(() => {
+    if (zIndex === undefined) {
+      elementNode.style.zIndex = null;
+    } else {
+      elementNode.style.zIndex = zIndex.toString();
+    }
+  }, [zIndex]);
+
+  useEffect(() => {
     const element = elementsRef.current[id as string];
     if (element) element.family = family;
   }, [family]);
@@ -168,7 +179,9 @@ const Element = (elementNode: HTMLDivElement) => ({
         return curr;
       }, {} as ElementsInMove));
 
-      setNextZIndex(elementNode);
+      if (updateZIndex) {
+        setNextZIndex(elementNode);
+      }
     };
 
     const contextmenu = (e: MouseEvent) => {
@@ -202,6 +215,7 @@ const Element = (elementNode: HTMLDivElement) => ({
     JSON.stringify(boundary),
     id,
     movingClassName,
+    updateZIndex,
   ]);
 
   useEffect(() => {
