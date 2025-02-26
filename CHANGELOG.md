@@ -1,5 +1,11 @@
 # panzoom-core
 
+## 1.9.0
+
+### Minor Changes
+
+- 6e31b40: add z-index property to element
+
 ## 1.8.2
 
 ### Patch Changes
