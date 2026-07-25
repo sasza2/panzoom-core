@@ -188,6 +188,110 @@ export const resizableElements = () => (
   </div>
 );
 
+export const elementResize = () => (
+  <div style={{ border: '1px dashed #000', height: 500 }}>
+    <style
+      // eslint-disable-next-line react/no-danger
+      dangerouslySetInnerHTML={{
+        __html: `
+          .react-panzoom__in {
+            background-color: #ddd;
+          }
+          .react-panzoom-element--resizing {
+            outline: 2px dashed #333;
+          }
+        `,
+      }}
+    />
+    <PanZoom
+      disabledUserSelect
+      boundary
+      width={800}
+      height={500}
+    >
+      <Element
+        id="horizontal"
+        x={20}
+        y={20}
+        width={200}
+        height={100}
+        resizable
+        resizedMinWidth={80}
+        resizedMaxWidth={400}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'orange',
+            fontSize: 14,
+          }}
+        >
+          <span>resize left/right (80–400 wide)</span>
+        </div>
+      </Element>
+      <Element
+        id="vertical"
+        x={20}
+        y={160}
+        width={200}
+        height={100}
+        resizableVertical
+        resizedMinHeight={60}
+        resizedMaxHeight={300}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'blue',
+            color: '#fff',
+            fontSize: 14,
+          }}
+        >
+          <span>resize top/bottom (60–300 tall)</span>
+        </div>
+      </Element>
+      <Element
+        id="both"
+        x={20}
+        y={300}
+        width={200}
+        height={100}
+        resizable
+        resizableVertical
+        resizedMinWidth={80}
+        resizedMaxWidth={400}
+        resizedMinHeight={60}
+        resizedMaxHeight={300}
+        resizerWidth={12}
+        resizerHeight={12}
+      >
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'green',
+            color: '#fff',
+            fontSize: 14,
+          }}
+        >
+          <span>resize all sides (thicker 12px handles)</span>
+        </div>
+      </Element>
+    </PanZoom>
+  </div>
+);
+
 export const selectingBoxes = () => {
   const [selecting, setSelecting] = useState(true);
 

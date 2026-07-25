@@ -206,6 +206,60 @@ it('helpers/produceBounding vertical + horizontal', () => {
   ).toStrictEqual({ x: 200, y: -100 });
 });
 
+it('helpers/produceBounding without a boundary returns the position unchanged', () => {
+  const parentSize = {
+    width: 300,
+    height: 400,
+  };
+
+  expect(
+    produceBounding({
+      boundary: undefined,
+      x: -900,
+      y: 900,
+      parentSize,
+      childSize: { width: 100, height: 150 },
+    })
+  ).toStrictEqual({ x: -900, y: 900 });
+
+  expect(
+    produceBounding({
+      boundary: false,
+      x: 12,
+      y: -12,
+      parentSize,
+      childSize: { width: 100, height: 150 },
+    })
+  ).toStrictEqual({ x: 12, y: -12 });
+});
+
+it('helpers/produceBounding boundary === true uses container edges as defaults', () => {
+  const parentSize = {
+    width: 300,
+    height: 400,
+  };
+
+  expect(
+    produceBounding({
+      boundary: true,
+      x: -200,
+      y: -400,
+      parentSize,
+      childSize: { width: 100, height: 150 },
+    })
+  ).toStrictEqual({ x: 0, y: 0 });
+
+  expect(
+    produceBounding({
+      boundary: true,
+      x: 1000,
+      y: 1000,
+      parentSize,
+      childSize: { width: 100, height: 150 },
+    })
+  ).toStrictEqual({ x: 200, y: 250 });
+});
+
 it('helpers/produceBounding vertical + horizontal zero value', () => {
   const boundary = {
     left: 0,

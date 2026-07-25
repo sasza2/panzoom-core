@@ -37,6 +37,20 @@ it('api/zoom/set', () => {
   expect(zoomRef.current).toBe(2.1);
 });
 
+it('api/zoom/set - clamps to zoomMin and zoomMax', () => {
+  const childNode = document.createElement('div')
+
+  const positionRef = createRef() as Ref<Position>;
+  positionRef.current = { x: 0, y: 0 };
+  const zoomRef = createRef() as Zoom;
+
+  setZoom({ childNode, positionRef, zoomRef, zoomMin: 1, zoomMax: 2 })(0.1);
+  expect(zoomRef.current).toBe(1);
+
+  setZoom({ childNode, positionRef, zoomRef, zoomMin: 1, zoomMax: 2 })(5);
+  expect(zoomRef.current).toBe(2);
+});
+
 it('api/zoom/in', () => {
   const childNode = document.createElement('div')
 

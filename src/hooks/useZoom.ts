@@ -117,7 +117,11 @@ const useZoom = (): Zoom => {
 
     const onWheelMobile = (e: TouchEvent) => {
       if (!isEventMobileZoom(e)) return;
-      wheelMobile(touchEventToZoom(e));
+
+      const zoomEvent = touchEventToZoom(e);
+      if (!zoomEvent) return;
+
+      wheelMobile(zoomEvent);
     };
 
     containerNode.addEventListener('touchstart', onWheelMobile);

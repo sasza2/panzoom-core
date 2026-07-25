@@ -45,12 +45,12 @@ export const Zoom = () => {
         zoomCenter
           ? (
             <button type="button" onClick={() => setZoomCenter(false)}>
-              zoom in cursor
+              zoom in center
             </button>
           )
           : (
             <button type="button" onClick={() => setZoomCenter(true)}>
-              zoom in center
+              zoom in cursor
             </button>
           )
       }

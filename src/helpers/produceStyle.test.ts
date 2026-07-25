@@ -10,3 +10,7 @@ it('helpers/produceStyle', () => {
     'translate(-15px, 9px) scale(0.5)'
   );
 });
+
+it('helpers/produceStyle - without zoom', () => {
+  expect(produceStyle({ position: { x: 10, y: 20 } })).toBe('translate(10px, 20px)');
+});

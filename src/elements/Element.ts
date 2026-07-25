@@ -32,6 +32,8 @@ const Element = (elementNode: HTMLDivElement) => ({
   className = ELEMENT_CLASS_NAME,
   disabled,
   disabledMove,
+  disabledMoveHorizontal,
+  disabledMoveVertical,
   draggableSelector,
   followers = [],
   x = 0,
@@ -47,6 +49,10 @@ const Element = (elementNode: HTMLDivElement) => ({
   resizerWidth,
   resizedMaxWidth,
   resizedMinWidth,
+  resizableVertical,
+  resizerHeight,
+  resizedMaxHeight,
+  resizedMinHeight,
   width,
   zIndex,
 }: ElementOptions) => {
@@ -74,6 +80,10 @@ const Element = (elementNode: HTMLDivElement) => ({
     resizerWidth,
     resizedMaxWidth,
     resizedMinWidth,
+    resizableVertical,
+    resizerHeight,
+    resizedMaxHeight,
+    resizedMinHeight,
     updateZIndex,
   });
 
@@ -248,6 +258,8 @@ const Element = (elementNode: HTMLDivElement) => ({
         elementsInMove,
         produceNextPosition: (from, currentElement) => {
           const position = mouseMovePosition(e, from, currentElement.node.current);
+          if (disabledMoveHorizontal) position.x = currentElement.position.x;
+          if (disabledMoveVertical) position.y = currentElement.position.y;
           return position;
         },
         onElementsChange: mouseMoveOnElementsChange,
