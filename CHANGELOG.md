@@ -1,5 +1,11 @@
 # panzoom-core
 
+## 1.9.1
+
+### Patch Changes
+
+- 08bb4c3: add resizableVertical and related resize options to the example React Element wrapper, fix touch pinch-zoom crash on the first gesture tick
+
 ## 1.9.0
 
 ### Minor Changes
