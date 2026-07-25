@@ -202,12 +202,18 @@ export type ElementResizeOptions = {
   resizedMaxWidth?: number;
   resizedMinWidth?: number;
   resizerWidth?: number;
+  resizableVertical?: boolean;
+  resizedMaxHeight?: number;
+  resizedMinHeight?: number;
+  resizerHeight?: number;
 }
 
 export type ElementOptions = {
   className?: string;
   disabled?: boolean;
   disabledMove?: boolean;
+  disabledMoveHorizontal?: boolean;
+  disabledMoveVertical?: boolean;
   draggableSelector?: string;
   family?: string;
   followers?: Array<ElementId>;

@@ -28,3 +28,15 @@ it('api/move', () => {
   expect(positionRef.current).toStrictEqual({ x: 170, y: 430 });
   expect(zoomRef.current).toBe(1.1);
 });
+
+it('api/move - without initial position uses x/y directly', () => {
+  const childNode = document.createElement('div')
+
+  const positionRef = createRef() as Ref<Position>;
+  const zoomRef = createRef() as Zoom;
+  zoomRef.current = 1;
+
+  move({ childNode, positionRef, zoomRef })(15, 25);
+
+  expect(positionRef.current).toStrictEqual({ x: 15, y: 25 });
+});
