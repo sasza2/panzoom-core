@@ -1,5 +1,11 @@
 # panzoom-core
 
+## 1.10.0
+
+### Minor Changes
+
+- 4dbff1f: feat: add onContainerPressStart and onContainerPressEnd callbacks
+
 ## 1.9.1
 
 ### Patch Changes
