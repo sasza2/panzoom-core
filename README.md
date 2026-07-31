@@ -89,7 +89,9 @@ Pass these to `initializePanZoom(node, options)` or update them later with `panZ
 | `elementsAutoMoveAtEdge` | `boolean` | `false` | Auto-pan the viewport when dragging an element near the edge. |
 | `height` | `string` \| `number` | `100%` | Height of the child container. |
 | `onContainerChange` | `func` | `null` | Fired on move **or** zoom. Receives `{ position, zoom }`. |
-| `onContainerClick` | `func` | `null` | Fired on mousedown/touchstart. Receives `{ e, stop, x, y }`. |
+| `onContainerClick` | `func` | `null` | Fired on mousedown/touchstart. Receives `{ e, stop, x, y }`. Same trigger as `onContainerPressStart`. |
+| `onContainerPressStart` | `func` | `null` | Fired on mousedown/touchstart. Receives `{ e, stop, x, y }`. |
+| `onContainerPressEnd` | `func` | `null` | Fired on mouseup/touchend/touchcancel. Receives `{ e, x, y }`. |
 | `onContainerPositionChange` | `func` | `null` | Fired on position change. Receives `{ position, zoom }`. |
 | `onContainerZoomChange` | `func` | `null` | Fired on zoom change. Receives `{ position, zoom }`. |
 | `onContextMenu` | `func` | `null` | Fired on right click. Receives `{ e, x, y }`. |
@@ -138,8 +140,11 @@ initializePanZoom(node, {
   onContainerChange: ({ position, zoom }) => {
     console.log('viewport moved or zoomed', position, zoom)
   },
-  onContainerClick: ({ e, stop, x, y }) => {
+  onContainerPressStart: ({ e, stop, x, y }) => {
     // call stop() to prevent panning from starting
+  },
+  onContainerPressEnd: ({ e, x, y }) => {
+    // fired when the mouse/touch is released
   },
   onElementsChange: (elements) => {
     // elements is a map: { [id]: { x, y } }

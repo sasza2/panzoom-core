@@ -28,6 +28,8 @@ const useMove = () => {
     onContextMenuRef,
     onContainerChangeRef,
     onContainerClickRef,
+    onContainerPressStartRef,
+    onContainerPressEndRef,
     onContainerPositionChangeRef,
     positionRef,
     zoomRef,
@@ -60,7 +62,17 @@ const useMove = () => {
       }
     };
 
-    const mouseup = () => {
+    const mouseup = (e: MouseEvent) => {
+      if (onContainerPressEndRef.current) {
+        const position = containerMouseDownPosition(e);
+
+        onContainerPressEndRef.current({
+          e,
+          x: position.x / zoomRef.current,
+          y: position.y / zoomRef.current,
+        });
+      }
+
       clearStyles();
       clearMouseUpEvents();
     };
@@ -69,7 +81,7 @@ const useMove = () => {
       if (blockMovingRef.current) return;
 
       if (!moving || e.buttons === 0) {
-        mouseup();
+        mouseup(e);
         return;
       }
 
@@ -106,14 +118,15 @@ const useMove = () => {
       const position = containerMouseDownPosition(e);
       const stop = stopEventPropagation();
 
-      if (onContainerClickRef.current) {
-        onContainerClickRef.current({
-          e,
-          x: position.x / zoomRef.current,
-          y: position.y / zoomRef.current,
-          stop,
-        });
-      }
+      const clickDownEvent = {
+        e,
+        x: position.x / zoomRef.current,
+        y: position.y / zoomRef.current,
+        stop,
+      };
+
+      if (onContainerClickRef.current) onContainerClickRef.current(clickDownEvent);
+      if (onContainerPressStartRef.current) onContainerPressStartRef.current(clickDownEvent);
 
       if (disabled || disabledMove || stop.done) return;
 

@@ -30,10 +30,16 @@ export type OnElementsChange = (elements: Record<string, Position>) => unknown;
 
 type OnContainerChange = ({ position, zoom }: { position: Position; zoom: number }) => unknown;
 
-type OnContainerClick = (
+type OnContainerPressStart = (
   click: {
     e: MouseEvent;
     stop: () => unknown;
+  } & Position
+) => unknown;
+
+type OnContainerPressEnd = (
+  click: {
+    e: MouseEvent;
   } & Position
 ) => unknown;
 
@@ -89,7 +95,9 @@ export type PanZoomOptions = {
   onContextMenu?: OnContextMenu;
   onElementsChange?: OnElementsChange;
   onContainerChange?: OnContainerChange;
-  onContainerClick?: OnContainerClick,
+  onContainerClick?: OnContainerPressStart,
+  onContainerPressStart?: OnContainerPressStart,
+  onContainerPressEnd?: OnContainerPressEnd,
   onContainerPositionChange?: OnContainerChange;
   onContainerZoomChange?: OnContainerChange;
   selecting?: boolean;
@@ -117,7 +125,9 @@ export type PanZoomContext = {
   disabledZoom: boolean,
   elementsAutoMoveAtEdge: boolean,
   onContainerChangeRef: Ref<OnContainerChange>,
-  onContainerClickRef: Ref<OnContainerClick>,
+  onContainerClickRef: Ref<OnContainerPressStart>,
+  onContainerPressStartRef: Ref<OnContainerPressStart>,
+  onContainerPressEndRef: Ref<OnContainerPressEnd>,
   onContainerPositionChangeRef: Ref<OnContainerChange>,
   onContainerZoomChangeRef: Ref<OnContainerChange>,
   onContextMenuRef: Ref<OnContextMenu>,

@@ -302,16 +302,20 @@ it('initPanZoom - setOptions updates context and re-renders', () => {
   api.destroy();
 });
 
-it('initPanZoom - onContainerClick and onContextMenu callbacks', () => {
-  const onContainerClick = vi.fn();
+it('initPanZoom - onContainerPressStart, onContainerPressEnd and onContextMenu callbacks', () => {
+  const onContainerPressStart = vi.fn();
+  const onContainerPressEnd = vi.fn();
   const onContextMenu = vi.fn();
-  const { api, containerNode } = setup({ onContainerClick, onContextMenu });
+  const {
+    api, containerNode,
+  } = setup({ onContainerPressStart, onContainerPressEnd, onContextMenu });
 
   containerNode.dispatchEvent(new MouseEvent('mousedown', { clientX: 1, clientY: 1 }));
   window.dispatchEvent(new MouseEvent('mouseup'));
   containerNode.dispatchEvent(new MouseEvent('contextmenu', { clientX: 1, clientY: 1 }));
 
-  expect(onContainerClick).toHaveBeenCalled();
+  expect(onContainerPressStart).toHaveBeenCalled();
+  expect(onContainerPressEnd).toHaveBeenCalled();
   expect(onContextMenu).toHaveBeenCalled();
 
   api.destroy();
@@ -784,8 +788,8 @@ it('initPanZoom - onContainerChange fires while dragging the container via mouse
 });
 
 it('initPanZoom - container mousedown with a non-primary button does not start a drag', () => {
-  const onContainerClick = vi.fn();
-  const { api, containerNode } = setup({ onContainerClick });
+  const onContainerPressStart = vi.fn();
+  const { api, containerNode } = setup({ onContainerPressStart });
 
   containerNode.dispatchEvent(new MouseEvent('mousedown', {
     clientX: 0, clientY: 0, buttons: 2, button: 1,
@@ -793,7 +797,7 @@ it('initPanZoom - container mousedown with a non-primary button does not start a
   window.dispatchEvent(new MouseEvent('mousemove', { clientX: 50, clientY: 50, buttons: 2 }));
   window.dispatchEvent(new MouseEvent('mouseup'));
 
-  expect(onContainerClick).not.toHaveBeenCalled();
+  expect(onContainerPressStart).not.toHaveBeenCalled();
   expect(api.getPosition()).toStrictEqual({ x: 0, y: 0 });
 
   api.destroy();

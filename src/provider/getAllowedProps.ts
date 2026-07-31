@@ -15,6 +15,8 @@ const getAllowedProps = (): Array<keyof PanZoomOptions> => [
   'onContextMenu',
   'onContainerChange',
   'onContainerClick',
+  'onContainerPressStart',
+  'onContainerPressEnd',
   'onContainerPositionChange',
   'onContainerZoomChange',
   'selecting',

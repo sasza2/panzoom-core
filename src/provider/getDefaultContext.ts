@@ -35,6 +35,8 @@ const getDefaultContext = (childNode: HTMLDivElement, options: PanZoomOptions): 
     onContextMenuRef: createRef(options.onContextMenu),
     onContainerChangeRef: createRef(options.onContainerChange),
     onContainerClickRef: createRef(options.onContainerClick),
+    onContainerPressStartRef: createRef(options.onContainerPressStart),
+    onContainerPressEndRef: createRef(options.onContainerPressEnd),
     onContainerPositionChangeRef: createRef(options.onContainerPositionChange),
     onContainerZoomChangeRef: createRef(options.onContainerZoomChange),
     onElementsChangeRef: createRef(options.onElementsChange),
